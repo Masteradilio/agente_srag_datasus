@@ -1,0 +1,102 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tests and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+
+# Logs
+*.log
+logs/
+
+# Local data layers
+data/landing/*
+data/refined/*
+!data/landing/.gitkeep
+!data/refined/.gitkeep
+
+# Runtime artifacts
+artifacts/runs/*
+!artifacts/runs/.gitkeep
+
+# Vector stores and local databases
+chroma_db/
+qdrant_storage/
+*.duckdb
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated reports and charts
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.html
+
+# Keep documentation PDFs when intentionally committed
+!docs/*.pdf
+
+# Large raw files
+*.xlsx
+*.xls
+*.csv
+*.parquet
+*.feather
+*.orc
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS-specific
+desktop.ini
