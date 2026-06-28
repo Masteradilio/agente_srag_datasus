@@ -31,7 +31,6 @@ ENV/
 # Environment variables and secrets
 .env
 .env.*
-!.env.example
 
 # IDEs and editors
 .vscode/
@@ -71,6 +70,7 @@ artifacts/runs/*
 # Vector stores and local databases
 chroma_db/
 qdrant_storage/
+artifacts/vector_store/
 *.duckdb
 *.db
 *.sqlite

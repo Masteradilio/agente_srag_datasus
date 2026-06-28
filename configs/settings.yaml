@@ -1,0 +1,32 @@
+project:
+  name: agente_srag_datasus
+  default_run_timezone: America/Sao_Paulo
+
+paths:
+  landing_dir: data/landing
+  refined_dir: data/refined
+  artifacts_dir: artifacts/runs
+  docs_dir: docs
+
+data_source:
+  primary: opendatasus_csv
+
+opendatasus:
+  dataset_url: https://dadosabertos.saude.gov.br/dataset/srag-2019-a-2026
+  latest_csv_url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2026/INFLUD26-22-06-2026.csv
+  target_file: INFLUD26-22-06-2026.csv
+  csv_separator: ;
+  csv_encoding: latin1
+
+gitlab:
+  base_url: https://gitlab.com
+  project_path: cgcovid/dados-abertos
+  srag_tree_path: Dados unificados/Unificado Srag
+  target_file: srag_total.xlsx
+
+privacy:
+  min_group_size: 10
+
+news:
+  max_sources_per_report: 6
+  request_timeout_seconds: 20

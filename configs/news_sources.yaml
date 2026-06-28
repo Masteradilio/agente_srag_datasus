@@ -1,0 +1,11 @@
+allowed_domains:
+  - gitlab.com/cgcovid/dados-abertos
+  - dadosabertos.saude.gov.br
+  - gov.br/saude
+  - infoms.saude.gov.br
+  - fiocruz.br
+  - github.com/infogripe
+  - agenciagov.ebc.com.br
+  - agenciabrasil.ebc.com.br
+  - paho.org
+  - who.int

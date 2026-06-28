@@ -1,0 +1,49 @@
+version: "0.1.0"
+metrics:
+  case_growth_rate_7d:
+    name: Taxa de aumento de casos
+    formula: (casos_ultimos_7_dias - casos_7_dias_anteriores) / casos_7_dias_anteriores
+    numerator: casos_ultimos_7_dias - casos_7_dias_anteriores
+    denominator: casos_7_dias_anteriores
+    null_when_denominator_zero: true
+    limitations:
+      - Retorna nulo quando o periodo anterior nao tem casos.
+  known_mortality_rate:
+    name: Taxa de mortalidade conhecida
+    formula: obitos / casos_com_evolucao_conhecida
+    numerator: obitos
+    denominator: casos_com_evolucao_conhecida
+    null_when_denominator_zero: true
+    limitations:
+      - Depende do preenchimento do campo de evolucao.
+  crude_mortality_rate:
+    name: Taxa de mortalidade bruta
+    formula: obitos / casos_totais
+    numerator: obitos
+    denominator: casos_totais
+    null_when_denominator_zero: true
+    limitations:
+      - Inclui casos sem evolucao conhecida no denominador.
+  icu_case_rate:
+    name: Proporcao de casos de SRAG com passagem por UTI
+    formula: casos_com_uti / casos_totais
+    numerator: casos_com_uti
+    denominator: casos_totais
+    null_when_denominator_zero: true
+    limitations:
+      - Nao representa ocupacao hospitalar real de leitos sem base complementar de leitos disponiveis.
+  registered_vaccination_case_rate:
+    name: Proporcao de casos de SRAG com vacinacao registrada
+    formula: casos_com_vacinacao_registrada / casos_com_status_vacinal_conhecido
+    numerator: casos_com_vacinacao_registrada
+    denominator: casos_com_status_vacinal_conhecido
+    null_when_denominator_zero: true
+    limitations:
+      - Nao representa cobertura vacinal populacional geral sem denominador populacional.
+charts:
+  daily_cases_30d:
+    name: Grafico diario de casos dos ultimos 30 dias
+    output_file: daily_cases_30d.png
+  monthly_cases_12m:
+    name: Grafico mensal de casos dos ultimos 12 meses
+    output_file: monthly_cases_12m.png

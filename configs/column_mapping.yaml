@@ -1,0 +1,34 @@
+case_date:
+  candidates: [DT_SIN_PRI, DT_NOTIFIC]
+notification_date:
+  candidates: [DT_NOTIFIC]
+evolution:
+  candidates: [EVOLUCAO]
+evolution_date:
+  candidates: [DT_EVOLUCA]
+icu:
+  candidates: [UTI]
+icu_start_date:
+  candidates: [DT_ENTUTI]
+icu_end_date:
+  candidates: [DT_SAIDUTI]
+vaccination:
+  candidates: [VACINA_COV, VACINA]
+state:
+  candidates: [SG_UF_NOT, SG_UF]
+city:
+  candidates: [ID_MUNICIP, CO_MUN_NOT]
+final_classification:
+  candidates: [CLASSI_FIN]
+epidemiological_week:
+  candidates: [Semana Epidemiológica, Semana Epidemiol�gica, SEMANA_EPIDEMIOLOGICA]
+cases:
+  candidates: [casos, CASOS]
+deaths:
+  candidates: [obitos, óbitos, OBITOS]
+age_group:
+  candidates: [Faixa Etária, Faixa Et�ria, FAIXA_ETARIA]
+city_code:
+  candidates: [Codigo, Código, CODIGO, CO_MUN_NOT]
+health_region:
+  candidates: [Regional de Saúde, Regional de Sa�de, REGIONAL_SAUDE]
