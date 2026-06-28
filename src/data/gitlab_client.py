@@ -1,10 +1,10 @@
-from typing import Any
+﻿from typing import Any
 from urllib.parse import quote
 
 import requests  # type: ignore[import-untyped]
 
-from srag_agent.config import GitLabConfig
-from srag_agent.data.schema import GitLabTreeItem
+from config import GitLabConfig
+from data.schema import GitLabTreeItem
 
 
 class GitLabClientError(RuntimeError):
@@ -87,3 +87,4 @@ class GitLabClient:
         except requests.HTTPError as error:
             details: Any = getattr(response, "text", "")
             raise GitLabClientError(f"GitLab request failed: {details}") from error
+

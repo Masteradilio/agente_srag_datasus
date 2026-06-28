@@ -1,8 +1,8 @@
-import json
+﻿import json
 from pathlib import Path
 
-from srag_agent.config import load_settings
-from srag_agent.data.ingestion import run_ingestion
+from config import load_settings
+from data.ingestion import run_ingestion
 
 
 class FakeIngestionClient:
@@ -59,3 +59,4 @@ def test_run_ingestion_uses_opendatasus_primary_source(tmp_path: Path) -> None:
     assert result.raw_file_path.name == "INFLUD26-22-06-2026.csv"
     assert result.raw_file_path.read_bytes() == b"col1;col2\n1;2\n"
     assert result.selected_folder == "opendatasus-2026"
+

@@ -1,6 +1,6 @@
-import json
+﻿import json
 
-from srag_agent.audit.run_context import record_agent_trace
+from audit.run_context import record_agent_trace
 
 
 def test_agent_trace_writes_jsonl_and_redacts_secrets(tmp_path) -> None:
@@ -20,4 +20,5 @@ def test_agent_trace_writes_jsonl_and_redacts_secrets(tmp_path) -> None:
     assert payload["tool"] == "get_metric_summary_tool"
     assert payload["input_summary"]["api_key"] == "[REDACTED]"
     assert payload["output_summary"]["rows"] == 10
+
 

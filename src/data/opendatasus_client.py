@@ -1,6 +1,6 @@
-import requests  # type: ignore[import-untyped]
+﻿import requests  # type: ignore[import-untyped]
 
-from srag_agent.config import OpenDataSUSConfig
+from config import OpenDataSUSConfig
 
 
 class OpenDataSUSClientError(RuntimeError):
@@ -28,3 +28,4 @@ class OpenDataSUSClient:
 
     def source_url(self) -> str:
         return str(self.config.latest_csv_url)
+

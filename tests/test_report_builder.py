@@ -1,4 +1,4 @@
-from srag_agent.reporting.report_builder import ReportContext, build_report_markdown
+﻿from reporting.report_builder import ReportContext, build_report_markdown
 
 
 def test_build_report_markdown_renders_required_sections() -> None:
@@ -35,4 +35,5 @@ def test_build_report_markdown_renders_required_sections() -> None:
     assert "daily_cases_30d.png" in report
     assert "https://www.who.int/news/srag" in report
     assert "Aviso de Uso" in report
+
 

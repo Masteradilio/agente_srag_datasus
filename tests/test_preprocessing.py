@@ -1,10 +1,10 @@
-import json
+﻿import json
 from pathlib import Path
 
 import pandas as pd
 
-from srag_agent.config import load_column_mapping, load_settings
-from srag_agent.data.preprocessing import (
+from config import load_column_mapping, load_settings
+from data.preprocessing import (
     load_raw_srag_excel,
     prepare_refined_dataframe,
     resolve_column_mapping,
@@ -84,3 +84,4 @@ def test_run_preprocessing_writes_parquet_and_quality_report(tmp_path: Path) -> 
     assert report["rows_raw"] == 3
     assert report["rows_refined"] == 2
     assert report["discarded_rows"] == 1
+

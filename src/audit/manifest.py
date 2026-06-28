@@ -1,12 +1,12 @@
-import json
+﻿import json
 import os
 from datetime import UTC, datetime
 from pathlib import Path
 
 from pydantic import BaseModel
 
-from srag_agent.utils.hashing import calculate_sha256
-from srag_agent.utils.paths import ensure_directory, resolve_project_path
+from utils.hashing import calculate_sha256
+from utils.paths import ensure_directory, resolve_project_path
 
 PROMPT_VERSION = "agent-report-v1"
 METRIC_CATALOG_VERSION = "metric-catalog-v1"
@@ -75,4 +75,5 @@ def write_execution_manifest(
         encoding="utf-8",
     )
     return output_path
+
 

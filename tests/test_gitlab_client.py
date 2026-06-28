@@ -1,5 +1,5 @@
-from srag_agent.config import GitLabConfig
-from srag_agent.data.gitlab_client import GitLabClient
+﻿from config import GitLabConfig
+from data.gitlab_client import GitLabClient
 
 
 class FakeResponse:
@@ -69,3 +69,4 @@ def test_download_file_returns_response_bytes() -> None:
     repository_path = "Dados unificados/Unificado Srag/2026_24/srag_total.xlsx"
 
     assert client.download_file(repository_path) == b"xlsx-bytes"
+

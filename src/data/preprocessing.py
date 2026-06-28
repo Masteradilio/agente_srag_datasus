@@ -1,14 +1,16 @@
-import json
+﻿import json
+import re
+import unicodedata
 from datetime import date
 from pathlib import Path
 from typing import Any
 
 import pandas as pd  # type: ignore[import-untyped]
 
-from srag_agent.config import Settings, load_column_mapping, load_settings
-from srag_agent.data.schema import PreprocessingResult
-from srag_agent.data.validation import build_data_quality_report, write_data_quality_report
-from srag_agent.utils.paths import ensure_directory, resolve_project_path
+from config import Settings, load_column_mapping, load_settings
+from data.schema import PreprocessingResult
+from data.validation import build_data_quality_report, write_data_quality_report
+from utils.paths import ensure_directory, resolve_project_path
 
 DATE_COLUMNS = {
     "case_date",
@@ -31,7 +33,11 @@ def load_raw_srag_excel(path: Path) -> pd.DataFrame:
 
 
 def resolve_column_mapping(df: pd.DataFrame, mapping: dict[str, Any]) -> dict[str, str | None]:
-    source_columns = {str(column).upper(): str(column) for column in df.columns}
+    source_columns: dict[str, str] = {}
+    for column in df.columns:
+        column_name = str(column)
+        for key in _column_match_keys(column_name):
+            source_columns.setdefault(key, column_name)
     resolved: dict[str, str | None] = {}
 
     for canonical_name, entry in mapping.items():
@@ -219,10 +225,30 @@ def _extract_candidates(entry: Any) -> list[str]:
 
 def _select_source_column(source_columns: dict[str, str], candidates: list[str]) -> str | None:
     for candidate in candidates:
-        normalized_candidate = candidate.upper()
-        if normalized_candidate in source_columns:
-            return source_columns[normalized_candidate]
+        for key in _column_match_keys(candidate):
+            if key in source_columns:
+                return source_columns[key]
     return None
+
+
+def _column_match_keys(value: str) -> set[str]:
+    values = {value, _repair_mojibake(value)}
+    keys = {item.upper() for item in values}
+    keys.update(_simplify_column_name(item) for item in values)
+    return {key for key in keys if key}
+
+
+def _repair_mojibake(value: str) -> str:
+    try:
+        return value.encode("latin1").decode("utf-8")
+    except UnicodeError:
+        return value
+
+
+def _simplify_column_name(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value)
+    ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
+    return re.sub(r"[^A-Z0-9]+", "", ascii_text.upper())
 
 
 def _optional_series(df: pd.DataFrame, column: str, index: pd.Index) -> pd.Series:
@@ -238,3 +264,6 @@ def _normalize_value(value: object) -> object:
         stripped = value.strip()
         return stripped.upper() if stripped else pd.NA
     return value
+
+
+

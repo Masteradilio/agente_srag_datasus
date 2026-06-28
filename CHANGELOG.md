@@ -4,58 +4,70 @@
 
 ### Added
 
-- Bootstrap do projeto com layout `src/`, diretórios `configs/`, `app/`, `tests/`,
+- Bootstrap do projeto com layout `src/`, diretorios `configs/`, `app/`, `tests/`,
   `data/landing`, `data/refined` e `artifacts/runs`.
-- Configurações YAML para settings, fontes de notícia, catálogo de métricas e
+- Configuracoes YAML para settings, fontes de noticia, catalogo de metricas e
   mapeamento de colunas.
-- Utilitários base para paths, YAML, hashes SHA-256, `run_id` e logging JSON.
-- Ingestão por OpenDataSUS CSV como fonte primária:
+- Utilitarios base para paths, YAML, hashes SHA-256, `run_id` e logging JSON.
+- Ingestao por OpenDataSUS CSV como fonte primaria:
   `INFLUD26-22-06-2026.csv`.
 - Cliente GitLab mantido como fonte auxiliar/contextual para arquivos agregados
   em `Dados unificados/Unificado Srag`.
-- Pré-processamento de CSV linha a linha e XLSX agregado, com normalização para
-  colunas canônicas e geração de Parquet.
-- Relatório de qualidade de dados em `data_quality_report.json`.
-- Cálculo determinístico de métricas:
-  - taxa de aumento de casos em 7 dias;
-  - taxa de mortalidade conhecida;
-  - taxa de mortalidade bruta;
-  - proporção de casos com UTI;
-  - proporção de casos com vacinação registrada.
-- Geração dos gráficos obrigatórios:
-  - `daily_cases_30d.png`;
-  - `monthly_cases_12m.png`.
-- Guardrail de allowlist de domínios para fontes externas.
-- Busca estruturada de notícias allowlisted, ranking simples, extração de HTML e
-  persistência de `news_sources.json`.
-- RAG documental local com loaders, chunking, índice lexical persistido em
+- Pre-processamento de CSV linha a linha e XLSX agregado, com normalizacao para
+  colunas canonicas e geracao de Parquet.
+- Relatorio de qualidade de dados em `data_quality_report.json`.
+- Calculo deterministico de metricas: aumento de casos em 7 dias, mortalidade
+  conhecida, mortalidade bruta, proporcao de casos com UTI e proporcao de casos
+  com vacinacao registrada.
+- Graficos obrigatorios `daily_cases_30d.png` e `monthly_cases_12m.png`.
+- Guardrails de entrada, privacidade, saida, allowlist de dominios e contrato de
+  relatorio.
+- Busca estruturada de noticias allowlisted, ranking simples, extracao de HTML e
+  persistencia de `news_sources.json`.
+- RAG documental local com loaders, chunking, indice lexical persistido em
   `artifacts/vector_store/` e retriever com metadados de fonte.
-- Teste smoke Fase 3 + Fase 4 cobrindo preprocessamento, métricas, gráficos e
-  artefatos no formato agregado.
+- Agente controlado com topologia LangGraph compilavel, tools deterministicas,
+  contrato de saida e trace por no.
+- Manifesto de execucao, `agent_trace.jsonl` e pipeline consolidado com
+  `python -m pipeline`.
+- Builder de relatorio Markdown, template versionado e exportador PDF com
+  fallback HTML/PDF quando WeasyPrint nao possui dependencias nativas locais.
+- Dashboard Streamlit com abas Pipeline, Relatorio, Qualidade dos Dados e Chat.
+- Documentacao tecnica em `docs/architecture.md`, `docs/metric_catalog.md`,
+  `docs/limitations.md` e `docs/architecture_diagram.pdf`.
+- Smoke cumulativo de Fase 3 + Fase 4 cobrindo preprocessamento, metricas,
+  graficos e artefatos.
 
 ### Changed
 
-- Fonte primária do pipeline mudou dos XLSX agregados do GitLab para o CSV
-  oficial do OpenDataSUS, pois o CSV contém as colunas necessárias de UTI,
-  vacinação, evolução e datas.
+- Fonte primaria do pipeline mudou dos XLSX agregados do GitLab para o CSV
+  oficial do OpenDataSUS, pois o CSV contem as colunas necessarias de UTI,
+  vacinacao, evolucao e datas.
 - Arquivos XLSX agregados do GitLab passaram a ser tratados como fonte auxiliar
-  contextual, sem soma automática na camada refined para evitar duplicidade.
+  contextual, sem soma automatica na camada refined para evitar duplicidade.
 - `MASTER_BACKLOG.md` recebeu a tarefa `F3.T8`, executada para validar o schema
-  real dos dados e adaptar o pipeline.
-- `.gitignore` passou a ignorar `.env.example` porque o arquivo local contém
-  chaves de API neste checkout.
+  real dos dados e adaptar o pipeline ao arquivo CSV oficial.
+- Codigo reorganizado para remover o pacote intermediario `src/srag_agent`; os
+  modulos agora ficam diretamente em `src/`.
+- `.env.example` e `docs/descricao_vaga.md` passam a ser arquivos locais
+  ignorados pelo Git.
+- Dependencias foram reduzidas para as bibliotecas efetivamente usadas pela
+  implementacao atual, mantendo instalacao limpa reproduzivel em Python
+  `>=3.11,<3.13`.
 
 ### Verified
 
+- Validacao limpa em clone temporario com `pip install -r requirements.txt`,
+  `pytest`, `ruff` e `mypy`.
+- Streamlit respondeu HTTP 200 em `localhost:8501`.
+- Pipeline real gerou `manifest.json`, `data_quality_report.json`,
+  `metrics.json`, `news_sources.json`, `agent_trace.jsonl`, `report.md`,
+  `report.pdf` e os dois graficos obrigatorios.
 - Smoke real com `data/landing/20260627T212036-0300/INFLUD26-22-06-2026.csv`:
-  - `rows_raw=137551`;
-  - `rows_refined=137551`;
-  - `reference_date=2026-06-21`;
-  - `known_mortality=0.05992052875135012`;
-  - `crude_mortality=0.043961875958735304`;
-  - `icu_value=0.24119054023598518`;
-  - `vaccination_value=0.4033807881628202`.
-- Regressão completa:
-  - `python -m pytest tests -q`: 48 passed;
-  - `python -m ruff check .`: All checks passed;
-  - `python -m mypy src`: Success.
+  `rows_raw=137551`, `rows_refined=137551`, `reference_date=2026-06-21`,
+  `known_mortality=0.05992052875135012`,
+  `crude_mortality=0.043961875958735304`,
+  `icu_value=0.24119054023598518` e
+  `vaccination_value=0.4033807881628202`.
+- Regressao completa anterior: `python -m pytest tests -q` com 48 testes,
+  `python -m ruff check .` sem achados e `python -m mypy src` com sucesso.

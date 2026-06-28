@@ -1,6 +1,6 @@
-import pytest
+﻿import pytest
 
-from srag_agent.guardrails.output_guard import enforce_output_guard, validate_output_report
+from guardrails.output_guard import enforce_output_guard, validate_output_report
 
 
 def test_output_guard_allows_report_with_limitations_notice_and_sources() -> None:
@@ -27,4 +27,5 @@ def test_output_guard_allows_report_with_limitations_notice_and_sources() -> Non
 def test_output_guard_blocks_invalid_report(report: str) -> None:
     with pytest.raises(ValueError):
         enforce_output_guard(report)
+
 

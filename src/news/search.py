@@ -1,8 +1,8 @@
-from collections.abc import Iterable
+﻿from collections.abc import Iterable
 
-from srag_agent.data.schema import NewsSearchResult
-from srag_agent.guardrails.domain_allowlist import extract_domain, is_allowed_url
-from srag_agent.news.rank import rank_news_results
+from data.schema import NewsSearchResult
+from guardrails.domain_allowlist import extract_domain, is_allowed_url
+from news.rank import rank_news_results
 
 
 def search_srag_news(
@@ -50,3 +50,4 @@ def _default_institutional_candidates(
             "snippet": "Busca em fonte oficial brasileira permitida.",
         },
     ][: len(allowed_domains)]
+

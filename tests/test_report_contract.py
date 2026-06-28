@@ -1,4 +1,4 @@
-from srag_agent.agents.output_contracts import validate_report_contract
+﻿from agents.output_contracts import validate_report_contract
 
 
 def _metric_summary() -> dict:
@@ -60,4 +60,5 @@ def test_report_contract_fails_when_source_is_missing() -> None:
 
     assert not result.is_valid
     assert any("fonte externa" in error for error in result.errors)
+
 

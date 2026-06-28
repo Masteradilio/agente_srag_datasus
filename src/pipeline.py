@@ -1,17 +1,17 @@
-import argparse
+﻿import argparse
 import json
 from pathlib import Path
 
 from pydantic import BaseModel
 
-from srag_agent.agents.graph import run_agent_graph
-from srag_agent.audit.manifest import build_execution_manifest, write_execution_manifest
-from srag_agent.config import load_settings
-from srag_agent.data.ingestion import run_ingestion
-from srag_agent.data.preprocessing import run_preprocessing
-from srag_agent.reporting.pdf_exporter import export_report_pdf
-from srag_agent.utils.hashing import calculate_sha256
-from srag_agent.utils.paths import ensure_directory, resolve_project_path
+from agents.graph import run_agent_graph
+from audit.manifest import build_execution_manifest, write_execution_manifest
+from config import load_settings
+from data.ingestion import run_ingestion
+from data.preprocessing import run_preprocessing
+from reporting.pdf_exporter import export_report_pdf
+from utils.hashing import calculate_sha256
+from utils.paths import ensure_directory, resolve_project_path
 
 
 class PipelineResult(BaseModel):
@@ -105,4 +105,5 @@ def _write_news_sources(news_evidence: list[dict], output_path: Path) -> Path:
 
 if __name__ == "__main__":
     main()
+
 

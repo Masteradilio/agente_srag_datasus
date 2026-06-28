@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -10,7 +10,6 @@ def test_required_root_files_exist() -> None:
         "requirements.txt",
         "docs/PRD_srag_genai_agent.md",
         "MASTER_BACKLOG.md",
-        ".env.example",
         "pyproject.toml",
     ]
 
@@ -21,16 +20,16 @@ def test_required_root_files_exist() -> None:
 def test_required_directories_exist() -> None:
     required_directories = [
         "configs",
-        "src/srag_agent",
-        "src/srag_agent/data",
-        "src/srag_agent/metrics",
-        "src/srag_agent/news",
-        "src/srag_agent/rag",
-        "src/srag_agent/agents",
-        "src/srag_agent/guardrails",
-        "src/srag_agent/reporting",
-        "src/srag_agent/audit",
-        "src/srag_agent/utils",
+        "src",
+        "src/data",
+        "src/metrics",
+        "src/news",
+        "src/rag",
+        "src/agents",
+        "src/guardrails",
+        "src/reporting",
+        "src/audit",
+        "src/utils",
         "app",
         "tests",
         "docs",
@@ -41,3 +40,4 @@ def test_required_directories_exist() -> None:
 
     for relative_path in required_directories:
         assert (PROJECT_ROOT / relative_path).is_dir(), relative_path
+

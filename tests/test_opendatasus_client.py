@@ -1,5 +1,5 @@
-from srag_agent.config import OpenDataSUSConfig
-from srag_agent.data.opendatasus_client import OpenDataSUSClient
+﻿from config import OpenDataSUSConfig
+from data.opendatasus_client import OpenDataSUSClient
 
 
 class FakeResponse:
@@ -34,3 +34,4 @@ def test_opendatasus_client_downloads_latest_csv() -> None:
     assert client.download_latest_csv() == b"csv-bytes"
     assert client.source_url().endswith("INFLUD26-22-06-2026.csv")
     assert session.calls[0]["timeout"] == 180
+

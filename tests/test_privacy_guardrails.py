@@ -1,6 +1,6 @@
-import pytest
+﻿import pytest
 
-from srag_agent.guardrails.privacy import enforce_min_group_size
+from guardrails.privacy import enforce_min_group_size
 
 
 def test_privacy_guard_filters_small_groups() -> None:
@@ -22,4 +22,5 @@ def test_privacy_guard_blocks_individual_fields() -> None:
 
 def test_privacy_guard_does_not_return_records_without_counts() -> None:
     assert enforce_min_group_size([{"uf": "SP"}], min_group_size=10) == []
+
 

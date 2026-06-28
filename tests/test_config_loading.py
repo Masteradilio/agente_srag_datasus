@@ -1,4 +1,4 @@
-from srag_agent.config import (
+﻿from config import (
     load_column_mapping,
     load_metric_catalog,
     load_news_sources,
@@ -38,3 +38,4 @@ def test_load_metric_catalog() -> None:
     assert "metrics" in catalog
     assert "case_growth_rate_7d" in catalog["metrics"]
     assert "charts" in catalog
+

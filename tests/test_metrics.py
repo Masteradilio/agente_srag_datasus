@@ -1,8 +1,8 @@
-from datetime import date
+﻿from datetime import date
 
 import pandas as pd
 
-from srag_agent.metrics.calculators import (
+from metrics.calculators import (
     calculate_case_growth_rate,
     calculate_icu_rate,
     calculate_metric_summary,
@@ -83,3 +83,4 @@ def test_calculate_metric_summary_and_write_json(tmp_path) -> None:
 
     assert summary.total_cases == 15
     assert output_path.is_file()
+

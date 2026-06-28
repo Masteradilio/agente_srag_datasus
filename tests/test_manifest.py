@@ -1,6 +1,6 @@
-import json
+﻿import json
 
-from srag_agent.audit.manifest import build_execution_manifest, write_execution_manifest
+from audit.manifest import build_execution_manifest, write_execution_manifest
 
 
 def test_manifest_contains_required_execution_fields(tmp_path) -> None:
@@ -27,4 +27,5 @@ def test_manifest_contains_required_execution_fields(tmp_path) -> None:
     assert payload["prompt_version"]
     assert payload["metric_catalog_version"]
     assert payload["allowlist_version"]
+
 

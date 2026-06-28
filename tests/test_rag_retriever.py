@@ -1,7 +1,7 @@
-from srag_agent.data.schema import DocumentSource
-from srag_agent.rag.chunking import chunk_documents
-from srag_agent.rag.retriever import retrieve_context
-from srag_agent.rag.vector_store import LocalVectorStore, build_vector_store
+﻿from data.schema import DocumentSource
+from rag.chunking import chunk_documents
+from rag.retriever import retrieve_context
+from rag.vector_store import LocalVectorStore, build_vector_store
 
 
 def test_vector_store_persists_and_retrieves_fixture(tmp_path) -> None:
@@ -29,7 +29,7 @@ def test_retrieve_context_returns_source(tmp_path) -> None:
         DocumentSource(
             source_path="fixture.md",
             source_type="markdown",
-            content="Vacinação registrada entre casos nao e cobertura populacional.",
+            content="VacinaÃ§Ã£o registrada entre casos nao e cobertura populacional.",
         )
     ]
     build_vector_store(chunk_documents(documents), persist_dir=tmp_path / "vector_store")
@@ -42,3 +42,4 @@ def test_retrieve_context_returns_source(tmp_path) -> None:
 
     assert results
     assert results[0].source_path == "fixture.md"
+

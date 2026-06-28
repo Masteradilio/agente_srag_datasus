@@ -1,10 +1,10 @@
-import json
+﻿import json
 import re
 from collections import Counter
 from pathlib import Path
 
-from srag_agent.data.schema import DocumentChunk, RetrievedDocument
-from srag_agent.utils.paths import ensure_directory
+from data.schema import DocumentChunk, RetrievedDocument
+from utils.paths import ensure_directory
 
 
 class LocalVectorStore:
@@ -66,7 +66,7 @@ def build_vector_store(
 
 
 def _tokenize(text: str) -> Counter[str]:
-    return Counter(re.findall(r"[a-zA-ZÀ-ÿ0-9_]{3,}", text.lower()))
+    return Counter(re.findall(r"\w{3,}", text.lower(), flags=re.UNICODE))
 
 
 def _lexical_score(query_terms: Counter[str], content: str) -> float:
@@ -74,3 +74,4 @@ def _lexical_score(query_terms: Counter[str], content: str) -> float:
         return 0.0
     content_terms = _tokenize(content)
     return float(sum(content_terms.get(term, 0) * weight for term, weight in query_terms.items()))
+

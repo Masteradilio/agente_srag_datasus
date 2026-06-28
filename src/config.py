@@ -1,9 +1,9 @@
-from pathlib import Path
+﻿from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, Field, HttpUrl
 
-from srag_agent.utils.paths import load_yaml
+from utils.paths import load_yaml
 
 
 class ProjectConfig(BaseModel):
@@ -90,3 +90,4 @@ def load_metric_catalog(path: str | Path = "configs/metric_catalog.yaml") -> dic
     if not isinstance(raw_catalog, dict):
         raise ValueError("Metric catalog configuration must be a mapping.")
     return raw_catalog
+

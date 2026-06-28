@@ -1,19 +1,41 @@
-# MASTER_BACKLOG.md — Agente SRAG DataSUS
+﻿# MASTER_BACKLOG.md â€” Agente SRAG DataSUS
 
 **Projeto:** `agente_srag_datasus`  
-**Repositório:** `https://github.com/Masteradilio/agente_srag_datasus`  
-**Tipo:** PoC técnica para desafio de Senior AI Engineer  
-**Objetivo:** implementar uma solução GenAI com pipeline determinístico, agente com tools controladas, RAG documental, notícias com allowlist, guardrails, auditoria e dashboard Streamlit para geração de relatórios sobre SRAG com dados DataSUS/OpenDataSUS.
+**RepositÃ³rio:** `https://github.com/Masteradilio/agente_srag_datasus`  
+**Tipo:** PoC tÃ©cnica para desafio de Senior AI Engineer  
+**Objetivo:** implementar uma soluÃ§Ã£o GenAI com pipeline determinÃ­stico, agente com tools controladas, RAG documental, notÃ­cias com allowlist, guardrails, auditoria e dashboard Streamlit para geraÃ§Ã£o de relatÃ³rios sobre SRAG com dados DataSUS/OpenDataSUS.
 
 ---
 
-## 1. Diretrizes Gerais de Implementação
+## Status de Execucao
+
+- [x] Fase 0 - Preparacao, estrutura inicial, ambiente e documentacao base.
+- [x] Fase 1 - Configuracoes, contratos, utilitarios e fundacao tecnica.
+- [x] Fase 2 - Ingestao de dados e validacao de fonte.
+- [x] Fase 3 - Pre-processamento, qualidade, schema real e tarefa F3.T8.
+- [x] Fase 4 - Metricas deterministicas e graficos obrigatorios.
+- [x] Fase 5 - RAG documental local.
+- [x] Fase 6 - Noticias externas com allowlist.
+- [x] Fase 7 - Agente controlado com tools e trace.
+- [x] Fase 8 - Guardrails de entrada, privacidade e saida.
+- [x] Fase 9 - Relatorio Markdown/PDF.
+- [x] Fase 10 - Dashboard Streamlit.
+- [x] Fase 11 - Documentacao, README, arquitetura e limitacoes.
+- [x] Fase 12 - Validacao final, testes, smoke real e limpeza de arquivos indevidos.
+- [x] Reorganizacao final - conteudo de `src/srag_agent` movido para `src/` e
+  pacote intermediario removido.
+- [x] Higiene de versionamento - `.env.example` e `docs/descricao_vaga.md`
+  mantidos apenas localmente via `.gitignore`.
+
+---
+
+## 1. Diretrizes Gerais de ImplementaÃ§Ã£o
 
 ### 1.1 Regra principal de arquitetura
 
-O LLM **não deve calcular métricas diretamente**.
+O LLM **nÃ£o deve calcular mÃ©tricas diretamente**.
 
-O pipeline determinístico deve baixar, validar, transformar e calcular as métricas. O agente GenAI deve orquestrar tools, consultar contexto, buscar notícias permitidas e redigir o relatório com base em resultados calculados por código.
+O pipeline determinÃ­stico deve baixar, validar, transformar e calcular as mÃ©tricas. O agente GenAI deve orquestrar tools, consultar contexto, buscar notÃ­cias permitidas e redigir o relatÃ³rio com base em resultados calculados por cÃ³digo.
 
 ### 1.2 Camadas esperadas
 
@@ -46,21 +68,21 @@ artifacts/runs/<run_id>/
 Streamlit Dashboard
 ```
 
-### 1.3 Critérios de qualidade
+### 1.3 CritÃ©rios de qualidade
 
-Todo código deve seguir:
+Todo cÃ³digo deve seguir:
 
-- funções pequenas e testáveis;
-- type hints sempre que possível;
-- configuração fora do código;
+- funÃ§Ãµes pequenas e testÃ¡veis;
+- type hints sempre que possÃ­vel;
+- configuraÃ§Ã£o fora do cÃ³digo;
 - logs claros;
-- tratamento explícito de erro;
+- tratamento explÃ­cito de erro;
 - nenhuma chave ou segredo versionado;
-- testes unitários por fase;
-- regressão completa ao final de cada fase;
+- testes unitÃ¡rios por fase;
+- regressÃ£o completa ao final de cada fase;
 - commits pequenos e descritivos.
 
-### 1.4 Ambiente padrão de desenvolvimento
+### 1.4 Ambiente padrÃ£o de desenvolvimento
 
 O projeto deve ser executado em ambiente virtual Python.
 
@@ -82,7 +104,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 1.5 Comandos de regressão obrigatórios
+### 1.5 Comandos de regressÃ£o obrigatÃ³rios
 
 Ao final de cada fase, executar dentro do ambiente `.venv`:
 
@@ -92,15 +114,15 @@ python -m pytest tests -q
 python -m ruff check .
 ```
 
-Quando houver tipagem suficiente no módulo implementado:
+Quando houver tipagem suficiente no mÃ³dulo implementado:
 
 ```bash
 python -m mypy src
 ```
 
-Se ainda não houver testes implementados em uma fase inicial, criar pelo menos testes mínimos antes de encerrar a fase.
+Se ainda nÃ£o houver testes implementados em uma fase inicial, criar pelo menos testes mÃ­nimos antes de encerrar a fase.
 
-### 1.6 Política de commit
+### 1.6 PolÃ­tica de commit
 
 Ao final de cada fase aprovada:
 
@@ -120,35 +142,35 @@ git commit -m "feat: complete phase 2 - gitlab ingestion pipeline"
 
 ## 2. Definition of Done Global
 
-O projeto será considerado pronto quando:
+O projeto serÃ¡ considerado pronto quando:
 
 - o pipeline identificar automaticamente a pasta mais recente do GitLab;
 - o arquivo `srag_total.xlsx` for baixado para `data/landing`;
-- a base for pré-processada e salva em Parquet em `data/refined`;
-- as quatro métricas obrigatórias forem calculadas por código;
-- os dois gráficos obrigatórios forem gerados;
-- o agente gerar relatório com métricas, gráficos, notícias, fontes e limitações;
+- a base for prÃ©-processada e salva em Parquet em `data/refined`;
+- as quatro mÃ©tricas obrigatÃ³rias forem calculadas por cÃ³digo;
+- os dois grÃ¡ficos obrigatÃ³rios forem gerados;
+- o agente gerar relatÃ³rio com mÃ©tricas, grÃ¡ficos, notÃ­cias, fontes e limitaÃ§Ãµes;
 - houver allowlist de fontes externas;
-- houver guardrails de entrada, tools, privacidade e saída;
-- cada execução gerar `manifest.json`, `data_quality_report.json`, `metrics.json`, `news_sources.json`, `agent_trace.jsonl`, relatório e gráficos;
-- o Streamlit demonstrar pipeline, relatório, qualidade de dados e chat;
+- houver guardrails de entrada, tools, privacidade e saÃ­da;
+- cada execuÃ§Ã£o gerar `manifest.json`, `data_quality_report.json`, `metrics.json`, `news_sources.json`, `agent_trace.jsonl`, relatÃ³rio e grÃ¡ficos;
+- o Streamlit demonstrar pipeline, relatÃ³rio, qualidade de dados e chat;
 - os testes passarem em ambiente `.venv`;
-- o README explicar arquitetura, execução, métricas, guardrails, auditoria e limitações;
-- o repositório incluir o PDF do diagrama conceitual em `docs/architecture_diagram.pdf`.
+- o README explicar arquitetura, execuÃ§Ã£o, mÃ©tricas, guardrails, auditoria e limitaÃ§Ãµes;
+- o repositÃ³rio incluir o PDF do diagrama conceitual em `docs/architecture_diagram.pdf`.
 
 ---
 
-# Fase 0 — Bootstrap do Repositório
+# Fase 0 â€” Bootstrap do RepositÃ³rio
 
 ## Objetivo
 
-Garantir que o repositório tenha uma base mínima organizada e pronta para desenvolvimento incremental.
+Garantir que o repositÃ³rio tenha uma base mÃ­nima organizada e pronta para desenvolvimento incremental.
 
 ## Tarefas
 
-### F0.T1 — Conferir arquivos iniciais
+### F0.T1 â€” Conferir arquivos iniciais
 
-Validar existência dos arquivos:
+Validar existÃªncia dos arquivos:
 
 ```text
 README.md
@@ -158,24 +180,24 @@ PRD.md
 MASTER_BACKLOG.md
 ```
 
-Se `PRD.md` ainda não estiver no repositório, adicioná-lo.
+Se `PRD.md` ainda nÃ£o estiver no repositÃ³rio, adicionÃ¡-lo.
 
-### F0.T2 — Criar estrutura inicial de diretórios
+### F0.T2 â€” Criar estrutura inicial de diretÃ³rios
 
 Criar:
 
 ```text
 configs/
-src/srag_agent/
-src/srag_agent/data/
-src/srag_agent/metrics/
-src/srag_agent/news/
-src/srag_agent/rag/
-src/srag_agent/agents/
-src/srag_agent/guardrails/
-src/srag_agent/reporting/
-src/srag_agent/audit/
-src/srag_agent/utils/
+src/
+src/data/
+src/metrics/
+src/news/
+src/rag/
+src/agents/
+src/guardrails/
+src/reporting/
+src/audit/
+src/utils/
 app/
 tests/
 docs/
@@ -184,26 +206,26 @@ data/refined/
 artifacts/runs/
 ```
 
-Adicionar `.gitkeep` onde necessário.
+Adicionar `.gitkeep` onde necessÃ¡rio.
 
-### F0.T3 — Criar arquivos de pacote
+### F0.T3 â€” Criar arquivos de pacote
 
 Criar `__init__.py` em:
 
 ```text
-src/srag_agent/
-src/srag_agent/data/
-src/srag_agent/metrics/
-src/srag_agent/news/
-src/srag_agent/rag/
-src/srag_agent/agents/
-src/srag_agent/guardrails/
-src/srag_agent/reporting/
-src/srag_agent/audit/
-src/srag_agent/utils/
+src/
+src/data/
+src/metrics/
+src/news/
+src/rag/
+src/agents/
+src/guardrails/
+src/reporting/
+src/audit/
+src/utils/
 ```
 
-### F0.T4 — Criar `.env.example`
+### F0.T4 â€” Criar `.env.example`
 
 Criar:
 
@@ -214,20 +236,20 @@ EMBEDDING_MODEL=text-embedding-3-small
 APP_ENV=local
 ```
 
-Não versionar `.env`.
+NÃ£o versionar `.env`.
 
-### F0.T5 — Criar teste mínimo de sanidade
+### F0.T5 â€” Criar teste mÃ­nimo de sanidade
 
-Criar `tests/test_project_structure.py` validando que diretórios e arquivos principais existem.
+Criar `tests/test_project_structure.py` validando que diretÃ³rios e arquivos principais existem.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
 - Estrutura inicial criada.
 - `.env.example` criado.
 - Teste de sanidade passando.
 - Nenhum arquivo de dado bruto versionado.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -244,17 +266,17 @@ git commit -m "chore: complete phase 0 - repository bootstrap"
 
 ---
 
-# Fase 1 — Configurações, Schemas e Utilitários Base
+# Fase 1 â€” ConfiguraÃ§Ãµes, Schemas e UtilitÃ¡rios Base
 
 ## Objetivo
 
-Criar a fundação configurável do projeto: settings, paths, hashing, datas, logs simples e arquivos YAML de configuração.
+Criar a fundaÃ§Ã£o configurÃ¡vel do projeto: settings, paths, hashing, datas, logs simples e arquivos YAML de configuraÃ§Ã£o.
 
 ## Tarefas
 
-### F1.T1 — Criar `configs/settings.yaml`
+### F1.T1 â€” Criar `configs/settings.yaml`
 
-Conteúdo mínimo:
+ConteÃºdo mÃ­nimo:
 
 ```yaml
 project:
@@ -281,9 +303,9 @@ news:
   request_timeout_seconds: 20
 ```
 
-### F1.T2 — Criar `configs/news_sources.yaml`
+### F1.T2 â€” Criar `configs/news_sources.yaml`
 
-Incluir allowlist máxima:
+Incluir allowlist mÃ¡xima:
 
 ```yaml
 allowed_domains:
@@ -299,20 +321,20 @@ allowed_domains:
   - who.int
 ```
 
-### F1.T3 — Criar `configs/metric_catalog.yaml`
+### F1.T3 â€” Criar `configs/metric_catalog.yaml`
 
-Registrar fórmulas das métricas obrigatórias:
+Registrar fÃ³rmulas das mÃ©tricas obrigatÃ³rias:
 
 - taxa de aumento de casos;
 - taxa de mortalidade conhecida;
 - taxa de mortalidade bruta;
-- proporção de casos com UTI;
-- proporção de casos com vacinação registrada;
-- gráficos obrigatórios.
+- proporÃ§Ã£o de casos com UTI;
+- proporÃ§Ã£o de casos com vacinaÃ§Ã£o registrada;
+- grÃ¡ficos obrigatÃ³rios.
 
-### F1.T4 — Criar `configs/column_mapping.yaml`
+### F1.T4 â€” Criar `configs/column_mapping.yaml`
 
-Criar mapeamento inicial de colunas candidatas para conceitos canônicos:
+Criar mapeamento inicial de colunas candidatas para conceitos canÃ´nicos:
 
 ```yaml
 case_date:
@@ -339,27 +361,27 @@ final_classification:
   candidates: [CLASSI_FIN]
 ```
 
-### F1.T5 — Implementar utilitários
+### F1.T5 â€” Implementar utilitÃ¡rios
 
 Arquivos:
 
 ```text
-src/srag_agent/utils/paths.py
-src/srag_agent/utils/hashing.py
-src/srag_agent/utils/dates.py
-src/srag_agent/audit/logger.py
+src/utils/paths.py
+src/utils/hashing.py
+src/utils/dates.py
+src/audit/logger.py
 ```
 
-Funções mínimas:
+FunÃ§Ãµes mÃ­nimas:
 
-- criar diretórios;
+- criar diretÃ³rios;
 - resolver paths;
 - calcular SHA-256;
 - gerar `run_id`;
 - carregar YAML;
-- logger básico estruturado.
+- logger bÃ¡sico estruturado.
 
-### F1.T6 — Criar testes
+### F1.T6 â€” Criar testes
 
 Arquivos:
 
@@ -369,15 +391,15 @@ tests/test_hashing.py
 tests/test_dates.py
 ```
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- Configurações carregam corretamente.
-- Allowlist contém no máximo 10 fontes.
+- ConfiguraÃ§Ãµes carregam corretamente.
+- Allowlist contÃ©m no mÃ¡ximo 10 fontes.
 - Hash SHA-256 testado.
-- `run_id` gerado de forma estável e segura.
+- `run_id` gerado de forma estÃ¡vel e segura.
 - Testes passando.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -395,39 +417,39 @@ git commit -m "feat: complete phase 1 - configuration and base utilities"
 
 ---
 
-# Fase 2 — Cliente GitLab e Ingestão da Camada Landing
+# Fase 2 â€” Cliente GitLab e IngestÃ£o da Camada Landing
 
 ## Objetivo
 
-Implementar a ingestão automática do arquivo `srag_total.xlsx` a partir da pasta mais recente do repositório GitLab.
+Implementar a ingestÃ£o automÃ¡tica do arquivo `srag_total.xlsx` a partir da pasta mais recente do repositÃ³rio GitLab.
 
 ## Tarefas
 
-### F2.T1 — Implementar `gitlab_client.py`
+### F2.T1 â€” Implementar `gitlab_client.py`
 
 Arquivo:
 
 ```text
-src/srag_agent/data/gitlab_client.py
+src/data/gitlab_client.py
 ```
 
 Responsabilidades:
 
-- montar URLs da API pública do GitLab;
-- listar árvore do repositório;
+- montar URLs da API pÃºblica do GitLab;
+- listar Ã¡rvore do repositÃ³rio;
 - navegar no path configurado;
 - listar pastas de `Dados unificados/Unificado Srag`;
 - baixar arquivo bruto.
 
-### F2.T2 — Implementar parser de pasta mais recente
+### F2.T2 â€” Implementar parser de pasta mais recente
 
 Arquivo:
 
 ```text
-src/srag_agent/data/ingestion.py
+src/data/ingestion.py
 ```
 
-Funções:
+FunÃ§Ãµes:
 
 ```python
 parse_folder_version(folder_name: str) -> tuple[int, ...]
@@ -436,14 +458,14 @@ select_latest_folder(folder_names: list[str]) -> str
 
 Regras:
 
-- ordenar por ano e sufixos numéricos;
+- ordenar por ano e sufixos numÃ©ricos;
 - suportar formatos como `2026_24`, `2025`, `2024`;
-- ignorar nomes inválidos com warning;
-- falhar explicitamente se nenhuma pasta válida existir.
+- ignorar nomes invÃ¡lidos com warning;
+- falhar explicitamente se nenhuma pasta vÃ¡lida existir.
 
-### F2.T3 — Implementar download para landing
+### F2.T3 â€” Implementar download para landing
 
-Função:
+FunÃ§Ã£o:
 
 ```python
 run_ingestion(run_id: str | None = None) -> IngestionResult
@@ -451,18 +473,18 @@ run_ingestion(run_id: str | None = None) -> IngestionResult
 
 Deve:
 
-- criar diretório `data/landing/<run_id>`;
+- criar diretÃ³rio `data/landing/<run_id>`;
 - baixar `srag_total.xlsx`;
 - salvar arquivo bruto;
 - calcular hash;
-- registrar metadados mínimos.
+- registrar metadados mÃ­nimos.
 
-### F2.T4 — Criar modelos Pydantic
+### F2.T4 â€” Criar modelos Pydantic
 
 Arquivo:
 
 ```text
-src/srag_agent/data/schema.py
+src/data/schema.py
 ```
 
 Modelos:
@@ -472,7 +494,7 @@ IngestionResult
 GitLabTreeItem
 ```
 
-### F2.T5 — Criar testes com mock
+### F2.T5 â€” Criar testes com mock
 
 Arquivos:
 
@@ -484,21 +506,21 @@ tests/test_ingestion.py
 
 Testar:
 
-- seleção de `2026_24` como mais recente quando existir;
-- seleção de `2025` se só houver anos;
-- erro quando não houver pasta válida;
+- seleÃ§Ã£o de `2026_24` como mais recente quando existir;
+- seleÃ§Ã£o de `2025` se sÃ³ houver anos;
+- erro quando nÃ£o houver pasta vÃ¡lida;
 - download mockado;
-- criação de landing;
+- criaÃ§Ã£o de landing;
 - hash calculado.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- A pasta mais recente é escolhida por código testado.
-- O download é encapsulado.
-- O resultado da ingestão é estruturado.
+- A pasta mais recente Ã© escolhida por cÃ³digo testado.
+- O download Ã© encapsulado.
+- O resultado da ingestÃ£o Ã© estruturado.
 - A fase funciona com mock nos testes.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -516,38 +538,38 @@ git commit -m "feat: complete phase 2 - gitlab ingestion pipeline"
 
 ---
 
-# Fase 3 — Pré-processamento, Validação e Camada Refined
+# Fase 3 â€” PrÃ©-processamento, ValidaÃ§Ã£o e Camada Refined
 
 ## Objetivo
 
-Transformar o Excel bruto em uma base Parquet refinada, validada e adequada para métricas.
+Transformar o Excel bruto em uma base Parquet refinada, validada e adequada para mÃ©tricas.
 
 ## Tarefas
 
-### F3.T1 — Implementar leitura do Excel
+### F3.T1 â€” Implementar leitura do Excel
 
 Arquivo:
 
 ```text
-src/srag_agent/data/preprocessing.py
+src/data/preprocessing.py
 ```
 
-Função:
+FunÃ§Ã£o:
 
 ```python
 load_raw_srag_excel(path: Path) -> pd.DataFrame
 ```
 
-### F3.T2 — Implementar normalização de colunas
+### F3.T2 â€” Implementar normalizaÃ§Ã£o de colunas
 
-Funções:
+FunÃ§Ãµes:
 
 ```python
 resolve_column_mapping(df: pd.DataFrame, mapping: dict) -> dict
 normalize_selected_columns(df: pd.DataFrame, resolved_mapping: dict) -> pd.DataFrame
 ```
 
-Criar colunas canônicas:
+Criar colunas canÃ´nicas:
 
 ```text
 case_date
@@ -563,44 +585,44 @@ city
 final_classification
 ```
 
-### F3.T3 — Implementar tratamento de datas e valores
+### F3.T3 â€” Implementar tratamento de datas e valores
 
 Regras:
 
-- converter datas com tolerância a erros;
-- preservar contagem de datas inválidas;
-- normalizar códigos de evolução, UTI e vacinação;
-- remover linhas sem data de caso e sem data de notificação;
+- converter datas com tolerÃ¢ncia a erros;
+- preservar contagem de datas invÃ¡lidas;
+- normalizar cÃ³digos de evoluÃ§Ã£o, UTI e vacinaÃ§Ã£o;
+- remover linhas sem data de caso e sem data de notificaÃ§Ã£o;
 - criar `canonical_case_date`.
 
-### F3.T4 — Implementar validação de dados
+### F3.T4 â€” Implementar validaÃ§Ã£o de dados
 
 Arquivo:
 
 ```text
-src/srag_agent/data/validation.py
+src/data/validation.py
 ```
 
-Gerar relatório:
+Gerar relatÃ³rio:
 
 ```text
 artifacts/runs/<run_id>/data_quality_report.json
 ```
 
-Conteúdo:
+ConteÃºdo:
 
 - linhas brutas;
 - linhas refinadas;
 - colunas encontradas;
 - colunas ausentes;
 - taxa de nulos;
-- datas inválidas;
+- datas invÃ¡lidas;
 - registros descartados;
 - warnings.
 
-### F3.T5 — Salvar Parquet
+### F3.T5 â€” Salvar Parquet
 
-Função:
+FunÃ§Ã£o:
 
 ```python
 run_preprocessing(raw_file: Path, run_id: str) -> PreprocessingResult
@@ -612,11 +634,11 @@ Salvar:
 data/refined/<run_id>/srag_total.parquet
 ```
 
-### F3.T6 — Criar fixture pequena para testes
+### F3.T6 â€” Criar fixture pequena para testes
 
-Criar fixture sintética em teste, sem versionar dados reais grandes.
+Criar fixture sintÃ©tica em teste, sem versionar dados reais grandes.
 
-### F3.T7 — Criar testes
+### F3.T7 â€” Criar testes
 
 Arquivos:
 
@@ -627,48 +649,48 @@ tests/test_validation.py
 
 Testar:
 
-- resolução de colunas;
+- resoluÃ§Ã£o de colunas;
 - fallback de data;
-- datas inválidas;
+- datas invÃ¡lidas;
 - nulos;
-- geração de Parquet;
-- geração de data quality report.
+- geraÃ§Ã£o de Parquet;
+- geraÃ§Ã£o de data quality report.
 
-### F3.T8 — Ajuste fino contra schema real do `srag_total.xlsx`
+### F3.T8 â€” Ajuste fino contra schema real do `srag_total.xlsx`
 
 Status: DONE
 
-Após executar a ingestão real do arquivo completo, validar o schema e os códigos
+ApÃ³s executar a ingestÃ£o real do arquivo completo, validar o schema e os cÃ³digos
 efetivos do `srag_total.xlsx` baixado e ajustar:
 
 - `configs/column_mapping.yaml` com aliases reais adicionais, se aparecerem;
-- normalização semântica dos códigos de `EVOLUCAO`, `UTI`, `VACINA_COV` e campos equivalentes;
+- normalizaÃ§Ã£o semÃ¢ntica dos cÃ³digos de `EVOLUCAO`, `UTI`, `VACINA_COV` e campos equivalentes;
 - regras de obrigatoriedade entre colunas essenciais e complementares;
-- warnings do `data_quality_report.json` para limitações observadas no arquivo real.
+- warnings do `data_quality_report.json` para limitaÃ§Ãµes observadas no arquivo real.
 
-Esse ajuste deve preservar a estratégia configurável: adaptar o mapeamento em
-`configs/` quando possível e só alterar código quando houver regra semântica
+Esse ajuste deve preservar a estratÃ©gia configurÃ¡vel: adaptar o mapeamento em
+`configs/` quando possÃ­vel e sÃ³ alterar cÃ³digo quando houver regra semÃ¢ntica
 nova que precise ser testada.
 
-Evidência executada:
+EvidÃªncia executada:
 
 - arquivo real baixado de `Dados unificados/Unificado Srag/2026_24/srag_total.xlsx`;
-- schema real identificado como agregado por semana epidemiológica, UF, município,
-  faixa etária, casos e óbitos;
+- schema real identificado como agregado por semana epidemiolÃ³gica, UF, municÃ­pio,
+  faixa etÃ¡ria, casos e Ã³bitos;
 - preprocessamento adaptado para schema agregado sem remover suporte ao schema
   linha a linha;
-- métricas adaptadas para usar `casos` e `obitos` agregados quando presentes;
+- mÃ©tricas adaptadas para usar `casos` e `obitos` agregados quando presentes;
 - smoke real gerou Parquet, `data_quality_report.json`, `metrics.json` e os dois
-  gráficos obrigatórios para o run `20260627T212036-0300`.
+  grÃ¡ficos obrigatÃ³rios para o run `20260627T212036-0300`.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
 - Excel bruto convertido para Parquet.
-- Colunas canônicas criadas.
-- Relatório de qualidade gerado.
-- Testes com fixture sintética passando.
+- Colunas canÃ´nicas criadas.
+- RelatÃ³rio de qualidade gerado.
+- Testes com fixture sintÃ©tica passando.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -686,39 +708,39 @@ git commit -m "feat: complete phase 3 - preprocessing and refined layer"
 
 ---
 
-# Fase 4 — Métricas e Gráficos Obrigatórios
+# Fase 4 â€” MÃ©tricas e GrÃ¡ficos ObrigatÃ³rios
 
 ## Objetivo
 
-Implementar o cálculo determinístico das métricas e a geração dos dois gráficos exigidos.
+Implementar o cÃ¡lculo determinÃ­stico das mÃ©tricas e a geraÃ§Ã£o dos dois grÃ¡ficos exigidos.
 
 ## Tarefas
 
-### F4.T1 — Implementar definições de métricas
+### F4.T1 â€” Implementar definiÃ§Ãµes de mÃ©tricas
 
 Arquivo:
 
 ```text
-src/srag_agent/metrics/definitions.py
+src/metrics/definitions.py
 ```
 
-Criar documentação em código para:
+Criar documentaÃ§Ã£o em cÃ³digo para:
 
 - taxa de aumento 7d;
 - mortalidade conhecida;
 - mortalidade bruta;
-- proporção de casos com UTI;
-- proporção de casos com vacinação registrada.
+- proporÃ§Ã£o de casos com UTI;
+- proporÃ§Ã£o de casos com vacinaÃ§Ã£o registrada.
 
-### F4.T2 — Implementar calculadoras
+### F4.T2 â€” Implementar calculadoras
 
 Arquivo:
 
 ```text
-src/srag_agent/metrics/calculators.py
+src/metrics/calculators.py
 ```
 
-Funções:
+FunÃ§Ãµes:
 
 ```python
 calculate_reference_date(df: pd.DataFrame) -> date
@@ -729,15 +751,15 @@ calculate_vaccination_rate(df: pd.DataFrame) -> MetricValue
 calculate_metric_summary(parquet_path: Path) -> MetricSummary
 ```
 
-### F4.T3 — Implementar gráficos
+### F4.T3 â€” Implementar grÃ¡ficos
 
 Arquivo:
 
 ```text
-src/srag_agent/metrics/charts.py
+src/metrics/charts.py
 ```
 
-Funções:
+FunÃ§Ãµes:
 
 ```python
 generate_daily_cases_30d_chart(df: pd.DataFrame, output_path: Path) -> Path
@@ -750,7 +772,7 @@ Salvar em:
 artifacts/runs/<run_id>/charts/
 ```
 
-### F4.T4 — Persistir `metrics.json`
+### F4.T4 â€” Persistir `metrics.json`
 
 Salvar:
 
@@ -758,7 +780,7 @@ Salvar:
 artifacts/runs/<run_id>/metrics.json
 ```
 
-### F4.T5 — Criar testes
+### F4.T5 â€” Criar testes
 
 Arquivos:
 
@@ -769,23 +791,23 @@ tests/test_charts.py
 
 Testar:
 
-- cálculo com denominador zero;
+- cÃ¡lculo com denominador zero;
 - janelas de 7 dias;
 - mortalidade conhecida;
 - UTI;
-- vacinação;
-- geração dos gráficos;
-- existência de arquivos de saída.
+- vacinaÃ§Ã£o;
+- geraÃ§Ã£o dos grÃ¡ficos;
+- existÃªncia de arquivos de saÃ­da.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- As quatro métricas obrigatórias são calculadas por código.
-- Os dois gráficos obrigatórios são gerados.
-- Métricas têm limitações registradas quando necessário.
-- `metrics.json` é produzido.
+- As quatro mÃ©tricas obrigatÃ³rias sÃ£o calculadas por cÃ³digo.
+- Os dois grÃ¡ficos obrigatÃ³rios sÃ£o gerados.
+- MÃ©tricas tÃªm limitaÃ§Ãµes registradas quando necessÃ¡rio.
+- `metrics.json` Ã© produzido.
 - Testes passam.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -803,41 +825,41 @@ git commit -m "feat: complete phase 4 - deterministic metrics and charts"
 
 ---
 
-# Fase 5 — Notícias em Tempo Real com Allowlist
+# Fase 5 â€” NotÃ­cias em Tempo Real com Allowlist
 
 ## Objetivo
 
-Implementar busca e extração de notícias/fontes recentes sobre SRAG com domínio restrito por allowlist.
+Implementar busca e extraÃ§Ã£o de notÃ­cias/fontes recentes sobre SRAG com domÃ­nio restrito por allowlist.
 
 ## Tarefas
 
-### F5.T1 — Implementar validação de domínio
+### F5.T1 â€” Implementar validaÃ§Ã£o de domÃ­nio
 
 Arquivo:
 
 ```text
-src/srag_agent/guardrails/domain_allowlist.py
+src/guardrails/domain_allowlist.py
 ```
 
-Funções:
+FunÃ§Ãµes:
 
 ```python
 is_allowed_url(url: str, allowed_domains: list[str]) -> bool
 filter_allowed_urls(urls: list[str], allowed_domains: list[str]) -> list[str]
 ```
 
-### F5.T2 — Implementar busca de notícias
+### F5.T2 â€” Implementar busca de notÃ­cias
 
 Arquivo:
 
 ```text
-src/srag_agent/news/search.py
+src/news/search.py
 ```
 
-Abordagem inicial aceitável:
+Abordagem inicial aceitÃ¡vel:
 
-- usar busca via API configurável, se disponível;
-- ou preparar interface abstrata com implementação mock/local para testes;
+- usar busca via API configurÃ¡vel, se disponÃ­vel;
+- ou preparar interface abstrata com implementaÃ§Ã£o mock/local para testes;
 - deixar clara a necessidade de chave externa, se usada.
 
 A interface deve ser:
@@ -846,15 +868,15 @@ A interface deve ser:
 search_srag_news(query: str, allowed_domains: list[str], max_results: int) -> list[NewsSearchResult]
 ```
 
-### F5.T3 — Implementar extração de conteúdo
+### F5.T3 â€” Implementar extraÃ§Ã£o de conteÃºdo
 
 Arquivo:
 
 ```text
-src/srag_agent/news/extract.py
+src/news/extract.py
 ```
 
-Função:
+FunÃ§Ã£o:
 
 ```python
 extract_news_article(url: str) -> NewsArticle
@@ -865,24 +887,24 @@ Regras:
 - validar allowlist antes de extrair;
 - timeout;
 - user-agent claro;
-- tratar erro sem quebrar todo o relatório.
+- tratar erro sem quebrar todo o relatÃ³rio.
 
-### F5.T4 — Implementar ranking simples
+### F5.T4 â€” Implementar ranking simples
 
 Arquivo:
 
 ```text
-src/srag_agent/news/rank.py
+src/news/rank.py
 ```
 
-Critérios:
+CritÃ©rios:
 
 - fonte oficial primeiro;
-- recência;
-- presença de termos SRAG, síndrome respiratória, influenza, covid, VSR;
-- diversidade de domínios.
+- recÃªncia;
+- presenÃ§a de termos SRAG, sÃ­ndrome respiratÃ³ria, influenza, covid, VSR;
+- diversidade de domÃ­nios.
 
-### F5.T5 — Persistir `news_sources.json`
+### F5.T5 â€” Persistir `news_sources.json`
 
 Salvar:
 
@@ -890,7 +912,7 @@ Salvar:
 artifacts/runs/<run_id>/news_sources.json
 ```
 
-### F5.T6 — Criar testes
+### F5.T6 â€” Criar testes
 
 Arquivos:
 
@@ -902,22 +924,22 @@ tests/test_news_extraction.py
 
 Testar:
 
-- domínio permitido;
-- domínio bloqueado;
+- domÃ­nio permitido;
+- domÃ­nio bloqueado;
 - URL maliciosa;
 - ranking;
-- extração mockada;
-- persistência de fontes.
+- extraÃ§Ã£o mockada;
+- persistÃªncia de fontes.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- Nenhuma fonte fora da allowlist é aceita.
-- Notícias são estruturadas.
-- Falhas de notícia não quebram o pipeline completo.
-- `news_sources.json` é produzido.
+- Nenhuma fonte fora da allowlist Ã© aceita.
+- NotÃ­cias sÃ£o estruturadas.
+- Falhas de notÃ­cia nÃ£o quebram o pipeline completo.
+- `news_sources.json` Ã© produzido.
 - Testes passam.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -935,20 +957,20 @@ git commit -m "feat: complete phase 5 - allowlisted news pipeline"
 
 ---
 
-# Fase 6 — RAG Documental
+# Fase 6 â€” RAG Documental
 
 ## Objetivo
 
-Implementar uma camada de RAG para recuperar contexto metodológico, dicionário de dados, limitações, documentação e notícias processadas.
+Implementar uma camada de RAG para recuperar contexto metodolÃ³gico, dicionÃ¡rio de dados, limitaÃ§Ãµes, documentaÃ§Ã£o e notÃ­cias processadas.
 
 ## Tarefas
 
-### F6.T1 — Implementar loaders
+### F6.T1 â€” Implementar loaders
 
 Arquivo:
 
 ```text
-src/srag_agent/rag/loaders.py
+src/rag/loaders.py
 ```
 
 Carregar:
@@ -961,53 +983,53 @@ Carregar:
 - `artifacts/runs/<run_id>/news_sources.json`;
 - `artifacts/runs/<run_id>/report.md`, quando existir.
 
-### F6.T2 — Implementar chunking
+### F6.T2 â€” Implementar chunking
 
 Arquivo:
 
 ```text
-src/srag_agent/rag/chunking.py
+src/rag/chunking.py
 ```
 
-Critérios:
+CritÃ©rios:
 
 - chunks moderados;
 - metadados de origem;
-- separação por seção quando possível.
+- separaÃ§Ã£o por seÃ§Ã£o quando possÃ­vel.
 
-### F6.T3 — Implementar vector store
+### F6.T3 â€” Implementar vector store
 
 Arquivo:
 
 ```text
-src/srag_agent/rag/vector_store.py
+src/rag/vector_store.py
 ```
 
 Usar ChromaDB inicialmente.
 
-Diretório local:
+DiretÃ³rio local:
 
 ```text
 artifacts/vector_store/
 ```
 
-O `.gitignore` deve impedir versionamento desse diretório.
+O `.gitignore` deve impedir versionamento desse diretÃ³rio.
 
-### F6.T4 — Implementar retriever
+### F6.T4 â€” Implementar retriever
 
 Arquivo:
 
 ```text
-src/srag_agent/rag/retriever.py
+src/rag/retriever.py
 ```
 
-Função:
+FunÃ§Ã£o:
 
 ```python
 retrieve_context(query: str, top_k: int = 5) -> list[RetrievedDocument]
 ```
 
-### F6.T5 — Criar testes
+### F6.T5 â€” Criar testes
 
 Arquivos:
 
@@ -1021,16 +1043,16 @@ Testar:
 - carregamento de documentos;
 - metadados;
 - chunking;
-- recuperação com fixture pequena.
+- recuperaÃ§Ã£o com fixture pequena.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- RAG indexa documentação e contexto textual.
-- RAG não é usado para cálculo de métricas.
-- Recuperação retorna contexto com fonte.
+- RAG indexa documentaÃ§Ã£o e contexto textual.
+- RAG nÃ£o Ã© usado para cÃ¡lculo de mÃ©tricas.
+- RecuperaÃ§Ã£o retorna contexto com fonte.
 - Testes passam.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -1048,23 +1070,23 @@ git commit -m "feat: complete phase 6 - documental rag layer"
 
 ---
 
-# Fase 7 — Agente LangGraph e Tools Controladas
+# Fase 7 â€” Agente LangGraph e Tools Controladas
 
 ## Objetivo
 
-Implementar o agente principal como grafo controlado, usando tools para métricas, gráficos, notícias, RAG e validação de relatório.
+Implementar o agente principal como grafo controlado, usando tools para mÃ©tricas, grÃ¡ficos, notÃ­cias, RAG e validaÃ§Ã£o de relatÃ³rio.
 
 ## Tarefas
 
-### F7.T1 — Definir estado do agente
+### F7.T1 â€” Definir estado do agente
 
 Arquivo:
 
 ```text
-src/srag_agent/agents/state.py
+src/agents/state.py
 ```
 
-Estado mínimo:
+Estado mÃ­nimo:
 
 ```python
 AgentState = TypedDict(
@@ -1083,15 +1105,15 @@ AgentState = TypedDict(
 )
 ```
 
-### F7.T2 — Implementar tools
+### F7.T2 â€” Implementar tools
 
 Arquivo:
 
 ```text
-src/srag_agent/agents/tools.py
+src/agents/tools.py
 ```
 
-Tools mínimas:
+Tools mÃ­nimas:
 
 - `get_metric_summary_tool`;
 - `generate_required_charts_tool`;
@@ -1099,29 +1121,29 @@ Tools mínimas:
 - `retrieve_context_tool`;
 - `validate_report_contract_tool`.
 
-### F7.T3 — Implementar prompts versionados
+### F7.T3 â€” Implementar prompts versionados
 
 Arquivo:
 
 ```text
-src/srag_agent/agents/prompts.py
+src/agents/prompts.py
 ```
 
 Prompts devem instruir o agente a:
 
-- não inventar métricas;
+- nÃ£o inventar mÃ©tricas;
 - usar apenas resultados das tools;
-- diferenciar dado calculado de interpretação;
+- diferenciar dado calculado de interpretaÃ§Ã£o;
 - citar fontes;
-- declarar limitações;
-- não dar recomendação médica individual.
+- declarar limitaÃ§Ãµes;
+- nÃ£o dar recomendaÃ§Ã£o mÃ©dica individual.
 
-### F7.T4 — Implementar grafo
+### F7.T4 â€” Implementar grafo
 
 Arquivo:
 
 ```text
-src/srag_agent/agents/graph.py
+src/agents/graph.py
 ```
 
 Fluxo:
@@ -1140,24 +1162,24 @@ START
 END
 ```
 
-### F7.T5 — Implementar contrato de saída
+### F7.T5 â€” Implementar contrato de saÃ­da
 
 Arquivo:
 
 ```text
-src/srag_agent/agents/output_contracts.py
+src/agents/output_contracts.py
 ```
 
-Verificar que relatório tem:
+Verificar que relatÃ³rio tem:
 
-- quatro métricas;
-- dois gráficos;
+- quatro mÃ©tricas;
+- dois grÃ¡ficos;
 - fontes;
-- limitações;
+- limitaÃ§Ãµes;
 - aviso de uso;
-- ausência de dado individual.
+- ausÃªncia de dado individual.
 
-### F7.T6 — Criar testes
+### F7.T6 â€” Criar testes
 
 Arquivos:
 
@@ -1169,21 +1191,21 @@ tests/test_report_contract.py
 
 Testar com mocks:
 
-- tool de métricas chamada;
-- tool de notícias chamada;
-- relatório validado;
-- falha quando métrica obrigatória faltar;
+- tool de mÃ©tricas chamada;
+- tool de notÃ­cias chamada;
+- relatÃ³rio validado;
+- falha quando mÃ©trica obrigatÃ³ria faltar;
 - falha quando fonte faltar.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
 - Agente orquestrado por LangGraph.
 - Tools controladas.
-- Relatório gerado em Markdown.
-- Contrato de saída validado.
+- RelatÃ³rio gerado em Markdown.
+- Contrato de saÃ­da validado.
 - Testes passam.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -1201,20 +1223,20 @@ git commit -m "feat: complete phase 7 - langgraph agent and controlled tools"
 
 ---
 
-# Fase 8 — Guardrails e Auditoria Completa
+# Fase 8 â€” Guardrails e Auditoria Completa
 
 ## Objetivo
 
-Fortalecer segurança, privacidade, rastreabilidade e governança da solução.
+Fortalecer seguranÃ§a, privacidade, rastreabilidade e governanÃ§a da soluÃ§Ã£o.
 
 ## Tarefas
 
-### F8.T1 — Guardrail de entrada
+### F8.T1 â€” Guardrail de entrada
 
 Arquivo:
 
 ```text
-src/srag_agent/guardrails/input_guard.py
+src/guardrails/input_guard.py
 ```
 
 Bloquear:
@@ -1223,15 +1245,15 @@ Bloquear:
 - pedido para ignorar regras;
 - pedidos fora do escopo;
 - dados linha a linha;
-- diagnóstico individual;
+- diagnÃ³stico individual;
 - tratamento individual.
 
-### F8.T2 — Guardrail de privacidade
+### F8.T2 â€” Guardrail de privacidade
 
 Arquivo:
 
 ```text
-src/srag_agent/guardrails/privacy.py
+src/guardrails/privacy.py
 ```
 
 Implementar:
@@ -1242,32 +1264,32 @@ enforce_min_group_size(records: list[dict], min_group_size: int) -> list[dict]
 
 Regras:
 
-- não exibir grupos com contagem menor que `min_group_size`;
-- não retornar registros individuais;
+- nÃ£o exibir grupos com contagem menor que `min_group_size`;
+- nÃ£o retornar registros individuais;
 - bloquear granularidade excessiva.
 
-### F8.T3 — Guardrail de saída
+### F8.T3 â€” Guardrail de saÃ­da
 
 Arquivo:
 
 ```text
-src/srag_agent/guardrails/output_guard.py
+src/guardrails/output_guard.py
 ```
 
 Validar:
 
-- ausência de dados individuais;
-- presença de limitações;
-- presença de aviso de uso analítico;
-- ausência de recomendações clínicas individualizadas;
-- fontes para comentários externos.
+- ausÃªncia de dados individuais;
+- presenÃ§a de limitaÃ§Ãµes;
+- presenÃ§a de aviso de uso analÃ­tico;
+- ausÃªncia de recomendaÃ§Ãµes clÃ­nicas individualizadas;
+- fontes para comentÃ¡rios externos.
 
-### F8.T4 — Manifesto de execução
+### F8.T4 â€” Manifesto de execuÃ§Ã£o
 
 Arquivo:
 
 ```text
-src/srag_agent/audit/manifest.py
+src/audit/manifest.py
 ```
 
 Gerar:
@@ -1276,7 +1298,7 @@ Gerar:
 artifacts/runs/<run_id>/manifest.json
 ```
 
-Conteúdo mínimo:
+ConteÃºdo mÃ­nimo:
 
 - `run_id`;
 - timestamp;
@@ -1292,12 +1314,12 @@ Conteúdo mínimo:
 - metric catalog version;
 - allowlist version.
 
-### F8.T5 — Trace do agente
+### F8.T5 â€” Trace do agente
 
 Arquivo:
 
 ```text
-src/srag_agent/audit/run_context.py
+src/audit/run_context.py
 ```
 
 Gerar:
@@ -1308,16 +1330,16 @@ artifacts/runs/<run_id>/agent_trace.jsonl
 
 Registrar:
 
-- nó executado;
+- nÃ³ executado;
 - tool chamada;
 - status;
 - resumo de entrada;
-- resumo de saída;
+- resumo de saÃ­da;
 - timestamp.
 
-Não registrar segredos.
+NÃ£o registrar segredos.
 
-### F8.T6 — Criar testes
+### F8.T6 â€” Criar testes
 
 Arquivos:
 
@@ -1329,15 +1351,15 @@ tests/test_manifest.py
 tests/test_agent_trace.py
 ```
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- Guardrails implementados em código.
+- Guardrails implementados em cÃ³digo.
 - Manifesto gerado.
 - Trace gerado.
 - Testes passam.
 - README menciona guardrails e auditoria.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -1355,61 +1377,61 @@ git commit -m "feat: complete phase 8 - guardrails and audit layer"
 
 ---
 
-# Fase 9 — Reporting e Exportação
+# Fase 9 â€” Reporting e ExportaÃ§Ã£o
 
 ## Objetivo
 
-Criar geração de relatório consistente em Markdown e PDF, usando template versionado.
+Criar geraÃ§Ã£o de relatÃ³rio consistente em Markdown e PDF, usando template versionado.
 
 ## Tarefas
 
-### F9.T1 — Criar template Markdown
+### F9.T1 â€” Criar template Markdown
 
 Arquivo:
 
 ```text
-src/srag_agent/reporting/templates/report_template.md
+src/reporting/templates/report_template.md
 ```
 
 Estrutura:
 
 ```markdown
-# Relatório Automatizado de SRAG
+# RelatÃ³rio Automatizado de SRAG
 
-## 1. Sumário Executivo
+## 1. SumÃ¡rio Executivo
 ## 2. Dados Utilizados
-## 3. Métricas Principais
-## 4. Evolução Temporal
-## 5. Contexto de Notícias e Fontes Oficiais
-## 6. Comentários Analíticos do Agente
-## 7. Limitações Metodológicas
+## 3. MÃ©tricas Principais
+## 4. EvoluÃ§Ã£o Temporal
+## 5. Contexto de NotÃ­cias e Fontes Oficiais
+## 6. ComentÃ¡rios AnalÃ­ticos do Agente
+## 7. LimitaÃ§Ãµes MetodolÃ³gicas
 ## 8. Fontes Consultadas
 ## 9. Aviso de Uso
 ```
 
-### F9.T2 — Implementar builder
+### F9.T2 â€” Implementar builder
 
 Arquivo:
 
 ```text
-src/srag_agent/reporting/report_builder.py
+src/reporting/report_builder.py
 ```
 
-Função:
+FunÃ§Ã£o:
 
 ```python
 build_report_markdown(context: ReportContext) -> str
 ```
 
-### F9.T3 — Implementar exportador PDF
+### F9.T3 â€” Implementar exportador PDF
 
 Arquivo:
 
 ```text
-src/srag_agent/reporting/pdf_exporter.py
+src/reporting/pdf_exporter.py
 ```
 
-Função:
+FunÃ§Ã£o:
 
 ```python
 export_report_pdf(markdown_path: Path, output_pdf_path: Path) -> Path
@@ -1417,7 +1439,7 @@ export_report_pdf(markdown_path: Path, output_pdf_path: Path) -> Path
 
 Se WeasyPrint apresentar problema local, criar fallback HTML e documentar.
 
-### F9.T4 — Testes
+### F9.T4 â€” Testes
 
 Arquivos:
 
@@ -1426,14 +1448,14 @@ tests/test_report_builder.py
 tests/test_pdf_exporter.py
 ```
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- Relatório Markdown gerado.
+- RelatÃ³rio Markdown gerado.
 - PDF gerado ou fallback documentado.
 - Template versionado.
 - Testes passam.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -1451,45 +1473,45 @@ git commit -m "feat: complete phase 9 - report generation and export"
 
 ---
 
-# Fase 10 — Streamlit Dashboard
+# Fase 10 â€” Streamlit Dashboard
 
 ## Objetivo
 
-Criar interface demonstrável para avaliadores técnicos e usuários finais.
+Criar interface demonstrÃ¡vel para avaliadores tÃ©cnicos e usuÃ¡rios finais.
 
 ## Tarefas
 
-### F10.T1 — Criar `app/streamlit_app.py`
+### F10.T1 â€” Criar `app/streamlit_app.py`
 
-Abas obrigatórias:
+Abas obrigatÃ³rias:
 
 1. Pipeline
-2. Relatório
+2. RelatÃ³rio
 3. Qualidade dos Dados
 4. Chat
 
-### F10.T2 — Aba Pipeline
+### F10.T2 â€” Aba Pipeline
 
 Exibir:
 
-- botão para executar pipeline;
+- botÃ£o para executar pipeline;
 - pasta selecionada;
 - arquivo baixado;
 - hash;
 - status de refined;
 - links dos artefatos.
 
-### F10.T3 — Aba Relatório
+### F10.T3 â€” Aba RelatÃ³rio
 
 Exibir:
 
-- métricas principais;
-- gráficos;
-- relatório Markdown;
+- mÃ©tricas principais;
+- grÃ¡ficos;
+- relatÃ³rio Markdown;
 - fontes consultadas;
-- botão para baixar relatório.
+- botÃ£o para baixar relatÃ³rio.
 
-### F10.T4 — Aba Qualidade dos Dados
+### F10.T4 â€” Aba Qualidade dos Dados
 
 Exibir:
 
@@ -1498,25 +1520,25 @@ Exibir:
 - colunas usadas;
 - nulos;
 - warnings;
-- limitações.
+- limitaÃ§Ãµes.
 
-### F10.T5 — Aba Chat
+### F10.T5 â€” Aba Chat
 
 Permitir perguntas sobre:
 
-- relatório;
-- métricas;
+- relatÃ³rio;
+- mÃ©tricas;
 - metodologia;
-- limitações;
+- limitaÃ§Ãµes;
 - fontes.
 
 Bloquear:
 
-- diagnóstico;
+- diagnÃ³stico;
 - dados individuais;
 - perguntas fora de escopo.
 
-### F10.T6 — Testes mínimos
+### F10.T6 â€” Testes mÃ­nimos
 
 Criar:
 
@@ -1524,16 +1546,16 @@ Criar:
 tests/test_streamlit_smoke.py
 ```
 
-Testar import da aplicação e funções auxiliares sem subir servidor.
+Testar import da aplicaÃ§Ã£o e funÃ§Ãµes auxiliares sem subir servidor.
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
 - Dashboard executa com `streamlit run app/streamlit_app.py`.
 - Interface mostra artefatos.
 - Chat usa guardrails.
 - Teste smoke passa.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -1551,64 +1573,64 @@ git commit -m "feat: complete phase 10 - streamlit dashboard"
 
 ---
 
-# Fase 11 — Documentação, Diagrama e Preparação para Entrevista
+# Fase 11 â€” DocumentaÃ§Ã£o, Diagrama e PreparaÃ§Ã£o para Entrevista
 
 ## Objetivo
 
-Finalizar a documentação técnica do repositório, criar diagrama conceitual em PDF e preparar a defesa técnica.
+Finalizar a documentaÃ§Ã£o tÃ©cnica do repositÃ³rio, criar diagrama conceitual em PDF e preparar a defesa tÃ©cnica.
 
 ## Tarefas
 
-### F11.T1 — Atualizar README.md
+### F11.T1 â€” Atualizar README.md
 
 O README deve explicar:
 
-- visão geral;
+- visÃ£o geral;
 - arquitetura;
 - como rodar;
 - pipeline de dados;
-- métricas e fórmulas;
+- mÃ©tricas e fÃ³rmulas;
 - agente e tools;
 - RAG documental;
 - guardrails;
 - auditoria;
 - testes;
-- limitações;
-- próximos passos.
+- limitaÃ§Ãµes;
+- prÃ³ximos passos.
 
-### F11.T2 — Criar `docs/architecture.md`
+### F11.T2 â€” Criar `docs/architecture.md`
 
 Explicar:
 
 - camadas;
 - fluxo de dados;
 - fluxo do agente;
-- decisões de arquitetura;
+- decisÃµes de arquitetura;
 - trade-offs.
 
-### F11.T3 — Criar `docs/metric_catalog.md`
+### F11.T3 â€” Criar `docs/metric_catalog.md`
 
 Documentar:
 
-- fórmulas;
+- fÃ³rmulas;
 - colunas usadas;
-- limitações;
+- limitaÃ§Ãµes;
 - proxies.
 
-### F11.T4 — Criar `docs/limitations.md`
+### F11.T4 â€” Criar `docs/limitations.md`
 
 Documentar:
 
 - atraso da base;
 - nulos;
 - proxy de UTI;
-- proxy de vacinação;
-- notícias externas;
-- não substituição de análise oficial ou médica.
+- proxy de vacinaÃ§Ã£o;
+- notÃ­cias externas;
+- nÃ£o substituiÃ§Ã£o de anÃ¡lise oficial ou mÃ©dica.
 
-### F11.T5 — Criar diagrama conceitual PDF
+### F11.T5 â€” Criar diagrama conceitual PDF
 
-Arquivo obrigatório:
+Arquivo obrigatÃ³rio:
 
 ```text
 docs/architecture_diagram.pdf
@@ -1629,23 +1651,23 @@ Deve mostrar:
 - audit;
 - Streamlit.
 
-### F11.T6 — Criar seção de defesa técnica
+### F11.T6 â€” Criar seÃ§Ã£o de defesa tÃ©cnica
 
-Adicionar ao README uma seção com a narrativa:
+Adicionar ao README uma seÃ§Ã£o com a narrativa:
 
 ```text
-A solução separa cálculo determinístico de geração textual. O LLM não calcula métricas diretamente; ele chama tools auditáveis. O RAG é usado para documentação e contexto textual, não para cálculo tabular. As fontes externas são filtradas por allowlist. Cada execução gera manifesto, métricas, fontes, trace e relatório, permitindo auditoria e reprodutibilidade.
+A soluÃ§Ã£o separa cÃ¡lculo determinÃ­stico de geraÃ§Ã£o textual. O LLM nÃ£o calcula mÃ©tricas diretamente; ele chama tools auditÃ¡veis. O RAG Ã© usado para documentaÃ§Ã£o e contexto textual, nÃ£o para cÃ¡lculo tabular. As fontes externas sÃ£o filtradas por allowlist. Cada execuÃ§Ã£o gera manifesto, mÃ©tricas, fontes, trace e relatÃ³rio, permitindo auditoria e reprodutibilidade.
 ```
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
 - README completo.
-- Documentação em `docs/`.
+- DocumentaÃ§Ã£o em `docs/`.
 - PDF do diagrama presente.
-- Limitações claramente documentadas.
-- Projeto pronto para apresentação.
+- LimitaÃ§Ãµes claramente documentadas.
+- Projeto pronto para apresentaÃ§Ã£o.
 
-## Regressão obrigatória da fase
+## RegressÃ£o obrigatÃ³ria da fase
 
 ```bash
 source .venv/Scripts/activate
@@ -1663,15 +1685,15 @@ git commit -m "docs: complete phase 11 - documentation and interview readiness"
 
 ---
 
-# Fase 12 — Validação Final de Entrega
+# Fase 12 â€” ValidaÃ§Ã£o Final de Entrega
 
 ## Objetivo
 
-Executar uma validação final como se o avaliador técnico fosse clonar e rodar o projeto do zero.
+Executar uma validaÃ§Ã£o final como se o avaliador tÃ©cnico fosse clonar e rodar o projeto do zero.
 
 ## Tarefas
 
-### F12.T1 — Rodar instalação limpa
+### F12.T1 â€” Rodar instalaÃ§Ã£o limpa
 
 Em nova pasta ou ambiente limpo:
 
@@ -1684,7 +1706,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### F12.T2 — Rodar testes
+### F12.T2 â€” Rodar testes
 
 ```bash
 python -m pytest tests -q
@@ -1692,31 +1714,31 @@ python -m ruff check .
 python -m mypy src
 ```
 
-### F12.T3 — Rodar pipeline
+### F12.T3 â€” Rodar pipeline
 
 Executar comando definido pelo projeto, por exemplo:
 
 ```bash
-python -m srag_agent.data.ingestion
-python -m srag_agent.data.preprocessing
-python -m srag_agent.metrics.calculators
+python -m data.ingestion
+python -m data.preprocessing
+python -m metrics.calculators
 ```
 
 Ou comando consolidado, se implementado:
 
 ```bash
-python -m srag_agent.pipeline
+python -m pipeline
 ```
 
-### F12.T4 — Rodar Streamlit
+### F12.T4 â€” Rodar Streamlit
 
 ```bash
 streamlit run app/streamlit_app.py
 ```
 
-### F12.T5 — Conferir artefatos finais
+### F12.T5 â€” Conferir artefatos finais
 
-Validar existência de:
+Validar existÃªncia de:
 
 ```text
 artifacts/runs/<run_id>/manifest.json
@@ -1730,9 +1752,9 @@ artifacts/runs/<run_id>/charts/daily_cases_30d.png
 artifacts/runs/<run_id>/charts/monthly_cases_12m.png
 ```
 
-### F12.T6 — Revisar risco de arquivos indevidos
+### F12.T6 â€” Revisar risco de arquivos indevidos
 
-Garantir que não foram versionados:
+Garantir que nÃ£o foram versionados:
 
 - `.env`;
 - chaves;
@@ -1740,10 +1762,10 @@ Garantir que não foram versionados:
 - arquivos `.xlsx`;
 - Parquet;
 - vector store;
-- artifacts de execução;
+- artifacts de execuÃ§Ã£o;
 - logs locais.
 
-### F12.T7 — Commit final
+### F12.T7 â€” Commit final
 
 ```bash
 git status
@@ -1752,31 +1774,32 @@ git commit -m "chore: final delivery validation"
 git push
 ```
 
-## Critérios de aceite
+## CritÃ©rios de aceite
 
-- Repositório roda do zero.
+- RepositÃ³rio roda do zero.
 - Testes passam.
 - Streamlit abre.
-- Relatório é gerado.
-- Artefatos são criados.
-- README é suficiente para avaliação.
+- RelatÃ³rio Ã© gerado.
+- Artefatos sÃ£o criados.
+- README Ã© suficiente para avaliaÃ§Ã£o.
 - Nenhum segredo ou dado pesado foi versionado.
 
 ---
 
-# Checklist Final para Entrevista Técnica
+# Checklist Final para Entrevista TÃ©cnica
 
 Use este checklist antes de apresentar:
 
-- [ ] Sei explicar por que o LLM não calcula métricas.
+- [ ] Sei explicar por que o LLM nÃ£o calcula mÃ©tricas.
 - [ ] Sei explicar o papel do RAG documental.
 - [ ] Sei explicar a allowlist de fontes.
-- [ ] Sei explicar guardrails de entrada, tool e saída.
-- [ ] Sei explicar como a solução trata dados sensíveis.
-- [ ] Sei explicar a diferença entre proporção de UTI e ocupação real de leitos.
-- [ ] Sei explicar a diferença entre vacinação entre casos e cobertura populacional.
-- [ ] Sei mostrar o manifesto de execução.
+- [ ] Sei explicar guardrails de entrada, tool e saÃ­da.
+- [ ] Sei explicar como a soluÃ§Ã£o trata dados sensÃ­veis.
+- [ ] Sei explicar a diferenÃ§a entre proporÃ§Ã£o de UTI e ocupaÃ§Ã£o real de leitos.
+- [ ] Sei explicar a diferenÃ§a entre vacinaÃ§Ã£o entre casos e cobertura populacional.
+- [ ] Sei mostrar o manifesto de execuÃ§Ã£o.
 - [ ] Sei mostrar o `agent_trace.jsonl`.
 - [ ] Sei mostrar os testes automatizados.
 - [ ] Sei rodar o Streamlit.
-- [ ] Sei apontar próximos passos para produção.
+- [ ] Sei apontar prÃ³ximos passos para produÃ§Ã£o.
+

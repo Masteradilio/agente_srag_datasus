@@ -1,8 +1,8 @@
-import json
+﻿import json
 
-from srag_agent.data.schema import NewsSearchResult
-from srag_agent.news.extract import extract_news_article
-from srag_agent.news.sources import persist_news_sources
+from data.schema import NewsSearchResult
+from news.extract import extract_news_article
+from news.sources import persist_news_sources
 
 
 class FakeResponse:
@@ -55,3 +55,4 @@ def test_persist_news_sources(tmp_path) -> None:
 
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload[0]["source_domain"] == "www.who.int"
+

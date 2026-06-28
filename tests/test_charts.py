@@ -1,6 +1,6 @@
-import pandas as pd
+﻿import pandas as pd
 
-from srag_agent.metrics.charts import (
+from metrics.charts import (
     generate_daily_cases_30d_chart,
     generate_monthly_cases_12m_chart,
 )
@@ -20,3 +20,4 @@ def test_generate_required_charts(tmp_path) -> None:
     assert monthly_path.is_file()
     assert daily_path.stat().st_size > 0
     assert monthly_path.stat().st_size > 0
+

@@ -1,6 +1,6 @@
-import pytest
+﻿import pytest
 
-from srag_agent.guardrails.input_guard import enforce_input_guard, validate_input_request
+from guardrails.input_guard import enforce_input_guard, validate_input_request
 
 
 def test_input_guard_allows_srag_analytics_request() -> None:
@@ -21,3 +21,4 @@ def test_input_guard_allows_srag_analytics_request() -> None:
 def test_input_guard_blocks_unsafe_requests(user_request: str) -> None:
     with pytest.raises(ValueError):
         enforce_input_guard(user_request)
+

@@ -1,9 +1,9 @@
-import json
+﻿import json
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from srag_agent.utils.paths import ensure_directory, resolve_project_path
+from utils.paths import ensure_directory, resolve_project_path
 
 SECRET_KEYS = ("api_key", "apikey", "token", "secret", "password", "authorization")
 
@@ -70,4 +70,5 @@ def _sanitize(value: Any) -> Any:
     if isinstance(value, str) and len(value) > 500:
         return value[:500] + "...[truncated]"
     return value
+
 

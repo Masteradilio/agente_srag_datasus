@@ -1,6 +1,6 @@
-from datetime import datetime
+﻿from datetime import datetime
 
-from srag_agent.data.schema import NewsSearchResult
+from data.schema import NewsSearchResult
 
 OFFICIAL_PRIORITY = {
     "dadosabertos.saude.gov.br": 100,
@@ -18,7 +18,7 @@ OFFICIAL_PRIORITY = {
 RELEVANT_TERMS = [
     "srag",
     "sindrome respiratoria",
-    "síndrome respiratória",
+    "sÃ­ndrome respiratÃ³ria",
     "influenza",
     "covid",
     "vsr",
@@ -44,3 +44,4 @@ def _published_timestamp(value: str | None) -> int:
         return int(datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp())
     except ValueError:
         return 0
+

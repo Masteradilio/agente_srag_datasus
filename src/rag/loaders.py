@@ -1,7 +1,7 @@
-from pathlib import Path
+﻿from pathlib import Path
 
-from srag_agent.data.schema import DocumentSource
-from srag_agent.utils.paths import resolve_project_path
+from data.schema import DocumentSource
+from utils.paths import resolve_project_path
 
 DEFAULT_DOCUMENT_PATHS = [
     "README.md",
@@ -62,3 +62,4 @@ def _infer_source_type(path: Path) -> str:
     if path.suffix.lower() == ".md":
         return "markdown"
     return "text"
+

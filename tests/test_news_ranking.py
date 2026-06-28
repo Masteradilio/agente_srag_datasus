@@ -1,6 +1,6 @@
-from srag_agent.data.schema import NewsSearchResult
-from srag_agent.news.rank import rank_news_results
-from srag_agent.news.search import search_srag_news
+﻿from data.schema import NewsSearchResult
+from news.rank import rank_news_results
+from news.search import search_srag_news
 
 
 def test_news_ranking_prioritizes_official_relevant_recent_sources() -> None:
@@ -33,3 +33,4 @@ def test_search_srag_news_filters_candidates_by_allowlist() -> None:
 
     assert len(results) == 1
     assert results[0].source_domain == "www.who.int"
+

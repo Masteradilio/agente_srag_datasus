@@ -1,52 +1,52 @@
-# PRD.md — Agente GenAI para Relatório de SRAG com Dados OpenDataSUS
+﻿# PRD.md â€” Agente GenAI para RelatÃ³rio de SRAG com Dados OpenDataSUS
 
 **Projeto:** SRAG GenAI Report Agent  
-**Tipo:** Prova de Conceito técnica para desafio de Senior AI Engineer  
-**Versão:** 1.0  
-**Status:** Planejamento aprovado para implementação  
-**Autor:** Adílio Farias  
+**Tipo:** Prova de Conceito tÃ©cnica para desafio de Senior AI Engineer  
+**VersÃ£o:** 1.0  
+**Status:** Planejamento aprovado para implementaÃ§Ã£o  
+**Autor:** AdÃ­lio Farias  
 
 ---
 
 ## 1. Resumo Executivo
 
-Este projeto tem como objetivo construir uma solução baseada em Inteligência Artificial Generativa capaz de gerar relatórios automatizados sobre Síndrome Respiratória Aguda Grave (SRAG), combinando dados estruturados do OpenDataSUS/DataSUS com notícias e fontes oficiais em tempo real.
+Este projeto tem como objetivo construir uma soluÃ§Ã£o baseada em InteligÃªncia Artificial Generativa capaz de gerar relatÃ³rios automatizados sobre SÃ­ndrome RespiratÃ³ria Aguda Grave (SRAG), combinando dados estruturados do OpenDataSUS/DataSUS com notÃ­cias e fontes oficiais em tempo real.
 
-A solução será composta por um pipeline determinístico de dados, uma camada analítica auditável, um agente GenAI orquestrado por tools controladas, uma camada de RAG documental, mecanismos de guardrails e uma interface em Streamlit para demonstração.
+A soluÃ§Ã£o serÃ¡ composta por um pipeline determinÃ­stico de dados, uma camada analÃ­tica auditÃ¡vel, um agente GenAI orquestrado por tools controladas, uma camada de RAG documental, mecanismos de guardrails e uma interface em Streamlit para demonstraÃ§Ã£o.
 
-A decisão arquitetural principal é separar claramente:
+A decisÃ£o arquitetural principal Ã© separar claramente:
 
-1. **Cálculo determinístico:** ingestão, pré-processamento, validação, métricas e gráficos.
-2. **Geração com LLM:** explicação, contextualização, redação do relatório e interação conversacional.
-3. **Governança:** logs, rastreabilidade, versionamento, manifesto de execução, fontes consultadas e auditoria de decisões.
+1. **CÃ¡lculo determinÃ­stico:** ingestÃ£o, prÃ©-processamento, validaÃ§Ã£o, mÃ©tricas e grÃ¡ficos.
+2. **GeraÃ§Ã£o com LLM:** explicaÃ§Ã£o, contextualizaÃ§Ã£o, redaÃ§Ã£o do relatÃ³rio e interaÃ§Ã£o conversacional.
+3. **GovernanÃ§a:** logs, rastreabilidade, versionamento, manifesto de execuÃ§Ã£o, fontes consultadas e auditoria de decisÃµes.
 
-O LLM não deve calcular métricas diretamente a partir de linguagem natural. Ele deve chamar tools confiáveis que retornam métricas já calculadas por código. Isso reduz risco de alucinação, melhora reprodutibilidade e facilita a defesa técnica da arquitetura.
+O LLM nÃ£o deve calcular mÃ©tricas diretamente a partir de linguagem natural. Ele deve chamar tools confiÃ¡veis que retornam mÃ©tricas jÃ¡ calculadas por cÃ³digo. Isso reduz risco de alucinaÃ§Ã£o, melhora reprodutibilidade e facilita a defesa tÃ©cnica da arquitetura.
 
 ---
 
 ## 2. Contexto do Desafio
 
-A Indicium HealthCare Inc. deseja avaliar uma PoC capaz de ajudar profissionais da área da saúde a entenderem, em tempo real, a severidade e o avanço de surtos de doenças.
+A Indicium HealthCare Inc. deseja avaliar uma PoC capaz de ajudar profissionais da Ã¡rea da saÃºde a entenderem, em tempo real, a severidade e o avanÃ§o de surtos de doenÃ§as.
 
-Para a PoC, será usada a base real de internações por SRAG do OpenDataSUS/DataSUS. O agente deve consultar dados, buscar notícias em tempo real e gerar um relatório contendo métricas, gráficos e comentários explicativos sobre o cenário observado.
+Para a PoC, serÃ¡ usada a base real de internaÃ§Ãµes por SRAG do OpenDataSUS/DataSUS. O agente deve consultar dados, buscar notÃ­cias em tempo real e gerar um relatÃ³rio contendo mÃ©tricas, grÃ¡ficos e comentÃ¡rios explicativos sobre o cenÃ¡rio observado.
 
-As métricas obrigatórias são:
+As mÃ©tricas obrigatÃ³rias sÃ£o:
 
 - taxa de aumento de casos;
 - taxa de mortalidade;
-- taxa de ocupação de UTI;
-- taxa de vacinação da população;
-- gráfico de número diário de casos dos últimos 30 dias;
-- gráfico de número mensal de casos dos últimos 12 meses.
+- taxa de ocupaÃ§Ã£o de UTI;
+- taxa de vacinaÃ§Ã£o da populaÃ§Ã£o;
+- grÃ¡fico de nÃºmero diÃ¡rio de casos dos Ãºltimos 30 dias;
+- grÃ¡fico de nÃºmero mensal de casos dos Ãºltimos 12 meses.
 
-O desafio também avalia:
+O desafio tambÃ©m avalia:
 
 - escolha de arquitetura;
-- governança e transparência;
-- mecanismos de auditoria e registro das decisões dos agentes;
+- governanÃ§a e transparÃªncia;
+- mecanismos de auditoria e registro das decisÃµes dos agentes;
 - guardrails;
 - uso de tools;
-- tratamento de dados sensíveis;
+- tratamento de dados sensÃ­veis;
 - clean code.
 
 ---
@@ -55,113 +55,113 @@ O desafio também avalia:
 
 ### 3.1 Objetivo Principal
 
-Construir uma aplicação demonstrável que gere um relatório automatizado sobre SRAG, combinando métricas calculadas sobre dados reais com explicações contextualizadas por notícias e fontes oficiais recentes.
+Construir uma aplicaÃ§Ã£o demonstrÃ¡vel que gere um relatÃ³rio automatizado sobre SRAG, combinando mÃ©tricas calculadas sobre dados reais com explicaÃ§Ãµes contextualizadas por notÃ­cias e fontes oficiais recentes.
 
-### 3.2 Objetivos Técnicos
+### 3.2 Objetivos TÃ©cnicos
 
-- Automatizar a descoberta da pasta mais recente no repositório GitLab de dados unificados.
+- Automatizar a descoberta da pasta mais recente no repositÃ³rio GitLab de dados unificados.
 - Baixar o arquivo `srag_total.xlsx` da pasta mais recente.
 - Persistir o arquivo bruto em camada `landing`.
-- Pré-processar os dados e salvar versão otimizada em camada `refined`.
-- Calcular métricas epidemiológicas de forma determinística.
-- Gerar os dois gráficos obrigatórios.
-- Implementar um agente GenAI que use tools controladas para obter métricas, gráficos, contexto documental e notícias.
-- Implementar RAG documental para apoiar explicações metodológicas e consulta ao dicionário de dados, sem usar o banco vetorial como motor principal de cálculo tabular.
-- Registrar logs, fontes, decisões e artefatos por execução.
-- Expor a solução em dashboard Streamlit.
-- Criar documentação robusta no README e diagrama conceitual em PDF.
+- PrÃ©-processar os dados e salvar versÃ£o otimizada em camada `refined`.
+- Calcular mÃ©tricas epidemiolÃ³gicas de forma determinÃ­stica.
+- Gerar os dois grÃ¡ficos obrigatÃ³rios.
+- Implementar um agente GenAI que use tools controladas para obter mÃ©tricas, grÃ¡ficos, contexto documental e notÃ­cias.
+- Implementar RAG documental para apoiar explicaÃ§Ãµes metodolÃ³gicas e consulta ao dicionÃ¡rio de dados, sem usar o banco vetorial como motor principal de cÃ¡lculo tabular.
+- Registrar logs, fontes, decisÃµes e artefatos por execuÃ§Ã£o.
+- Expor a soluÃ§Ã£o em dashboard Streamlit.
+- Criar documentaÃ§Ã£o robusta no README e diagrama conceitual em PDF.
 
-### 3.3 Objetivos de Defesa Técnica
+### 3.3 Objetivos de Defesa TÃ©cnica
 
-A solução deve permitir defender claramente as seguintes decisões:
+A soluÃ§Ã£o deve permitir defender claramente as seguintes decisÃµes:
 
-- Por que métricas são calculadas por código e não pelo LLM.
-- Por que o agente usa tools com schemas e não acesso livre aos dados.
-- Como a arquitetura reduz alucinação.
-- Como as fontes externas são controladas por allowlist.
-- Como os dados sensíveis são tratados.
-- Como uma execução pode ser auditada e reproduzida.
-- Como o projeto poderia evoluir para produção.
+- Por que mÃ©tricas sÃ£o calculadas por cÃ³digo e nÃ£o pelo LLM.
+- Por que o agente usa tools com schemas e nÃ£o acesso livre aos dados.
+- Como a arquitetura reduz alucinaÃ§Ã£o.
+- Como as fontes externas sÃ£o controladas por allowlist.
+- Como os dados sensÃ­veis sÃ£o tratados.
+- Como uma execuÃ§Ã£o pode ser auditada e reproduzida.
+- Como o projeto poderia evoluir para produÃ§Ã£o.
 
 ---
 
-## 4. Não Objetivos
+## 4. NÃ£o Objetivos
 
-Este projeto não tem como objetivo:
+Este projeto nÃ£o tem como objetivo:
 
-- Substituir vigilância epidemiológica oficial.
-- Fornecer diagnóstico médico individual.
-- Recomendar tratamento clínico individualizado.
+- Substituir vigilÃ¢ncia epidemiolÃ³gica oficial.
+- Fornecer diagnÃ³stico mÃ©dico individual.
+- Recomendar tratamento clÃ­nico individualizado.
 - Expor dados linha a linha de pacientes.
-- Criar um modelo preditivo epidemiológico completo.
+- Criar um modelo preditivo epidemiolÃ³gico completo.
 - Fazer fine-tuning de LLM.
 - Construir infraestrutura cloud produtiva completa.
 - Criar um data warehouse corporativo.
-- Usar banco vetorial para cálculo numérico das métricas.
+- Usar banco vetorial para cÃ¡lculo numÃ©rico das mÃ©tricas.
 
 ---
 
-## 5. Personas e Usuários
+## 5. Personas e UsuÃ¡rios
 
-### 5.1 Usuário Avaliador Técnico
+### 5.1 UsuÃ¡rio Avaliador TÃ©cnico
 
-Pessoa que avaliará arquitetura, código, clareza, governança, guardrails, uso de tools e capacidade de defesa técnica.
+Pessoa que avaliarÃ¡ arquitetura, cÃ³digo, clareza, governanÃ§a, guardrails, uso de tools e capacidade de defesa tÃ©cnica.
 
 Necessidades:
 
 - Rodar o projeto com comandos simples.
 - Entender rapidamente a arquitetura.
-- Ver evidências de senioridade técnica.
-- Inspecionar logs, testes e decisões.
+- Ver evidÃªncias de senioridade tÃ©cnica.
+- Inspecionar logs, testes e decisÃµes.
 
-### 5.2 Profissional de Saúde / Analista Epidemiológico
+### 5.2 Profissional de SaÃºde / Analista EpidemiolÃ³gico
 
-Usuário final hipotético da PoC.
+UsuÃ¡rio final hipotÃ©tico da PoC.
 
 Necessidades:
 
-- Visualizar métricas de SRAG de forma clara.
-- Entender evolução recente dos casos.
-- Obter comentários contextualizados com fontes confiáveis.
-- Consultar limitações das métricas.
+- Visualizar mÃ©tricas de SRAG de forma clara.
+- Entender evoluÃ§Ã£o recente dos casos.
+- Obter comentÃ¡rios contextualizados com fontes confiÃ¡veis.
+- Consultar limitaÃ§Ãµes das mÃ©tricas.
 
 ### 5.3 Engenheiro de IA / Mantenedor
 
-Pessoa responsável por evoluir a solução.
+Pessoa responsÃ¡vel por evoluir a soluÃ§Ã£o.
 
 Necessidades:
 
-- Código modular.
-- Configurações centralizadas.
+- CÃ³digo modular.
+- ConfiguraÃ§Ãµes centralizadas.
 - Testes automatizados.
 - Contratos claros de tools.
-- Facilidade para trocar LLM, vector store ou fonte de notícias.
+- Facilidade para trocar LLM, vector store ou fonte de notÃ­cias.
 
 ---
 
-## 6. Princípios de Arquitetura
+## 6. PrincÃ­pios de Arquitetura
 
-### 6.1 Determinismo para Métricas
+### 6.1 Determinismo para MÃ©tricas
 
-Todas as métricas devem ser calculadas por código testável. O LLM apenas interpreta os resultados retornados por tools.
+Todas as mÃ©tricas devem ser calculadas por cÃ³digo testÃ¡vel. O LLM apenas interpreta os resultados retornados por tools.
 
-### 6.2 Separação entre Dados Tabulares e Conhecimento Textual
+### 6.2 SeparaÃ§Ã£o entre Dados Tabulares e Conhecimento Textual
 
 Dados tabulares devem ser armazenados em Parquet e consultados por Polars, DuckDB ou Pandas.
 
-O banco vetorial deve armazenar conteúdo textual, como:
+O banco vetorial deve armazenar conteÃºdo textual, como:
 
-- dicionário de dados;
-- catálogo de métricas;
-- documentação do projeto;
-- notícias extraídas;
-- relatórios gerados;
-- limitações metodológicas;
-- explicações de campos e fórmulas.
+- dicionÃ¡rio de dados;
+- catÃ¡logo de mÃ©tricas;
+- documentaÃ§Ã£o do projeto;
+- notÃ­cias extraÃ­das;
+- relatÃ³rios gerados;
+- limitaÃ§Ãµes metodolÃ³gicas;
+- explicaÃ§Ãµes de campos e fÃ³rmulas.
 
-### 6.3 Tools Pequenas, Explícitas e Auditáveis
+### 6.3 Tools Pequenas, ExplÃ­citas e AuditÃ¡veis
 
-O agente deve acessar funcionalidades por meio de tools com entrada e saída bem definidas.
+O agente deve acessar funcionalidades por meio de tools com entrada e saÃ­da bem definidas.
 
 Exemplo:
 
@@ -169,15 +169,15 @@ Exemplo:
 get_metric_summary(period: str, uf: str | None = None) -> MetricSummary
 ```
 
-O agente não deve receber acesso livre ao banco nem executar SQL arbitrário.
+O agente nÃ£o deve receber acesso livre ao banco nem executar SQL arbitrÃ¡rio.
 
-### 6.4 Segurança e Privacidade por Design
+### 6.4 SeguranÃ§a e Privacidade por Design
 
-O sistema deve bloquear perguntas fora do escopo, evitar exposição de registros individuais e aplicar regras de agregação mínima.
+O sistema deve bloquear perguntas fora do escopo, evitar exposiÃ§Ã£o de registros individuais e aplicar regras de agregaÃ§Ã£o mÃ­nima.
 
 ### 6.5 Reprodutibilidade
 
-Cada execução deve gerar um diretório de artefatos com manifesto, hash do dado bruto, hash do dado refinado, métricas, relatório, gráficos, fontes e trace do agente.
+Cada execuÃ§Ã£o deve gerar um diretÃ³rio de artefatos com manifesto, hash do dado bruto, hash do dado refinado, mÃ©tricas, relatÃ³rio, grÃ¡ficos, fontes e trace do agente.
 
 ### 6.6 Observabilidade
 
@@ -192,7 +192,7 @@ Todas as etapas relevantes devem gerar logs estruturados.
         |
         v
 [Data Ingestion]
-- listar diretórios
+- listar diretÃ³rios
 - escolher pasta mais recente
 - baixar srag_total.xlsx
 - salvar landing/raw
@@ -200,52 +200,52 @@ Todas as etapas relevantes devem gerar logs estruturados.
         |
         v
 [Data Quality + Preprocessing]
-- validação de schema mínimo
-- normalização de colunas
+- validaÃ§Ã£o de schema mÃ­nimo
+- normalizaÃ§Ã£o de colunas
 - tratamento de datas
-- tratamento de nulos e códigos
-- geração de data_quality_report.json
+- tratamento de nulos e cÃ³digos
+- geraÃ§Ã£o de data_quality_report.json
 - salvar refined/srag_total.parquet
         |
         v
 [Analytical Layer]
 - leitura Parquet
-- cálculo de métricas
-- agregações temporais
-- geração de gráficos
+- cÃ¡lculo de mÃ©tricas
+- agregaÃ§Ãµes temporais
+- geraÃ§Ã£o de grÃ¡ficos
         |
         v
 [Agent Orchestrator]
-- chama tools de métricas
-- chama tools de notícias
+- chama tools de mÃ©tricas
+- chama tools de notÃ­cias
 - consulta RAG documental
-- gera relatório
-- passa por validação de saída
+- gera relatÃ³rio
+- passa por validaÃ§Ã£o de saÃ­da
         |
         v
 [Guardrails + Audit]
 - valida entrada
 - restringe tools
 - aplica allowlist
-- bloqueia dados sensíveis
-- registra decisões
+- bloqueia dados sensÃ­veis
+- registra decisÃµes
         |
         v
 [Streamlit Dashboard]
 - pipeline
-- relatório
+- relatÃ³rio
 - qualidade dos dados
-- chat analítico
+- chat analÃ­tico
 ```
 
 ---
 
-## 8. Stack Técnica Recomendada
+## 8. Stack TÃ©cnica Recomendada
 
 ### 8.1 Linguagem e Empacotamento
 
 - Python 3.11+
-- `uv` ou `poetry` para gerenciamento de dependências
+- `uv` ou `poetry` para gerenciamento de dependÃªncias
 - `pyproject.toml`
 - `ruff` para lint/format
 - `pytest` para testes
@@ -254,32 +254,32 @@ Todas as etapas relevantes devem gerar logs estruturados.
 
 - `requests` ou `httpx` para acesso HTTP
 - `pandas` ou `polars` para leitura inicial de Excel
-- `duckdb` para consultas analíticas locais
+- `duckdb` para consultas analÃ­ticas locais
 - `pyarrow` para Parquet
-- `pandera` ou validações Pydantic para qualidade de dados
+- `pandera` ou validaÃ§Ãµes Pydantic para qualidade de dados
 
 ### 8.3 Agente e RAG
 
-- LangGraph para orquestração controlada do agente
-- LangChain apenas se facilitar integração com tools, retrievers e LLMs
+- LangGraph para orquestraÃ§Ã£o controlada do agente
+- LangChain apenas se facilitar integraÃ§Ã£o com tools, retrievers e LLMs
 - ChromaDB ou Qdrant como vector store open source
-- Modelo de embedding multilíngue, preferencialmente com bom suporte a português
-- LLM configurável por variável de ambiente
+- Modelo de embedding multilÃ­ngue, preferencialmente com bom suporte a portuguÃªs
+- LLM configurÃ¡vel por variÃ¡vel de ambiente
 
 ### 8.4 Interface
 
 - Streamlit para dashboard e chat
-- Plotly ou Matplotlib para gráficos
+- Plotly ou Matplotlib para grÃ¡ficos
 
-### 8.5 Exportação
+### 8.5 ExportaÃ§Ã£o
 
-- Markdown como formato primário do relatório
+- Markdown como formato primÃ¡rio do relatÃ³rio
 - PDF gerado a partir de Markdown/HTML
-- PNG ou SVG para gráficos
+- PNG ou SVG para grÃ¡ficos
 
 ---
 
-## 9. Estrutura de Repositório
+## 9. Estrutura de RepositÃ³rio
 
 ```text
 srag-genai-agent/
@@ -298,7 +298,7 @@ srag-genai-agent/
     column_mapping.yaml
 
   src/
-    srag_agent/
+    
       __init__.py
 
       data/
@@ -383,44 +383,44 @@ srag-genai-agent/
 
 ## 10. Fontes e Allowlist
 
-A aplicação deve consultar apenas fontes explicitamente permitidas. Isso reduz risco de baixa qualidade informacional, scraping indevido, prompt injection em páginas externas e uso de fontes não confiáveis.
+A aplicaÃ§Ã£o deve consultar apenas fontes explicitamente permitidas. Isso reduz risco de baixa qualidade informacional, scraping indevido, prompt injection em pÃ¡ginas externas e uso de fontes nÃ£o confiÃ¡veis.
 
-### 10.1 Allowlist Máxima de Fontes
+### 10.1 Allowlist MÃ¡xima de Fontes
 
-| Nº | Domínio/Fonte | Uso Permitido | Justificativa |
+| NÂº | DomÃ­nio/Fonte | Uso Permitido | Justificativa |
 |---:|---|---|---|
 | 1 | `gitlab.com/cgcovid/dados-abertos` | Download da base unificada SRAG | Fonte indicada no desafio para obter `srag_total.xlsx`. |
-| 2 | `dadosabertos.saude.gov.br` | Dataset oficial, dicionário de dados e metadados | Portal oficial de dados abertos do SUS. |
-| 3 | `gov.br/saude` | Notas técnicas, orientações e comunicados oficiais | Fonte institucional do Ministério da Saúde. |
-| 4 | `infoms.saude.gov.br` | Painéis oficiais de saúde e vacinação, quando aplicável | Fonte oficial para indicadores complementares. |
-| 5 | `fiocruz.br` | Boletins InfoGripe e notícias técnicas | Referência pública em vigilância e análise de SRAG. |
-| 6 | `github.com/infogripe` | Repositórios públicos do InfoGripe, quando úteis | Suporte técnico e materiais públicos relacionados ao InfoGripe. |
-| 7 | `agenciagov.ebc.com.br` | Notícias governamentais sobre saúde pública | Fonte pública de comunicação institucional. |
-| 8 | `agenciabrasil.ebc.com.br` | Notícias públicas de saúde | Fonte jornalística pública brasileira. |
-| 9 | `paho.org` | Contexto regional das Américas | Organização Pan-Americana da Saúde. |
-| 10 | `who.int` | Contexto global e vigilância respiratória | Organização Mundial da Saúde. |
+| 2 | `dadosabertos.saude.gov.br` | Dataset oficial, dicionÃ¡rio de dados e metadados | Portal oficial de dados abertos do SUS. |
+| 3 | `gov.br/saude` | Notas tÃ©cnicas, orientaÃ§Ãµes e comunicados oficiais | Fonte institucional do MinistÃ©rio da SaÃºde. |
+| 4 | `infoms.saude.gov.br` | PainÃ©is oficiais de saÃºde e vacinaÃ§Ã£o, quando aplicÃ¡vel | Fonte oficial para indicadores complementares. |
+| 5 | `fiocruz.br` | Boletins InfoGripe e notÃ­cias tÃ©cnicas | ReferÃªncia pÃºblica em vigilÃ¢ncia e anÃ¡lise de SRAG. |
+| 6 | `github.com/infogripe` | RepositÃ³rios pÃºblicos do InfoGripe, quando Ãºteis | Suporte tÃ©cnico e materiais pÃºblicos relacionados ao InfoGripe. |
+| 7 | `agenciagov.ebc.com.br` | NotÃ­cias governamentais sobre saÃºde pÃºblica | Fonte pÃºblica de comunicaÃ§Ã£o institucional. |
+| 8 | `agenciabrasil.ebc.com.br` | NotÃ­cias pÃºblicas de saÃºde | Fonte jornalÃ­stica pÃºblica brasileira. |
+| 9 | `paho.org` | Contexto regional das AmÃ©ricas | OrganizaÃ§Ã£o Pan-Americana da SaÃºde. |
+| 10 | `who.int` | Contexto global e vigilÃ¢ncia respiratÃ³ria | OrganizaÃ§Ã£o Mundial da SaÃºde. |
 
 ### 10.2 Regras de Uso da Allowlist
 
-- O agente não deve buscar fontes fora da allowlist.
-- Resultados de busca devem ser filtrados por domínio antes de qualquer extração.
-- Cada notícia usada no relatório deve ser registrada em `news_sources.json`.
-- Cada comentário baseado em notícia deve ser rastreável até pelo menos uma fonte.
-- Conteúdo de páginas externas deve ser tratado como dado não confiável.
-- Instruções encontradas em páginas externas nunca devem sobrescrever system prompt, developer prompt ou regras internas.
+- O agente nÃ£o deve buscar fontes fora da allowlist.
+- Resultados de busca devem ser filtrados por domÃ­nio antes de qualquer extraÃ§Ã£o.
+- Cada notÃ­cia usada no relatÃ³rio deve ser registrada em `news_sources.json`.
+- Cada comentÃ¡rio baseado em notÃ­cia deve ser rastreÃ¡vel atÃ© pelo menos uma fonte.
+- ConteÃºdo de pÃ¡ginas externas deve ser tratado como dado nÃ£o confiÃ¡vel.
+- InstruÃ§Ãµes encontradas em pÃ¡ginas externas nunca devem sobrescrever system prompt, developer prompt ou regras internas.
 
 ---
 
 ## 11. Pipeline de Dados
 
-### 11.1 Ingestão
+### 11.1 IngestÃ£o
 
 Responsabilidade: localizar e baixar automaticamente o arquivo mais recente.
 
 Fluxo:
 
-1. Acessar a árvore do repositório GitLab.
-2. Navegar até `Dados unificados/Unificado Srag`.
+1. Acessar a Ã¡rvore do repositÃ³rio GitLab.
+2. Navegar atÃ© `Dados unificados/Unificado Srag`.
 3. Listar subpastas.
 4. Identificar a pasta mais recente pelo nome.
 5. Validar se existe `srag_total.xlsx`.
@@ -429,39 +429,39 @@ Fluxo:
 8. Calcular hash SHA-256 do arquivo.
 9. Registrar metadados no manifesto.
 
-Critério de seleção da pasta mais recente:
+CritÃ©rio de seleÃ§Ã£o da pasta mais recente:
 
-- O nome da pasta deve ser interpretado por uma função dedicada.
-- A função deve aceitar formatos como `YYYY`, `YYYY_MM`, `YYYY_WW`, `YYYY_SE`, `YYYY_XX` ou equivalentes encontrados no repositório.
-- Quando houver ambiguidade, ordenar primeiro por ano e depois pelo maior sufixo numérico.
-- A função deve ser coberta por testes unitários.
+- O nome da pasta deve ser interpretado por uma funÃ§Ã£o dedicada.
+- A funÃ§Ã£o deve aceitar formatos como `YYYY`, `YYYY_MM`, `YYYY_WW`, `YYYY_SE`, `YYYY_XX` ou equivalentes encontrados no repositÃ³rio.
+- Quando houver ambiguidade, ordenar primeiro por ano e depois pelo maior sufixo numÃ©rico.
+- A funÃ§Ã£o deve ser coberta por testes unitÃ¡rios.
 
 ### 11.2 Camada Landing
 
-A camada `landing` deve armazenar o dado bruto sem alteração.
+A camada `landing` deve armazenar o dado bruto sem alteraÃ§Ã£o.
 
 Regras:
 
-- Nunca sobrescrever arquivo bruto sem registrar nova execução.
+- Nunca sobrescrever arquivo bruto sem registrar nova execuÃ§Ã£o.
 - Salvar hash do arquivo.
 - Salvar caminho original e pasta selecionada.
 - Salvar timestamp da coleta.
 
-### 11.3 Pré-processamento
+### 11.3 PrÃ©-processamento
 
-Responsabilidade: converter dados reais e imperfeitos em uma base analítica consistente.
+Responsabilidade: converter dados reais e imperfeitos em uma base analÃ­tica consistente.
 
 Tratamentos esperados:
 
 - normalizar nomes de colunas;
-- mapear colunas para nomes canônicos internos;
+- mapear colunas para nomes canÃ´nicos internos;
 - converter datas;
 - remover linhas completamente vazias;
-- tratar códigos ignorados ou desconhecidos;
-- padronizar valores categóricos;
+- tratar cÃ³digos ignorados ou desconhecidos;
+- padronizar valores categÃ³ricos;
 - gerar flags auxiliares;
-- aplicar validações mínimas de consistência;
-- preservar contagem de registros descartados ou inválidos;
+- aplicar validaÃ§Ãµes mÃ­nimas de consistÃªncia;
+- preservar contagem de registros descartados ou invÃ¡lidos;
 - salvar a base refinada em Parquet.
 
 ### 11.4 Camada Refined
@@ -472,48 +472,48 @@ Arquivo principal:
 data/refined/<run_id>/srag_total.parquet
 ```
 
-Essa camada será a fonte oficial para cálculo de métricas.
+Essa camada serÃ¡ a fonte oficial para cÃ¡lculo de mÃ©tricas.
 
 ---
 
 ## 12. Colunas Relevantes e Mapeamento
 
-Como bases públicas podem mudar de schema, o projeto deve usar um arquivo de mapeamento configurável.
+Como bases pÃºblicas podem mudar de schema, o projeto deve usar um arquivo de mapeamento configurÃ¡vel.
 
 Exemplo de colunas candidatas:
 
 | Conceito | Colunas candidatas | Uso |
 |---|---|---|
-| Data de notificação | `DT_NOTIFIC` | Série temporal alternativa. |
-| Data de início dos sintomas | `DT_SIN_PRI` | Série temporal preferencial para casos. |
-| Unidade Federativa | `SG_UF_NOT`, `SG_UF` | Filtros geográficos. |
-| Município | `ID_MUNICIP`, `CO_MUN_NOT` | Filtros agregados. |
-| Evolução | `EVOLUCAO` | Mortalidade. |
-| Data de evolução | `DT_EVOLUCA` | Recorte temporal de desfecho. |
-| UTI | `UTI` | Proporção de casos com UTI. |
-| Entrada em UTI | `DT_ENTUTI` | Estimativa temporal de UTI, se disponível. |
-| Saída de UTI | `DT_SAIDUTI` | Estimativa temporal de UTI, se disponível. |
-| Vacinação | `VACINA_COV`, `VACINA`, campos equivalentes | Proporção de casos com vacinação registrada. |
-| Classificação final | `CLASSI_FIN` | Filtros de SRAG por etiologia, se aplicável. |
-| Critério de encerramento | `CRITERIO` | Qualidade analítica. |
+| Data de notificaÃ§Ã£o | `DT_NOTIFIC` | SÃ©rie temporal alternativa. |
+| Data de inÃ­cio dos sintomas | `DT_SIN_PRI` | SÃ©rie temporal preferencial para casos. |
+| Unidade Federativa | `SG_UF_NOT`, `SG_UF` | Filtros geogrÃ¡ficos. |
+| MunicÃ­pio | `ID_MUNICIP`, `CO_MUN_NOT` | Filtros agregados. |
+| EvoluÃ§Ã£o | `EVOLUCAO` | Mortalidade. |
+| Data de evoluÃ§Ã£o | `DT_EVOLUCA` | Recorte temporal de desfecho. |
+| UTI | `UTI` | ProporÃ§Ã£o de casos com UTI. |
+| Entrada em UTI | `DT_ENTUTI` | Estimativa temporal de UTI, se disponÃ­vel. |
+| SaÃ­da de UTI | `DT_SAIDUTI` | Estimativa temporal de UTI, se disponÃ­vel. |
+| VacinaÃ§Ã£o | `VACINA_COV`, `VACINA`, campos equivalentes | ProporÃ§Ã£o de casos com vacinaÃ§Ã£o registrada. |
+| ClassificaÃ§Ã£o final | `CLASSI_FIN` | Filtros de SRAG por etiologia, se aplicÃ¡vel. |
+| CritÃ©rio de encerramento | `CRITERIO` | Qualidade analÃ­tica. |
 
 Regras:
 
-- Se uma coluna obrigatória não existir, a aplicação deve falhar de forma explicável.
-- Se uma coluna complementar não existir, a métrica associada deve registrar limitação.
-- O mapeamento real deve ser validado contra o dicionário de dados.
+- Se uma coluna obrigatÃ³ria nÃ£o existir, a aplicaÃ§Ã£o deve falhar de forma explicÃ¡vel.
+- Se uma coluna complementar nÃ£o existir, a mÃ©trica associada deve registrar limitaÃ§Ã£o.
+- O mapeamento real deve ser validado contra o dicionÃ¡rio de dados.
 
 ---
 
-## 13. Catálogo de Métricas
+## 13. CatÃ¡logo de MÃ©tricas
 
-As fórmulas devem ser documentadas em `configs/metric_catalog.yaml` e `docs/metric_catalog.md`.
+As fÃ³rmulas devem ser documentadas em `configs/metric_catalog.yaml` e `docs/metric_catalog.md`.
 
-### 13.1 Data de Referência
+### 13.1 Data de ReferÃªncia
 
-A data de referência do relatório deve ser a maior data válida encontrada na base refinada, e não necessariamente a data atual do sistema.
+A data de referÃªncia do relatÃ³rio deve ser a maior data vÃ¡lida encontrada na base refinada, e nÃ£o necessariamente a data atual do sistema.
 
-Motivo: bases públicas podem ter atraso de atualização.
+Motivo: bases pÃºblicas podem ter atraso de atualizaÃ§Ã£o.
 
 ```text
 data_referencia = max(data_evento_valida)
@@ -521,7 +521,7 @@ data_referencia = max(data_evento_valida)
 
 ### 13.2 Taxa de Aumento de Casos
 
-Definição principal:
+DefiniÃ§Ã£o principal:
 
 ```text
 taxa_aumento_7d = (casos_ultimos_7_dias - casos_7_dias_anteriores) / casos_7_dias_anteriores
@@ -529,27 +529,27 @@ taxa_aumento_7d = (casos_ultimos_7_dias - casos_7_dias_anteriores) / casos_7_dia
 
 Janela:
 
-- últimos 7 dias encerrados na data de referência;
+- Ãºltimos 7 dias encerrados na data de referÃªncia;
 - comparados com os 7 dias imediatamente anteriores.
 
-Tratamento de divisão por zero:
+Tratamento de divisÃ£o por zero:
 
-- se o período anterior tiver zero casos, retornar `null` e explicar limitação.
+- se o perÃ­odo anterior tiver zero casos, retornar `null` e explicar limitaÃ§Ã£o.
 
 Campos usados:
 
-- data canônica de caso, preferencialmente início dos sintomas;
-- fallback para data de notificação se necessário.
+- data canÃ´nica de caso, preferencialmente inÃ­cio dos sintomas;
+- fallback para data de notificaÃ§Ã£o se necessÃ¡rio.
 
 ### 13.3 Taxa de Mortalidade
 
-Definição principal:
+DefiniÃ§Ã£o principal:
 
 ```text
 taxa_mortalidade_conhecida = obitos / casos_com_evolucao_conhecida
 ```
 
-Definição complementar:
+DefiniÃ§Ã£o complementar:
 
 ```text
 taxa_mortalidade_bruta = obitos / casos_totais
@@ -557,69 +557,69 @@ taxa_mortalidade_bruta = obitos / casos_totais
 
 Motivo:
 
-A taxa sobre casos com evolução conhecida reduz distorção causada por registros ainda em aberto ou sem preenchimento.
+A taxa sobre casos com evoluÃ§Ã£o conhecida reduz distorÃ§Ã£o causada por registros ainda em aberto ou sem preenchimento.
 
-O relatório deve apresentar a métrica principal e informar a limitação.
+O relatÃ³rio deve apresentar a mÃ©trica principal e informar a limitaÃ§Ã£o.
 
-### 13.4 Taxa de Ocupação de UTI
+### 13.4 Taxa de OcupaÃ§Ã£o de UTI
 
-A base de SRAG não necessariamente contém denominador de leitos disponíveis. Portanto, a métrica deve ser nomeada com precisão.
+A base de SRAG nÃ£o necessariamente contÃ©m denominador de leitos disponÃ­veis. Portanto, a mÃ©trica deve ser nomeada com precisÃ£o.
 
-Definição principal para a PoC:
+DefiniÃ§Ã£o principal para a PoC:
 
 ```text
 proporcao_casos_com_uti = casos_com_uti / casos_totais
 ```
 
-Nome recomendado no relatório:
+Nome recomendado no relatÃ³rio:
 
 ```text
-Proporção de casos de SRAG com passagem por UTI
+ProporÃ§Ã£o de casos de SRAG com passagem por UTI
 ```
 
-Se houver datas de entrada e saída de UTI, pode ser criada uma métrica complementar:
+Se houver datas de entrada e saÃ­da de UTI, pode ser criada uma mÃ©trica complementar:
 
 ```text
 casos_estimados_em_uti_por_dia
 ```
 
-Limitação obrigatória:
+LimitaÃ§Ã£o obrigatÃ³ria:
 
-A métrica não representa ocupação hospitalar real de leitos sem uma base externa de leitos disponíveis.
+A mÃ©trica nÃ£o representa ocupaÃ§Ã£o hospitalar real de leitos sem uma base externa de leitos disponÃ­veis.
 
-### 13.5 Taxa de Vacinação da População
+### 13.5 Taxa de VacinaÃ§Ã£o da PopulaÃ§Ã£o
 
-A base SRAG pode conter informação de vacinação dos casos notificados, mas isso não mede automaticamente cobertura vacinal da população geral.
+A base SRAG pode conter informaÃ§Ã£o de vacinaÃ§Ã£o dos casos notificados, mas isso nÃ£o mede automaticamente cobertura vacinal da populaÃ§Ã£o geral.
 
-Definição principal da PoC:
+DefiniÃ§Ã£o principal da PoC:
 
 ```text
 proporcao_casos_com_vacinacao_registrada = casos_com_vacinacao_registrada / casos_com_status_vacinal_conhecido
 ```
 
-Nome recomendado no relatório:
+Nome recomendado no relatÃ³rio:
 
 ```text
-Proporção de casos de SRAG com vacinação registrada
+ProporÃ§Ã£o de casos de SRAG com vacinaÃ§Ã£o registrada
 ```
 
-Extensão opcional:
+ExtensÃ£o opcional:
 
-- consultar fonte oficial complementar de cobertura vacinal populacional, caso disponível e estável;
-- apresentar cobertura populacional separadamente da proporção entre casos.
+- consultar fonte oficial complementar de cobertura vacinal populacional, caso disponÃ­vel e estÃ¡vel;
+- apresentar cobertura populacional separadamente da proporÃ§Ã£o entre casos.
 
-Limitação obrigatória:
+LimitaÃ§Ã£o obrigatÃ³ria:
 
-A métrica calculada na base de SRAG não deve ser descrita como cobertura vacinal populacional geral se o denominador populacional não estiver disponível.
+A mÃ©trica calculada na base de SRAG nÃ£o deve ser descrita como cobertura vacinal populacional geral se o denominador populacional nÃ£o estiver disponÃ­vel.
 
-### 13.6 Gráfico de Casos Diários — Últimos 30 Dias
+### 13.6 GrÃ¡fico de Casos DiÃ¡rios â€” Ãšltimos 30 Dias
 
-Definição:
+DefiniÃ§Ã£o:
 
 - eixo X: data;
-- eixo Y: número de casos;
-- janela: 30 dias encerrados na data de referência;
-- agregação: contagem de casos por data canônica.
+- eixo Y: nÃºmero de casos;
+- janela: 30 dias encerrados na data de referÃªncia;
+- agregaÃ§Ã£o: contagem de casos por data canÃ´nica.
 
 Arquivo esperado:
 
@@ -627,14 +627,14 @@ Arquivo esperado:
 artifacts/runs/<run_id>/charts/daily_cases_30d.png
 ```
 
-### 13.7 Gráfico de Casos Mensais — Últimos 12 Meses
+### 13.7 GrÃ¡fico de Casos Mensais â€” Ãšltimos 12 Meses
 
-Definição:
+DefiniÃ§Ã£o:
 
-- eixo X: mês;
-- eixo Y: número de casos;
-- janela: 12 meses encerrados no mês da data de referência;
-- agregação: contagem de casos por mês.
+- eixo X: mÃªs;
+- eixo Y: nÃºmero de casos;
+- janela: 12 meses encerrados no mÃªs da data de referÃªncia;
+- agregaÃ§Ã£o: contagem de casos por mÃªs.
 
 Arquivo esperado:
 
@@ -646,13 +646,13 @@ artifacts/runs/<run_id>/charts/monthly_cases_12m.png
 
 ## 14. Data Quality Report
 
-Cada execução deve gerar:
+Cada execuÃ§Ã£o deve gerar:
 
 ```text
 artifacts/runs/<run_id>/data_quality_report.json
 ```
 
-Conteúdo mínimo:
+ConteÃºdo mÃ­nimo:
 
 ```json
 {
@@ -669,7 +669,7 @@ Conteúdo mínimo:
 }
 ```
 
-O relatório final deve mencionar limitações relevantes encontradas na qualidade dos dados.
+O relatÃ³rio final deve mencionar limitaÃ§Ãµes relevantes encontradas na qualidade dos dados.
 
 ---
 
@@ -677,19 +677,19 @@ O relatório final deve mencionar limitações relevantes encontradas na qualida
 
 ### 15.1 Objetivo
 
-A camada RAG deve fornecer conhecimento textual ao agente, sem substituir a camada analítica.
+A camada RAG deve fornecer conhecimento textual ao agente, sem substituir a camada analÃ­tica.
 
-### 15.2 Conteúdos Indexados
+### 15.2 ConteÃºdos Indexados
 
-- dicionário de dados;
-- catálogo de métricas;
-- documentação de limitações;
-- notícias extraídas e resumidas;
-- relatório atual;
-- relatórios anteriores, se houver;
+- dicionÃ¡rio de dados;
+- catÃ¡logo de mÃ©tricas;
+- documentaÃ§Ã£o de limitaÃ§Ãµes;
+- notÃ­cias extraÃ­das e resumidas;
+- relatÃ³rio atual;
+- relatÃ³rios anteriores, se houver;
 - README e arquitetura do projeto.
 
-### 15.3 Conteúdos Não Indexados como Fonte Primária
+### 15.3 ConteÃºdos NÃ£o Indexados como Fonte PrimÃ¡ria
 
 - registros linha a linha da base SRAG;
 - dados pessoais ou quasi-identificadores;
@@ -698,14 +698,14 @@ A camada RAG deve fornecer conhecimento textual ao agente, sem substituir a cama
 
 ### 15.4 Vector Store
 
-Opções aceitáveis:
+OpÃ§Ãµes aceitÃ¡veis:
 
 - ChromaDB para simplicidade local;
-- Qdrant para defesa mais próxima de produção.
+- Qdrant para defesa mais prÃ³xima de produÃ§Ã£o.
 
-Critério de escolha para MVP:
+CritÃ©rio de escolha para MVP:
 
-- ChromaDB se o objetivo for velocidade de implementação;
+- ChromaDB se o objetivo for velocidade de implementaÃ§Ã£o;
 - Qdrant se houver tempo para demonstrar maturidade maior.
 
 ---
@@ -714,31 +714,31 @@ Critério de escolha para MVP:
 
 ### 16.1 Papel do Agente
 
-O agente atua como orquestrador e redator analítico.
+O agente atua como orquestrador e redator analÃ­tico.
 
 Ele deve:
 
-- consultar métricas por tools;
-- consultar gráficos gerados por tools;
-- recuperar explicações metodológicas via RAG;
-- buscar notícias em fontes permitidas;
-- gerar relatório final;
-- responder perguntas no chat com base no relatório e nos dados agregados.
+- consultar mÃ©tricas por tools;
+- consultar grÃ¡ficos gerados por tools;
+- recuperar explicaÃ§Ãµes metodolÃ³gicas via RAG;
+- buscar notÃ­cias em fontes permitidas;
+- gerar relatÃ³rio final;
+- responder perguntas no chat com base no relatÃ³rio e nos dados agregados.
 
-Ele não deve:
+Ele nÃ£o deve:
 
-- calcular métricas por conta própria;
-- acessar dados linha a linha sem agregação;
+- calcular mÃ©tricas por conta prÃ³pria;
+- acessar dados linha a linha sem agregaÃ§Ã£o;
 - executar SQL livre;
 - usar fontes fora da allowlist;
-- dar diagnóstico médico individual;
-- inventar fonte, número ou conclusão.
+- dar diagnÃ³stico mÃ©dico individual;
+- inventar fonte, nÃºmero ou conclusÃ£o.
 
-### 16.2 Orquestração com LangGraph
+### 16.2 OrquestraÃ§Ã£o com LangGraph
 
 O fluxo do agente deve ser modelado como grafo controlado.
 
-Nós sugeridos:
+NÃ³s sugeridos:
 
 ```text
 START
@@ -777,7 +777,7 @@ class AgentState(TypedDict):
 
 ### 17.1 `get_metric_summary`
 
-Retorna métricas obrigatórias e complementares.
+Retorna mÃ©tricas obrigatÃ³rias e complementares.
 
 Entrada:
 
@@ -789,7 +789,7 @@ Entrada:
 }
 ```
 
-Saída:
+SaÃ­da:
 
 ```json
 {
@@ -805,9 +805,9 @@ Saída:
 
 ### 17.2 `generate_required_charts`
 
-Gera os dois gráficos obrigatórios.
+Gera os dois grÃ¡ficos obrigatÃ³rios.
 
-Saída:
+SaÃ­da:
 
 ```json
 {
@@ -818,43 +818,43 @@ Saída:
 
 ### 17.3 `search_srag_news`
 
-Busca notícias e fontes recentes sobre SRAG.
+Busca notÃ­cias e fontes recentes sobre SRAG.
 
 Regras:
 
-- aplicar allowlist antes de extrair conteúdo;
+- aplicar allowlist antes de extrair conteÃºdo;
 - priorizar fontes oficiais;
-- registrar data, título, domínio e trecho relevante;
-- limitar número de fontes por relatório.
+- registrar data, tÃ­tulo, domÃ­nio e trecho relevante;
+- limitar nÃºmero de fontes por relatÃ³rio.
 
 ### 17.4 `retrieve_context`
 
-Busca no RAG documental informações sobre:
+Busca no RAG documental informaÃ§Ãµes sobre:
 
-- definição das métricas;
-- limitações;
+- definiÃ§Ã£o das mÃ©tricas;
+- limitaÃ§Ãµes;
 - campos usados;
 - metodologia;
-- contexto das notícias já extraídas.
+- contexto das notÃ­cias jÃ¡ extraÃ­das.
 
 ### 17.5 `validate_report_contract`
 
-Confere se o relatório contém:
+Confere se o relatÃ³rio contÃ©m:
 
-- as quatro métricas obrigatórias;
-- os dois gráficos obrigatórios;
-- seção de fontes;
-- seção de limitações;
-- aviso de uso analítico;
-- ausência de dados sensíveis linha a linha.
+- as quatro mÃ©tricas obrigatÃ³rias;
+- os dois grÃ¡ficos obrigatÃ³rios;
+- seÃ§Ã£o de fontes;
+- seÃ§Ã£o de limitaÃ§Ãµes;
+- aviso de uso analÃ­tico;
+- ausÃªncia de dados sensÃ­veis linha a linha.
 
 ---
 
-## 18. Relatório Gerado
+## 18. RelatÃ³rio Gerado
 
 ### 18.1 Formato
 
-Formato primário:
+Formato primÃ¡rio:
 
 ```text
 artifacts/runs/<run_id>/report.md
@@ -866,56 +866,56 @@ Formato complementar:
 artifacts/runs/<run_id>/report.pdf
 ```
 
-### 18.2 Estrutura Mínima do Relatório
+### 18.2 Estrutura MÃ­nima do RelatÃ³rio
 
 ```markdown
-# Relatório Automatizado de SRAG
+# RelatÃ³rio Automatizado de SRAG
 
-## 1. Sumário Executivo
+## 1. SumÃ¡rio Executivo
 
 ## 2. Dados Utilizados
 - fonte
 - pasta selecionada
 - arquivo
-- data de referência
+- data de referÃªncia
 - hash do arquivo bruto
 
-## 3. Métricas Principais
+## 3. MÃ©tricas Principais
 - taxa de aumento de casos
 - taxa de mortalidade
-- proporção de casos com UTI
-- proporção de casos com vacinação registrada
+- proporÃ§Ã£o de casos com UTI
+- proporÃ§Ã£o de casos com vacinaÃ§Ã£o registrada
 
-## 4. Evolução Temporal
-- gráfico diário dos últimos 30 dias
-- gráfico mensal dos últimos 12 meses
+## 4. EvoluÃ§Ã£o Temporal
+- grÃ¡fico diÃ¡rio dos Ãºltimos 30 dias
+- grÃ¡fico mensal dos Ãºltimos 12 meses
 
-## 5. Contexto de Notícias e Fontes Oficiais
+## 5. Contexto de NotÃ­cias e Fontes Oficiais
 - principais fatos recentes
-- relação entre notícias e métricas observadas
+- relaÃ§Ã£o entre notÃ­cias e mÃ©tricas observadas
 
-## 6. Comentários Analíticos do Agente
-- interpretação do cenário
-- hipóteses explicativas
+## 6. ComentÃ¡rios AnalÃ­ticos do Agente
+- interpretaÃ§Ã£o do cenÃ¡rio
+- hipÃ³teses explicativas
 - cautelas
 
-## 7. Limitações Metodológicas
+## 7. LimitaÃ§Ãµes MetodolÃ³gicas
 
 ## 8. Fontes Consultadas
 
 ## 9. Aviso de Uso
 ```
 
-### 18.3 Regras de Redação
+### 18.3 Regras de RedaÃ§Ã£o
 
-O relatório deve:
+O relatÃ³rio deve:
 
-- distinguir claramente dado calculado de comentário interpretativo;
+- distinguir claramente dado calculado de comentÃ¡rio interpretativo;
 - citar fontes consultadas;
 - evitar tom alarmista;
-- declarar limitações;
-- não oferecer aconselhamento médico individual;
-- indicar quando uma métrica é proxy e não medição direta.
+- declarar limitaÃ§Ãµes;
+- nÃ£o oferecer aconselhamento mÃ©dico individual;
+- indicar quando uma mÃ©trica Ã© proxy e nÃ£o mediÃ§Ã£o direta.
 
 ---
 
@@ -925,53 +925,53 @@ O relatório deve:
 
 Devem bloquear ou redirecionar:
 
-- pedidos fora do escopo de SRAG, relatório, metodologia ou dados agregados;
+- pedidos fora do escopo de SRAG, relatÃ³rio, metodologia ou dados agregados;
 - tentativas de prompt injection;
 - pedidos para ignorar regras do sistema;
 - pedidos de dados pessoais ou registros individuais;
-- pedidos de diagnóstico ou tratamento médico individualizado;
+- pedidos de diagnÃ³stico ou tratamento mÃ©dico individualizado;
 - pedidos de scraping fora da allowlist.
 
 ### 19.2 Guardrails de Tools
 
-- O LLM só pode chamar tools registradas.
+- O LLM sÃ³ pode chamar tools registradas.
 - Cada tool deve ter schema validado.
-- Não permitir SQL livre vindo do LLM.
+- NÃ£o permitir SQL livre vindo do LLM.
 - Aplicar timeout.
 - Registrar toda chamada de tool.
-- Bloquear domínios fora da allowlist.
+- Bloquear domÃ­nios fora da allowlist.
 - Validar paths de arquivo para evitar path traversal.
 
 ### 19.3 Guardrails de Privacidade
 
-- Não retornar linhas individuais.
-- Não exibir recortes com contagem menor que limite configurável.
-- Aplicar regra de agregação mínima, por exemplo `min_group_size = 10`.
-- Remover ou não carregar campos que possam facilitar reidentificação.
-- Evitar combinação excessivamente granular de filtros.
+- NÃ£o retornar linhas individuais.
+- NÃ£o exibir recortes com contagem menor que limite configurÃ¡vel.
+- Aplicar regra de agregaÃ§Ã£o mÃ­nima, por exemplo `min_group_size = 10`.
+- Remover ou nÃ£o carregar campos que possam facilitar reidentificaÃ§Ã£o.
+- Evitar combinaÃ§Ã£o excessivamente granular de filtros.
 
-### 19.4 Guardrails de Saída
+### 19.4 Guardrails de SaÃ­da
 
-Antes de exibir resposta ou relatório:
+Antes de exibir resposta ou relatÃ³rio:
 
-- validar presença das métricas obrigatórias;
-- validar presença dos gráficos obrigatórios;
-- validar se afirmações de notícias possuem fonte;
-- validar se não há dados sensíveis;
-- validar se limitações estão declaradas;
-- validar se não há recomendações clínicas individualizadas.
+- validar presenÃ§a das mÃ©tricas obrigatÃ³rias;
+- validar presenÃ§a dos grÃ¡ficos obrigatÃ³rios;
+- validar se afirmaÃ§Ãµes de notÃ­cias possuem fonte;
+- validar se nÃ£o hÃ¡ dados sensÃ­veis;
+- validar se limitaÃ§Ãµes estÃ£o declaradas;
+- validar se nÃ£o hÃ¡ recomendaÃ§Ãµes clÃ­nicas individualizadas.
 
 ---
 
-## 20. Governança, Auditoria e Transparência
+## 20. GovernanÃ§a, Auditoria e TransparÃªncia
 
-Cada execução deve gerar uma pasta:
+Cada execuÃ§Ã£o deve gerar uma pasta:
 
 ```text
 artifacts/runs/<run_id>/
 ```
 
-Conteúdo esperado:
+ConteÃºdo esperado:
 
 ```text
 manifest.json
@@ -988,7 +988,7 @@ charts/
 
 ### 20.1 `manifest.json`
 
-Conteúdo mínimo:
+ConteÃºdo mÃ­nimo:
 
 ```json
 {
@@ -1026,7 +1026,7 @@ Cada linha deve registrar um evento:
 }
 ```
 
-Não registrar prompts com segredos ou chaves de API.
+NÃ£o registrar prompts com segredos ou chaves de API.
 
 ---
 
@@ -1036,47 +1036,47 @@ Não registrar prompts com segredos ou chaves de API.
 
 Deve permitir:
 
-- executar ingestão;
+- executar ingestÃ£o;
 - ver pasta selecionada;
 - ver status de download;
 - ver hash do arquivo;
 - ver status da camada refined;
-- ver erros de validação.
+- ver erros de validaÃ§Ã£o.
 
-### 21.2 Aba Relatório
+### 21.2 Aba RelatÃ³rio
 
 Deve mostrar:
 
-- métricas principais;
-- gráficos obrigatórios;
-- relatório gerado;
+- mÃ©tricas principais;
+- grÃ¡ficos obrigatÃ³rios;
+- relatÃ³rio gerado;
 - fontes usadas;
-- botão de download do Markdown/PDF.
+- botÃ£o de download do Markdown/PDF.
 
 ### 21.3 Aba Qualidade dos Dados
 
 Deve mostrar:
 
-- número de linhas brutas e refinadas;
+- nÃºmero de linhas brutas e refinadas;
 - colunas selecionadas;
 - percentual de nulos;
-- datas inválidas;
+- datas invÃ¡lidas;
 - avisos;
-- limitações de interpretação.
+- limitaÃ§Ãµes de interpretaÃ§Ã£o.
 
 ### 21.4 Aba Chat
 
 Deve permitir perguntas sobre:
 
-- relatório gerado;
-- métricas;
+- relatÃ³rio gerado;
+- mÃ©tricas;
 - metodologia;
-- limitações;
+- limitaÃ§Ãµes;
 - fontes usadas.
 
 O chat deve recusar:
 
-- diagnóstico individual;
+- diagnÃ³stico individual;
 - dados linha a linha;
 - perguntas fora do escopo;
 - pedidos para burlar regras.
@@ -1087,62 +1087,62 @@ O chat deve recusar:
 
 | ID | Requisito | Prioridade |
 |---|---|---|
-| RF-001 | Listar diretórios do GitLab e selecionar a pasta mais recente. | Alta |
+| RF-001 | Listar diretÃ³rios do GitLab e selecionar a pasta mais recente. | Alta |
 | RF-002 | Baixar `srag_total.xlsx` da pasta selecionada. | Alta |
 | RF-003 | Salvar dado bruto em camada landing. | Alta |
-| RF-004 | Gerar hash e manifesto da execução. | Alta |
-| RF-005 | Pré-processar base e salvar Parquet em refined. | Alta |
+| RF-004 | Gerar hash e manifesto da execuÃ§Ã£o. | Alta |
+| RF-005 | PrÃ©-processar base e salvar Parquet em refined. | Alta |
 | RF-006 | Gerar data quality report. | Alta |
-| RF-007 | Calcular as quatro métricas obrigatórias. | Alta |
-| RF-008 | Gerar gráfico diário dos últimos 30 dias. | Alta |
-| RF-009 | Gerar gráfico mensal dos últimos 12 meses. | Alta |
-| RF-010 | Buscar notícias/fontes recentes sobre SRAG usando allowlist. | Alta |
+| RF-007 | Calcular as quatro mÃ©tricas obrigatÃ³rias. | Alta |
+| RF-008 | Gerar grÃ¡fico diÃ¡rio dos Ãºltimos 30 dias. | Alta |
+| RF-009 | Gerar grÃ¡fico mensal dos Ãºltimos 12 meses. | Alta |
+| RF-010 | Buscar notÃ­cias/fontes recentes sobre SRAG usando allowlist. | Alta |
 | RF-011 | Implementar agente com tools controladas. | Alta |
-| RF-012 | Gerar relatório em Markdown. | Alta |
-| RF-013 | Exportar relatório para PDF. | Média |
+| RF-012 | Gerar relatÃ³rio em Markdown. | Alta |
+| RF-013 | Exportar relatÃ³rio para PDF. | MÃ©dia |
 | RF-014 | Disponibilizar dashboard Streamlit. | Alta |
-| RF-015 | Disponibilizar chat sobre relatório e metodologia. | Média |
+| RF-015 | Disponibilizar chat sobre relatÃ³rio e metodologia. | MÃ©dia |
 | RF-016 | Registrar trace do agente. | Alta |
-| RF-017 | Implementar guardrails de entrada, tools e saída. | Alta |
-| RF-018 | Criar README didático e diagrama PDF. | Alta |
+| RF-017 | Implementar guardrails de entrada, tools e saÃ­da. | Alta |
+| RF-018 | Criar README didÃ¡tico e diagrama PDF. | Alta |
 
 ---
 
-## 23. Requisitos Não Funcionais
+## 23. Requisitos NÃ£o Funcionais
 
-### 23.1 Segurança
+### 23.1 SeguranÃ§a
 
 - Chaves em `.env`, nunca commitadas.
 - Allowlist para fontes externas.
-- Sanitização de entrada.
-- Sem exposição de dados individuais.
+- SanitizaÃ§Ã£o de entrada.
+- Sem exposiÃ§Ã£o de dados individuais.
 
 ### 23.2 Confiabilidade
 
 - Fallback para arquivo em cache se download falhar.
-- Falhas explicáveis.
+- Falhas explicÃ¡veis.
 - Logs estruturados.
 
 ### 23.3 Reprodutibilidade
 
-- Manifesto por execução.
+- Manifesto por execuÃ§Ã£o.
 - Hashes dos dados.
-- Versão do catálogo de métricas.
-- Versão dos prompts.
+- VersÃ£o do catÃ¡logo de mÃ©tricas.
+- VersÃ£o dos prompts.
 
 ### 23.4 Manutenibilidade
 
-- Código modular.
-- Funções pequenas.
+- CÃ³digo modular.
+- FunÃ§Ãµes pequenas.
 - Type hints.
-- Testes unitários.
-- Configuração centralizada.
+- Testes unitÃ¡rios.
+- ConfiguraÃ§Ã£o centralizada.
 
 ### 23.5 Performance
 
-- Salvar Parquet para leitura rápida.
-- Evitar recarregar Excel em cada interação.
-- Cache de notícias e embeddings.
+- Salvar Parquet para leitura rÃ¡pida.
+- Evitar recarregar Excel em cada interaÃ§Ã£o.
+- Cache de notÃ­cias e embeddings.
 - Limitar chamadas ao LLM.
 
 ---
@@ -1151,88 +1151,88 @@ O chat deve recusar:
 
 ### 24.1 Testes de Dados
 
-- seleção correta da pasta mais recente;
+- seleÃ§Ã£o correta da pasta mais recente;
 - download com mock de GitLab;
-- validação de schema mínimo;
-- conversão de datas;
+- validaÃ§Ã£o de schema mÃ­nimo;
+- conversÃ£o de datas;
 - tratamento de nulos;
-- geração de Parquet.
+- geraÃ§Ã£o de Parquet.
 
-### 24.2 Testes de Métricas
+### 24.2 Testes de MÃ©tricas
 
 - taxa de aumento com casos normais;
 - taxa de aumento com denominador zero;
-- mortalidade com evolução conhecida;
+- mortalidade com evoluÃ§Ã£o conhecida;
 - mortalidade com dados ausentes;
-- proporção de UTI;
-- proporção de vacinação;
+- proporÃ§Ã£o de UTI;
+- proporÃ§Ã£o de vacinaÃ§Ã£o;
 - janelas de 30 dias e 12 meses.
 
 ### 24.3 Testes de Guardrails
 
 - bloqueio de prompt injection;
-- bloqueio de domínio fora da allowlist;
+- bloqueio de domÃ­nio fora da allowlist;
 - bloqueio de pedido de dados individuais;
-- bloqueio de diagnóstico individual;
-- validação de contagem mínima por grupo.
+- bloqueio de diagnÃ³stico individual;
+- validaÃ§Ã£o de contagem mÃ­nima por grupo.
 
-### 24.4 Testes do Relatório
+### 24.4 Testes do RelatÃ³rio
 
-- contém as quatro métricas;
-- contém os dois gráficos;
-- contém fontes;
-- contém limitações;
-- não contém dados sensíveis;
-- separa métricas calculadas de comentários interpretativos.
+- contÃ©m as quatro mÃ©tricas;
+- contÃ©m os dois grÃ¡ficos;
+- contÃ©m fontes;
+- contÃ©m limitaÃ§Ãµes;
+- nÃ£o contÃ©m dados sensÃ­veis;
+- separa mÃ©tricas calculadas de comentÃ¡rios interpretativos.
 
 ---
 
-## 25. Critérios de Aceite
+## 25. CritÃ©rios de Aceite
 
-A solução será considerada satisfatória quando:
+A soluÃ§Ã£o serÃ¡ considerada satisfatÃ³ria quando:
 
-1. O avaliador conseguir rodar o projeto com instruções claras no README.
-2. A aplicação localizar automaticamente a pasta mais recente do repositório.
+1. O avaliador conseguir rodar o projeto com instruÃ§Ãµes claras no README.
+2. A aplicaÃ§Ã£o localizar automaticamente a pasta mais recente do repositÃ³rio.
 3. O arquivo `srag_total.xlsx` for baixado e salvo em landing.
 4. O pipeline gerar Parquet refinado.
-5. As quatro métricas obrigatórias forem calculadas por código.
-6. Os dois gráficos obrigatórios forem gerados.
-7. O agente gerar relatório com comentários e fontes.
-8. O relatório declarar limitações metodológicas.
-9. Houver guardrails implementados em código.
-10. Houver logs e manifesto por execução.
-11. A interface Streamlit demonstrar pipeline, relatório, qualidade dos dados e chat.
-12. O repositório público conter README, PRD e diagrama conceitual em PDF.
+5. As quatro mÃ©tricas obrigatÃ³rias forem calculadas por cÃ³digo.
+6. Os dois grÃ¡ficos obrigatÃ³rios forem gerados.
+7. O agente gerar relatÃ³rio com comentÃ¡rios e fontes.
+8. O relatÃ³rio declarar limitaÃ§Ãµes metodolÃ³gicas.
+9. Houver guardrails implementados em cÃ³digo.
+10. Houver logs e manifesto por execuÃ§Ã£o.
+11. A interface Streamlit demonstrar pipeline, relatÃ³rio, qualidade dos dados e chat.
+12. O repositÃ³rio pÃºblico conter README, PRD e diagrama conceitual em PDF.
 
 ---
 
-## 26. README.md — Conteúdo Esperado
+## 26. README.md â€” ConteÃºdo Esperado
 
-O README deve ser escrito como documento de defesa técnica.
+O README deve ser escrito como documento de defesa tÃ©cnica.
 
 Estrutura recomendada:
 
 ```markdown
 # SRAG GenAI Report Agent
 
-## 1. Visão Geral
+## 1. VisÃ£o Geral
 
-## 2. Demonstração
+## 2. DemonstraÃ§Ã£o
 - screenshots
-- exemplo de relatório
+- exemplo de relatÃ³rio
 
 ## 3. Arquitetura
 - diagrama
-- explicação das camadas
+- explicaÃ§Ã£o das camadas
 
 ## 4. Como Rodar
-- pré-requisitos
-- variáveis de ambiente
+- prÃ©-requisitos
+- variÃ¡veis de ambiente
 - comandos
 
 ## 5. Pipeline de Dados
 
-## 6. Métricas e Fórmulas
+## 6. MÃ©tricas e FÃ³rmulas
 
 ## 7. Agente e Tools
 
@@ -1240,13 +1240,13 @@ Estrutura recomendada:
 
 ## 9. Guardrails e Privacidade
 
-## 10. Governança e Auditoria
+## 10. GovernanÃ§a e Auditoria
 
 ## 11. Testes
 
-## 12. Limitações
+## 12. LimitaÃ§Ãµes
 
-## 13. Próximos Passos
+## 13. PrÃ³ximos Passos
 ```
 
 Comandos esperados:
@@ -1262,7 +1262,7 @@ make run-app
 
 ## 27. Diagrama Conceitual em PDF
 
-O repositório deve incluir:
+O repositÃ³rio deve incluir:
 
 ```text
 docs/architecture_diagram.pdf
@@ -1273,87 +1273,88 @@ O diagrama deve mostrar:
 - fonte GitLab/OpenDataSUS;
 - camada landing;
 - camada refined;
-- camada analítica;
+- camada analÃ­tica;
 - vector store;
 - agente principal;
 - tools;
 - LLM;
-- fontes de notícias;
+- fontes de notÃ­cias;
 - guardrails;
 - auditoria;
 - Streamlit.
 
 ---
 
-## 28. Riscos e Mitigações
+## 28. Riscos e MitigaÃ§Ãµes
 
-| Risco | Impacto | Mitigação |
+| Risco | Impacto | MitigaÃ§Ã£o |
 |---|---|---|
-| Mudança no schema do arquivo | Métricas quebram | Mapeamento configurável e validação de schema. |
-| Pasta mais recente com nome inesperado | Download falha | Parser testado e fallback explicável. |
+| MudanÃ§a no schema do arquivo | MÃ©tricas quebram | Mapeamento configurÃ¡vel e validaÃ§Ã£o de schema. |
+| Pasta mais recente com nome inesperado | Download falha | Parser testado e fallback explicÃ¡vel. |
 | Arquivo muito grande/lento | Baixa usabilidade | Converter para Parquet e cachear. |
-| LLM inventar números | Alto | Métricas apenas por tools determinísticas. |
-| Notícias ruins ou irrelevantes | Médio | Allowlist, ranking e registro de fontes. |
-| Prompt injection em conteúdo externo | Alto | Tratar páginas como dados não confiáveis e filtrar instruções. |
-| Exposição de dados sensíveis | Alto | Agregação mínima e bloqueio de linha individual. |
-| Métrica de UTI ser interpretada incorretamente | Alto | Nomear como proporção de casos com UTI e declarar limitação. |
-| Métrica de vacinação ser interpretada como cobertura populacional | Alto | Separar vacinação em casos de cobertura populacional real. |
+| LLM inventar nÃºmeros | Alto | MÃ©tricas apenas por tools determinÃ­sticas. |
+| NotÃ­cias ruins ou irrelevantes | MÃ©dio | Allowlist, ranking e registro de fontes. |
+| Prompt injection em conteÃºdo externo | Alto | Tratar pÃ¡ginas como dados nÃ£o confiÃ¡veis e filtrar instruÃ§Ãµes. |
+| ExposiÃ§Ã£o de dados sensÃ­veis | Alto | AgregaÃ§Ã£o mÃ­nima e bloqueio de linha individual. |
+| MÃ©trica de UTI ser interpretada incorretamente | Alto | Nomear como proporÃ§Ã£o de casos com UTI e declarar limitaÃ§Ã£o. |
+| MÃ©trica de vacinaÃ§Ã£o ser interpretada como cobertura populacional | Alto | Separar vacinaÃ§Ã£o em casos de cobertura populacional real. |
 
 ---
 
-## 29. Evoluções Futuras
+## 29. EvoluÃ§Ãµes Futuras
 
-Após a PoC, a solução poderia evoluir para:
+ApÃ³s a PoC, a soluÃ§Ã£o poderia evoluir para:
 
-- ingestão incremental;
-- orquestração com Airflow;
+- ingestÃ£o incremental;
+- orquestraÃ§Ã£o com Airflow;
 - armazenamento em data lake cloud;
-- autenticação e controle de acesso;
-- monitoramento de qualidade em produção;
-- avaliação automática de respostas do agente;
-- integração com APIs oficiais de vacinação e leitos;
-- alertas automáticos por UF ou município;
-- implantação em container cloud;
-- LangSmith ou OpenTelemetry para tracing avançado;
-- avaliação de custo, latência e qualidade do LLM.
+- autenticaÃ§Ã£o e controle de acesso;
+- monitoramento de qualidade em produÃ§Ã£o;
+- avaliaÃ§Ã£o automÃ¡tica de respostas do agente;
+- integraÃ§Ã£o com APIs oficiais de vacinaÃ§Ã£o e leitos;
+- alertas automÃ¡ticos por UF ou municÃ­pio;
+- implantaÃ§Ã£o em container cloud;
+- LangSmith ou OpenTelemetry para tracing avanÃ§ado;
+- avaliaÃ§Ã£o de custo, latÃªncia e qualidade do LLM.
 
 ---
 
-## 30. Narrativa Técnica para Entrevista
+## 30. Narrativa TÃ©cnica para Entrevista
 
-A solução deve ser defendida com a seguinte linha de raciocínio:
+A soluÃ§Ã£o deve ser defendida com a seguinte linha de raciocÃ­nio:
 
-> Eu separei a solução em uma camada determinística e uma camada GenAI. A camada determinística é responsável por baixar, validar, pré-processar e calcular métricas sobre a base SRAG. O LLM não calcula números diretamente; ele chama tools auditáveis que retornam métricas já calculadas. O agente usa LangGraph para seguir um fluxo controlado, consulta notícias apenas em fontes permitidas, recupera contexto metodológico via RAG e gera o relatório. Para governança, cada execução gera manifesto, hashes, data quality report, métricas, fontes e trace do agente. Para segurança, implementei guardrails de entrada, tools e saída, além de regras para não expor dados sensíveis ou registros individuais.
+> Eu separei a soluÃ§Ã£o em uma camada determinÃ­stica e uma camada GenAI. A camada determinÃ­stica Ã© responsÃ¡vel por baixar, validar, prÃ©-processar e calcular mÃ©tricas sobre a base SRAG. O LLM nÃ£o calcula nÃºmeros diretamente; ele chama tools auditÃ¡veis que retornam mÃ©tricas jÃ¡ calculadas. O agente usa LangGraph para seguir um fluxo controlado, consulta notÃ­cias apenas em fontes permitidas, recupera contexto metodolÃ³gico via RAG e gera o relatÃ³rio. Para governanÃ§a, cada execuÃ§Ã£o gera manifesto, hashes, data quality report, mÃ©tricas, fontes e trace do agente. Para seguranÃ§a, implementei guardrails de entrada, tools e saÃ­da, alÃ©m de regras para nÃ£o expor dados sensÃ­veis ou registros individuais.
 
 Pontos fortes a destacar:
 
-- separação entre cálculo e linguagem natural;
+- separaÃ§Ã£o entre cÃ¡lculo e linguagem natural;
 - tool-calling controlado;
-- RAG usado para documentação, não para métrica;
+- RAG usado para documentaÃ§Ã£o, nÃ£o para mÃ©trica;
 - allowlist de fontes;
-- transparência de fórmulas;
+- transparÃªncia de fÃ³rmulas;
 - logs e auditoria;
-- cuidado com limitações de UTI e vacinação;
-- projeto demonstrável em Streamlit;
-- estrutura de código compatível com evolução para produção.
+- cuidado com limitaÃ§Ãµes de UTI e vacinaÃ§Ã£o;
+- projeto demonstrÃ¡vel em Streamlit;
+- estrutura de cÃ³digo compatÃ­vel com evoluÃ§Ã£o para produÃ§Ã£o.
 
 ---
 
-## 31. Definição de Pronto
+## 31. DefiniÃ§Ã£o de Pronto
 
-O projeto estará pronto para entrega quando houver:
+O projeto estarÃ¡ pronto para entrega quando houver:
 
-- repositório público no GitHub;
+- repositÃ³rio pÃºblico no GitHub;
 - README completo;
 - PRD.md versionado;
-- aplicação Streamlit funcionando;
-- pipeline executável;
-- relatório gerado;
-- gráficos gerados;
+- aplicaÃ§Ã£o Streamlit funcionando;
+- pipeline executÃ¡vel;
+- relatÃ³rio gerado;
+- grÃ¡ficos gerados;
 - agent trace;
 - manifest;
 - data quality report;
 - testes passando;
 - diagrama PDF em `docs/architecture_diagram.pdf`;
 - `.env.example` sem segredos;
-- instruções claras para reprodução.
+- instruÃ§Ãµes claras para reproduÃ§Ã£o.
+

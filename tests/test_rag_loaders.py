@@ -1,5 +1,5 @@
-from srag_agent.rag.chunking import chunk_document, chunk_documents
-from srag_agent.rag.loaders import load_project_documents, load_text_document
+﻿from rag.chunking import chunk_document, chunk_documents
+from rag.loaders import load_project_documents, load_text_document
 
 
 def test_load_text_document_has_metadata() -> None:
@@ -34,3 +34,4 @@ def test_chunk_documents() -> None:
     documents = load_project_documents(document_paths=["README.md"])
 
     assert chunk_documents(documents, max_chars=300)
+

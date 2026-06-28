@@ -1,9 +1,9 @@
-from pathlib import Path
+﻿from pathlib import Path
 
-from srag_agent.data.schema import RetrievedDocument
-from srag_agent.rag.chunking import chunk_documents
-from srag_agent.rag.loaders import load_project_documents
-from srag_agent.rag.vector_store import LocalVectorStore, build_vector_store
+from data.schema import RetrievedDocument
+from rag.chunking import chunk_documents
+from rag.loaders import load_project_documents
+from rag.vector_store import LocalVectorStore, build_vector_store
 
 
 def index_project_context(
@@ -25,3 +25,4 @@ def retrieve_context(
     if not store.search(query, top_k=1):
         store = index_project_context(persist_dir=persist_dir)
     return store.search(query, top_k=top_k)
+

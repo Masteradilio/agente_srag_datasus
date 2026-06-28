@@ -1,10 +1,10 @@
-import json
+﻿import json
 from pathlib import Path
 
 import pandas as pd  # type: ignore[import-untyped]
 
-from srag_agent.data.schema import DataQualityReport
-from srag_agent.utils.paths import ensure_directory
+from data.schema import DataQualityReport
+from utils.paths import ensure_directory
 
 ROW_LEVEL_REQUIRED_COLUMNS = {"case_date", "notification_date"}
 AGGREGATED_REQUIRED_COLUMNS = {"epidemiological_week", "cases", "deaths"}
@@ -92,3 +92,4 @@ def _required_columns_for_schema(resolved_mapping: dict[str, str | None]) -> set
     if all(resolved_mapping.get(column) for column in AGGREGATED_REQUIRED_COLUMNS):
         return AGGREGATED_REQUIRED_COLUMNS
     return ROW_LEVEL_REQUIRED_COLUMNS
+

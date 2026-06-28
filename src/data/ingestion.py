@@ -1,16 +1,16 @@
-import json
+﻿import json
 import logging
 import re
 from pathlib import Path
 from typing import Protocol
 
-from srag_agent.config import Settings, load_settings
-from srag_agent.data.gitlab_client import GitLabClient
-from srag_agent.data.opendatasus_client import OpenDataSUSClient
-from srag_agent.data.schema import IngestionResult
-from srag_agent.utils.dates import generate_run_id, now_in_timezone
-from srag_agent.utils.hashing import calculate_sha256
-from srag_agent.utils.paths import ensure_directory, resolve_project_path
+from config import Settings, load_settings
+from data.gitlab_client import GitLabClient
+from data.opendatasus_client import OpenDataSUSClient
+from data.schema import IngestionResult
+from utils.dates import generate_run_id, now_in_timezone
+from utils.hashing import calculate_sha256
+from utils.paths import ensure_directory, resolve_project_path
 
 
 class IngestionClient(Protocol):
@@ -163,3 +163,4 @@ def _write_ingestion_metadata(result: IngestionResult) -> None:
         json.dumps(result.model_dump(mode="json"), ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+

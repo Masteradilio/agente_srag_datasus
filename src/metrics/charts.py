@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 
 import matplotlib
 
@@ -6,7 +6,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd  # type: ignore[import-untyped]
 
-from srag_agent.utils.paths import ensure_directory
+from utils.paths import ensure_directory
 
 
 def generate_daily_cases_30d_chart(df: pd.DataFrame, output_path: Path) -> Path:
@@ -93,3 +93,4 @@ def _weighted_counts_by_month(
         (weighted_df["date"] >= start_month) & (weighted_df["date"] <= end_month)
     ]
     return window.groupby(window["date"].dt.to_period("M"))["cases"].sum().sort_index()
+

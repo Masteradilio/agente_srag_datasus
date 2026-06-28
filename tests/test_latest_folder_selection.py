@@ -1,6 +1,6 @@
-import pytest
+﻿import pytest
 
-from srag_agent.data.ingestion import parse_folder_version, select_latest_folder
+from data.ingestion import parse_folder_version, select_latest_folder
 
 
 def test_parse_folder_version() -> None:
@@ -21,3 +21,4 @@ def test_select_latest_folder_uses_year_when_only_years_exist() -> None:
 def test_select_latest_folder_fails_without_valid_folder() -> None:
     with pytest.raises(ValueError, match="No valid SRAG folders"):
         select_latest_folder(["latest", "arquivo"])
+

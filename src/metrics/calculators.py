@@ -1,12 +1,12 @@
-import json
+﻿import json
 import unicodedata
 from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd  # type: ignore[import-untyped]
 
-from srag_agent.data.schema import MetricSummary, MetricValue
-from srag_agent.metrics.definitions import (
+from data.schema import MetricSummary, MetricValue
+from metrics.definitions import (
     CASE_GROWTH_RATE_7D,
     CRUDE_MORTALITY_RATE,
     ICU_CASE_RATE,
@@ -15,7 +15,7 @@ from srag_agent.metrics.definitions import (
     METRIC_NAMES,
     REGISTERED_VACCINATION_CASE_RATE,
 )
-from srag_agent.utils.paths import ensure_directory
+from utils.paths import ensure_directory
 
 DEATH_CODES = {"2", "OBITO", "OBITO POR SRAG"}
 KNOWN_EVOLUTION_CODES = {"1", "2", "CURA", "OBITO", "OBITO POR SRAG"}
@@ -248,3 +248,4 @@ def _collect_limitations(summary: MetricSummary) -> list[str]:
     ]:
         limitations.extend(metric.limitations)
     return sorted(set(limitations))
+

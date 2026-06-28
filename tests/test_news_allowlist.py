@@ -1,4 +1,4 @@
-from srag_agent.guardrails.domain_allowlist import filter_allowed_urls, is_allowed_url
+﻿from guardrails.domain_allowlist import filter_allowed_urls, is_allowed_url
 
 ALLOWED = ["gov.br/saude", "who.int", "gitlab.com/cgcovid/dados-abertos"]
 
@@ -25,3 +25,4 @@ def test_filter_allowed_urls() -> None:
         "https://www.who.int/news",
         "https://gitlab.com/cgcovid/dados-abertos/-/tree/main",
     ]
+

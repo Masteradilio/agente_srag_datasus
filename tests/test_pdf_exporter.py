@@ -1,4 +1,4 @@
-from srag_agent.reporting.pdf_exporter import export_report_pdf
+﻿from reporting.pdf_exporter import export_report_pdf
 
 
 def test_export_report_pdf_creates_file(tmp_path) -> None:
@@ -22,3 +22,4 @@ def test_export_report_pdf_fallback_creates_html_and_pdf(monkeypatch, tmp_path) 
     assert pdf_path.is_file()
     assert (tmp_path / "fallback.html").is_file()
     assert pdf_path.read_bytes().startswith(b"%PDF")
+

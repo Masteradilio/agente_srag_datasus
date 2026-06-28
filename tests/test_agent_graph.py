@@ -1,8 +1,8 @@
-from pathlib import Path
+﻿from pathlib import Path
 
 import pandas as pd
 
-from srag_agent.agents.graph import AgentDependencies, build_langgraph_workflow, run_agent_graph
+from agents.graph import AgentDependencies, build_langgraph_workflow, run_agent_graph
 
 
 def _metric_summary() -> dict:
@@ -108,3 +108,4 @@ def test_agent_graph_smoke_with_phase3_phase4_artifacts(tmp_path) -> None:
     assert Path(state["final_report_path"]).is_file()
     assert (tmp_path / "artifacts" / run_id / "metrics.json").is_file()
     assert len(state["chart_paths"]) == 2
+

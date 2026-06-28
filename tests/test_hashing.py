@@ -1,4 +1,4 @@
-from srag_agent.utils.hashing import calculate_bytes_sha256, calculate_sha256
+﻿from utils.hashing import calculate_bytes_sha256, calculate_sha256
 
 
 def test_calculate_sha256(tmp_path) -> None:
@@ -16,3 +16,4 @@ def test_calculate_bytes_sha256() -> None:
         calculate_bytes_sha256([b"sr", b"ag\n"])
         == "60842e94a3586c87ed7918253f1e51b912cc24d21248328b44074fd4ab75e5ff"
     )
+

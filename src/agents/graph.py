@@ -1,23 +1,23 @@
-from collections.abc import Callable
+﻿from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from langgraph.graph import END, StateGraph  # type: ignore[import-untyped]
 
-from srag_agent.agents.prompts import SYSTEM_PROMPT
-from srag_agent.agents.state import AgentState
-from srag_agent.agents.tools import (
+from agents.prompts import SYSTEM_PROMPT
+from agents.state import AgentState
+from agents.tools import (
     generate_required_charts_tool,
     get_metric_summary_tool,
     retrieve_context_tool,
     search_srag_news_tool,
     validate_report_contract_tool,
 )
-from srag_agent.audit.run_context import AgentTraceLogger
-from srag_agent.guardrails.input_guard import enforce_input_guard
-from srag_agent.guardrails.output_guard import enforce_output_guard
-from srag_agent.utils.paths import ensure_directory, resolve_project_path
+from audit.run_context import AgentTraceLogger
+from guardrails.input_guard import enforce_input_guard
+from guardrails.output_guard import enforce_output_guard
+from utils.paths import ensure_directory, resolve_project_path
 
 MetricTool = Callable[[str, Path | None, Path | None], dict[str, Any]]
 ChartTool = Callable[[str, Path | None, Path | None], list[str]]
@@ -355,3 +355,4 @@ def _summarize_state(state: AgentState) -> dict[str, Any]:
 
 def _passthrough_node(state: AgentState) -> AgentState:
     return state
+

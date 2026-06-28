@@ -1,11 +1,11 @@
-from collections.abc import Callable
+﻿from collections.abc import Callable
 
 import requests  # type: ignore[import-untyped]
 from bs4 import BeautifulSoup  # type: ignore[import-untyped]
 
-from srag_agent.config import load_news_sources
-from srag_agent.data.schema import NewsArticle
-from srag_agent.guardrails.domain_allowlist import extract_domain, is_allowed_url
+from config import load_news_sources
+from data.schema import NewsArticle
+from guardrails.domain_allowlist import extract_domain, is_allowed_url
 
 USER_AGENT = "agente_srag_datasus/0.1 (+https://github.com/Masteradilio/agente_srag_datasus)"
 
@@ -70,3 +70,4 @@ def _extract_content(soup: BeautifulSoup) -> str:
         tag.extract()
     paragraphs = [paragraph.get_text(" ", strip=True) for paragraph in soup.find_all("p")]
     return "\n".join(paragraph for paragraph in paragraphs if paragraph)
+

@@ -1,8 +1,8 @@
-import json
+﻿import json
 
 import pandas as pd
 
-from srag_agent.data.validation import build_data_quality_report, write_data_quality_report
+from data.validation import build_data_quality_report, write_data_quality_report
 
 
 def test_build_data_quality_report_tracks_missing_columns_and_warnings() -> None:
@@ -40,3 +40,4 @@ def test_write_data_quality_report(tmp_path) -> None:
 
     written = json.loads(output_path.read_text(encoding="utf-8"))
     assert written["rows_raw"] == 1
+

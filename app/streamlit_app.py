@@ -1,4 +1,4 @@
-import json
+﻿import json
 import sys
 from pathlib import Path
 from typing import Any
@@ -10,11 +10,11 @@ SRC_DIR = PROJECT_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from srag_agent.config import load_settings  # noqa: E402
-from srag_agent.data.ingestion import run_ingestion  # noqa: E402
-from srag_agent.data.preprocessing import run_preprocessing  # noqa: E402
-from srag_agent.guardrails.input_guard import validate_input_request  # noqa: E402
-from srag_agent.utils.paths import resolve_project_path  # noqa: E402
+from config import load_settings  # noqa: E402
+from data.ingestion import run_ingestion  # noqa: E402
+from data.preprocessing import run_preprocessing  # noqa: E402
+from guardrails.input_guard import validate_input_request  # noqa: E402
+from utils.paths import resolve_project_path  # noqa: E402
 
 
 def list_run_ids(artifacts_dir: Path) -> list[str]:
@@ -170,3 +170,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

@@ -1,50 +1,50 @@
-# Agente SRAG DataSUS
+﻿# Agente SRAG DataSUS
 
-Agente de IA Generativa para geração automatizada de relatórios sobre Síndrome Respiratória Aguda Grave (SRAG), combinando dados estruturados do OpenDataSUS/DataSUS com notícias e fontes institucionais recentes.
+Agente de IA Generativa para geraÃ§Ã£o automatizada de relatÃ³rios sobre SÃ­ndrome RespiratÃ³ria Aguda Grave (SRAG), combinando dados estruturados do OpenDataSUS/DataSUS com notÃ­cias e fontes institucionais recentes.
 
-Este projeto foi criado como uma Prova de Conceito técnica para demonstrar uma arquitetura de agente analítico com pipeline determinístico de dados, uso controlado de tools, RAG documental, guardrails, auditoria e interface demonstrável em Streamlit.
+Este projeto foi criado como uma Prova de Conceito tÃ©cnica para demonstrar uma arquitetura de agente analÃ­tico com pipeline determinÃ­stico de dados, uso controlado de tools, RAG documental, guardrails, auditoria e interface demonstrÃ¡vel em Streamlit.
 
 ---
 
 ## 1. Objetivo
 
-Construir uma solução capaz de:
+Construir uma soluÃ§Ã£o capaz de:
 
-- acessar automaticamente os dados públicos de SRAG;
-- identificar a pasta mais recente no repositório de dados unificados;
+- acessar automaticamente os dados pÃºblicos de SRAG;
+- identificar a pasta mais recente no repositÃ³rio de dados unificados;
 - baixar e processar o arquivo `srag_total.xlsx`;
-- calcular métricas epidemiológicas de forma determinística;
-- gerar gráficos obrigatórios;
-- consultar notícias e fontes oficiais em tempo real;
-- produzir um relatório explicativo com apoio de LLM;
-- registrar rastreabilidade, fontes, decisões e artefatos por execução;
-- disponibilizar uma interface em Streamlit para demonstração.
+- calcular mÃ©tricas epidemiolÃ³gicas de forma determinÃ­stica;
+- gerar grÃ¡ficos obrigatÃ³rios;
+- consultar notÃ­cias e fontes oficiais em tempo real;
+- produzir um relatÃ³rio explicativo com apoio de LLM;
+- registrar rastreabilidade, fontes, decisÃµes e artefatos por execuÃ§Ã£o;
+- disponibilizar uma interface em Streamlit para demonstraÃ§Ã£o.
 
 ---
 
 ## 2. Escopo da PoC
 
-A solução deve gerar um relatório contendo, no mínimo:
+A soluÃ§Ã£o deve gerar um relatÃ³rio contendo, no mÃ­nimo:
 
 - taxa de aumento de casos;
 - taxa de mortalidade;
-- proporção de casos de SRAG com passagem por UTI;
-- proporção de casos de SRAG com vacinação registrada;
-- gráfico diário de casos dos últimos 30 dias;
-- gráfico mensal de casos dos últimos 12 meses;
-- comentários explicativos baseados em fontes confiáveis;
-- limitações metodológicas;
+- proporÃ§Ã£o de casos de SRAG com passagem por UTI;
+- proporÃ§Ã£o de casos de SRAG com vacinaÃ§Ã£o registrada;
+- grÃ¡fico diÃ¡rio de casos dos Ãºltimos 30 dias;
+- grÃ¡fico mensal de casos dos Ãºltimos 12 meses;
+- comentÃ¡rios explicativos baseados em fontes confiÃ¡veis;
+- limitaÃ§Ãµes metodolÃ³gicas;
 - fontes consultadas.
 
-Observação: algumas métricas solicitadas no desafio são tratadas como proxies quando a base não possui o denominador necessário. Por exemplo, a base de SRAG permite calcular proporção de casos com UTI, mas não ocupação hospitalar real de leitos sem fonte complementar de leitos disponíveis.
+ObservaÃ§Ã£o: algumas mÃ©tricas solicitadas no desafio sÃ£o tratadas como proxies quando a base nÃ£o possui o denominador necessÃ¡rio. Por exemplo, a base de SRAG permite calcular proporÃ§Ã£o de casos com UTI, mas nÃ£o ocupaÃ§Ã£o hospitalar real de leitos sem fonte complementar de leitos disponÃ­veis.
 
 ---
 
-## 3. Princípio Arquitetural
+## 3. PrincÃ­pio Arquitetural
 
-A arquitetura separa cálculo determinístico de geração textual.
+A arquitetura separa cÃ¡lculo determinÃ­stico de geraÃ§Ã£o textual.
 
-O LLM não calcula métricas diretamente. Ele atua como orquestrador e redator analítico, chamando tools controladas que retornam métricas e evidências já calculadas por código.
+O LLM nÃ£o calcula mÃ©tricas diretamente. Ele atua como orquestrador e redator analÃ­tico, chamando tools controladas que retornam mÃ©tricas e evidÃªncias jÃ¡ calculadas por cÃ³digo.
 
 ```text
 GitLab/OpenDataSUS
@@ -69,14 +69,14 @@ LangGraph Agent
         +--> Guardrails
         |
         v
-Relatório + Streamlit + Auditoria
+RelatÃ³rio + Streamlit + Auditoria
 ```
 
 ---
 
 ## 4. Fontes Permitidas
 
-A aplicação deve consultar somente fontes explicitamente permitidas.
+A aplicaÃ§Ã£o deve consultar somente fontes explicitamente permitidas.
 
 Allowlist inicial:
 
@@ -91,7 +91,7 @@ Allowlist inicial:
 9. `paho.org`
 10. `who.int`
 
-Conteúdos externos devem ser tratados como dados não confiáveis. Nenhuma instrução encontrada em páginas externas pode sobrescrever regras internas, prompts de sistema ou políticas de segurança.
+ConteÃºdos externos devem ser tratados como dados nÃ£o confiÃ¡veis. Nenhuma instruÃ§Ã£o encontrada em pÃ¡ginas externas pode sobrescrever regras internas, prompts de sistema ou polÃ­ticas de seguranÃ§a.
 
 ---
 
@@ -112,7 +112,7 @@ agente_srag_datasus/
     column_mapping.yaml
 
   src/
-    srag_agent/
+    
       data/
       metrics/
       news/
@@ -144,94 +144,94 @@ agente_srag_datasus/
 
 ---
 
-## 6. Camadas da Solução
+## 6. Camadas da SoluÃ§Ã£o
 
-### 6.1 Ingestão
+### 6.1 IngestÃ£o
 
-Responsável por:
+ResponsÃ¡vel por:
 
-- acessar o repositório público de dados;
+- acessar o repositÃ³rio pÃºblico de dados;
 - listar pastas em `Dados unificados/Unificado Srag`;
 - selecionar a pasta mais recente pelo nome;
 - baixar `srag_total.xlsx`;
 - salvar o arquivo bruto em `data/landing`;
-- registrar hash e metadados no manifesto da execução.
+- registrar hash e metadados no manifesto da execuÃ§Ã£o.
 
-### 6.2 Pré-processamento
+### 6.2 PrÃ©-processamento
 
-Responsável por:
+ResponsÃ¡vel por:
 
 - ler o arquivo Excel;
 - selecionar colunas relevantes;
 - normalizar nomes de colunas;
 - converter datas;
-- tratar nulos, códigos ignorados e valores inconsistentes;
-- gerar relatório de qualidade de dados;
+- tratar nulos, cÃ³digos ignorados e valores inconsistentes;
+- gerar relatÃ³rio de qualidade de dados;
 - salvar o resultado em Parquet na camada `data/refined`.
 
-### 6.3 Métricas
+### 6.3 MÃ©tricas
 
-Responsável por calcular, de forma determinística:
+ResponsÃ¡vel por calcular, de forma determinÃ­stica:
 
-- variação de casos em janela recente;
+- variaÃ§Ã£o de casos em janela recente;
 - mortalidade;
-- proporção de casos com UTI;
-- proporção de casos com vacinação registrada;
-- séries temporais para os gráficos obrigatórios.
+- proporÃ§Ã£o de casos com UTI;
+- proporÃ§Ã£o de casos com vacinaÃ§Ã£o registrada;
+- sÃ©ries temporais para os grÃ¡ficos obrigatÃ³rios.
 
-### 6.4 Notícias
+### 6.4 NotÃ­cias
 
-Responsável por:
+ResponsÃ¡vel por:
 
-- buscar notícias e fontes institucionais sobre SRAG;
-- aplicar allowlist de domínios;
-- extrair título, data, fonte, URL e trecho relevante;
-- entregar evidências para o agente;
+- buscar notÃ­cias e fontes institucionais sobre SRAG;
+- aplicar allowlist de domÃ­nios;
+- extrair tÃ­tulo, data, fonte, URL e trecho relevante;
+- entregar evidÃªncias para o agente;
 - registrar as fontes usadas.
 
 ### 6.5 RAG Documental
 
-Responsável por recuperar contexto textual, como:
+ResponsÃ¡vel por recuperar contexto textual, como:
 
-- dicionário de dados;
-- catálogo de métricas;
-- limitações metodológicas;
-- documentação do projeto;
-- fontes e notícias já processadas;
-- relatórios anteriores.
+- dicionÃ¡rio de dados;
+- catÃ¡logo de mÃ©tricas;
+- limitaÃ§Ãµes metodolÃ³gicas;
+- documentaÃ§Ã£o do projeto;
+- fontes e notÃ­cias jÃ¡ processadas;
+- relatÃ³rios anteriores.
 
-O RAG não é usado como mecanismo principal para cálculo tabular.
+O RAG nÃ£o Ã© usado como mecanismo principal para cÃ¡lculo tabular.
 
 ### 6.6 Agente
 
-Responsável por:
+ResponsÃ¡vel por:
 
 - orquestrar tools;
-- coletar métricas;
-- coletar gráficos;
-- consultar notícias;
+- coletar mÃ©tricas;
+- coletar grÃ¡ficos;
+- consultar notÃ­cias;
 - recuperar contexto documental;
-- gerar relatório;
-- validar a saída antes de disponibilizar ao usuário.
+- gerar relatÃ³rio;
+- validar a saÃ­da antes de disponibilizar ao usuÃ¡rio.
 
 ### 6.7 Guardrails
 
-Responsáveis por:
+ResponsÃ¡veis por:
 
 - bloquear prompt injection;
 - restringir fontes externas;
-- impedir exposição de dados individuais;
+- impedir exposiÃ§Ã£o de dados individuais;
 - impedir SQL livre gerado pelo LLM;
-- validar saídas do relatório;
-- bloquear aconselhamento médico individualizado;
-- exigir fontes para comentários baseados em notícias.
+- validar saÃ­das do relatÃ³rio;
+- bloquear aconselhamento mÃ©dico individualizado;
+- exigir fontes para comentÃ¡rios baseados em notÃ­cias.
 
 A implementacao atual inclui guardrail de entrada, privacidade por tamanho minimo
 de grupo e validacao de saida antes da persistencia do relatorio.
 
 ### 6.8 Auditoria
 
-Cada execução deve gerar artefatos como:
+Cada execuÃ§Ã£o deve gerar artefatos como:
 
 ```text
 artifacts/runs/<run_id>/
@@ -250,11 +250,11 @@ sanitizados, sem gravar segredos.
 
 ---
 
-## 7. Métricas
+## 7. MÃ©tricas
 
 ### 7.1 Taxa de Aumento de Casos
 
-Definição inicial:
+DefiniÃ§Ã£o inicial:
 
 ```text
 (casos_ultimos_7_dias - casos_7_dias_anteriores) / casos_7_dias_anteriores
@@ -262,37 +262,37 @@ Definição inicial:
 
 ### 7.2 Taxa de Mortalidade
 
-Definição principal:
+DefiniÃ§Ã£o principal:
 
 ```text
 obitos / casos_com_evolucao_conhecida
 ```
 
-Definição complementar:
+DefiniÃ§Ã£o complementar:
 
 ```text
 obitos / casos_totais
 ```
 
-### 7.3 Proporção de Casos com UTI
+### 7.3 ProporÃ§Ã£o de Casos com UTI
 
-Definição:
+DefiniÃ§Ã£o:
 
 ```text
 casos_com_uti / casos_totais
 ```
 
-Essa métrica não deve ser descrita como ocupação hospitalar real de leitos sem fonte complementar.
+Essa mÃ©trica nÃ£o deve ser descrita como ocupaÃ§Ã£o hospitalar real de leitos sem fonte complementar.
 
-### 7.4 Proporção de Casos com Vacinação Registrada
+### 7.4 ProporÃ§Ã£o de Casos com VacinaÃ§Ã£o Registrada
 
-Definição:
+DefiniÃ§Ã£o:
 
 ```text
 casos_com_vacinacao_registrada / casos_com_status_vacinal_conhecido
 ```
 
-Essa métrica não deve ser descrita como cobertura vacinal populacional geral sem denominador populacional.
+Essa mÃ©trica nÃ£o deve ser descrita como cobertura vacinal populacional geral sem denominador populacional.
 
 ---
 
@@ -311,14 +311,14 @@ No Linux/macOS:
 source .venv/bin/activate
 ```
 
-### 8.2 Instalar dependências
+### 8.2 Instalar dependÃªncias
 
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 8.3 Configurar variáveis de ambiente
+### 8.3 Configurar variÃ¡veis de ambiente
 
 Crie um arquivo `.env` com base em `.env.example`.
 
@@ -336,7 +336,7 @@ EMBEDDING_MODEL=text-embedding-3-small
 pytest
 ```
 
-### 8.5 Executar aplicação Streamlit
+### 8.5 Executar aplicaÃ§Ã£o Streamlit
 
 ```bash
 streamlit run app/streamlit_app.py
@@ -346,7 +346,7 @@ streamlit run app/streamlit_app.py
 
 ## 9. Comandos Planejados
 
-Quando a estrutura estiver implementada, os comandos principais poderão ser padronizados via `Makefile`:
+Quando a estrutura estiver implementada, os comandos principais poderÃ£o ser padronizados via `Makefile`:
 
 ```bash
 make setup
@@ -357,62 +357,62 @@ make run-app
 
 ---
 
-## 10. Estratégia de Qualidade
+## 10. EstratÃ©gia de Qualidade
 
 O projeto deve incluir testes para:
 
-- seleção da pasta mais recente;
-- ingestão do arquivo correto;
-- normalização de colunas;
-- cálculo de métricas;
-- geração dos gráficos;
-- aplicação da allowlist;
+- seleÃ§Ã£o da pasta mais recente;
+- ingestÃ£o do arquivo correto;
+- normalizaÃ§Ã£o de colunas;
+- cÃ¡lculo de mÃ©tricas;
+- geraÃ§Ã£o dos grÃ¡ficos;
+- aplicaÃ§Ã£o da allowlist;
 - bloqueio de prompt injection;
-- validação do contrato do relatório.
+- validaÃ§Ã£o do contrato do relatÃ³rio.
 
 ---
 
-## 11. Limitações Conhecidas
+## 11. LimitaÃ§Ãµes Conhecidas
 
-- A base de SRAG pode ter atraso de atualização.
+- A base de SRAG pode ter atraso de atualizaÃ§Ã£o.
 - Campos podem ter preenchimento incompleto ou inconsistente.
-- A métrica de UTI é uma proxy de passagem por UTI, não ocupação real de leitos.
-- A métrica de vacinação na base SRAG mede vacinação registrada entre casos, não necessariamente cobertura populacional geral.
-- Notícias externas podem mudar, sair do ar ou conter informações incompletas.
-- A PoC não substitui análise epidemiológica oficial nem orientação clínica.
+- A mÃ©trica de UTI Ã© uma proxy de passagem por UTI, nÃ£o ocupaÃ§Ã£o real de leitos.
+- A mÃ©trica de vacinaÃ§Ã£o na base SRAG mede vacinaÃ§Ã£o registrada entre casos, nÃ£o necessariamente cobertura populacional geral.
+- NotÃ­cias externas podem mudar, sair do ar ou conter informaÃ§Ãµes incompletas.
+- A PoC nÃ£o substitui anÃ¡lise epidemiolÃ³gica oficial nem orientaÃ§Ã£o clÃ­nica.
 
 ---
 
-## 12. Roadmap Técnico
+## 12. Roadmap TÃ©cnico
 
 - [ ] Criar estrutura inicial do projeto.
 - [ ] Implementar cliente GitLab.
-- [ ] Implementar seleção automática da pasta mais recente.
+- [ ] Implementar seleÃ§Ã£o automÃ¡tica da pasta mais recente.
 - [ ] Implementar download do `srag_total.xlsx`.
 - [ ] Implementar camada landing.
-- [ ] Implementar pré-processamento.
+- [ ] Implementar prÃ©-processamento.
 - [ ] Implementar camada refined em Parquet.
-- [ ] Implementar cálculo das métricas.
-- [ ] Implementar geração dos gráficos.
-- [ ] Implementar busca de notícias com allowlist.
+- [ ] Implementar cÃ¡lculo das mÃ©tricas.
+- [ ] Implementar geraÃ§Ã£o dos grÃ¡ficos.
+- [ ] Implementar busca de notÃ­cias com allowlist.
 - [ ] Implementar RAG documental.
 - [ ] Implementar agente com LangGraph.
 - [ ] Implementar guardrails.
-- [ ] Implementar auditoria por execução.
+- [ ] Implementar auditoria por execuÃ§Ã£o.
 - [ ] Implementar dashboard Streamlit.
 - [ ] Gerar diagrama conceitual em PDF.
-- [ ] Finalizar README técnico.
-- [ ] Preparar defesa técnica da arquitetura.
+- [ ] Finalizar README tÃ©cnico.
+- [ ] Preparar defesa tÃ©cnica da arquitetura.
 
 ---
 
-## 13. Narrativa Técnica
+## 13. Narrativa TÃ©cnica
 
-A principal decisão de arquitetura é separar dados, métricas e linguagem natural.
+A principal decisÃ£o de arquitetura Ã© separar dados, mÃ©tricas e linguagem natural.
 
-O pipeline determinístico baixa, valida, transforma e calcula as métricas sobre a base SRAG. O agente GenAI não tem acesso livre ao banco nem calcula números por conta própria. Ele chama tools com contratos claros, recebe resultados agregados e usa o LLM para interpretar o cenário, escrever o relatório e contextualizar com notícias de fontes permitidas.
+O pipeline determinÃ­stico baixa, valida, transforma e calcula as mÃ©tricas sobre a base SRAG. O agente GenAI nÃ£o tem acesso livre ao banco nem calcula nÃºmeros por conta prÃ³pria. Ele chama tools com contratos claros, recebe resultados agregados e usa o LLM para interpretar o cenÃ¡rio, escrever o relatÃ³rio e contextualizar com notÃ­cias de fontes permitidas.
 
-Essa separação torna a solução mais segura, auditável, reproduzível e fácil de defender tecnicamente.
+Essa separaÃ§Ã£o torna a soluÃ§Ã£o mais segura, auditÃ¡vel, reproduzÃ­vel e fÃ¡cil de defender tecnicamente.
 
 ---
 
@@ -450,3 +450,4 @@ metricas diretamente; ele chama tools auditaveis. O RAG e usado para documentaca
 e contexto textual, nao para calculo tabular. As fontes externas sao filtradas
 por allowlist. Cada execucao gera manifesto, metricas, fontes, trace e relatorio,
 permitindo auditoria e reprodutibilidade.
+

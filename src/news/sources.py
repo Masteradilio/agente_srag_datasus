@@ -1,8 +1,8 @@
-import json
+﻿import json
 from pathlib import Path
 
-from srag_agent.data.schema import NewsArticle, NewsSearchResult
-from srag_agent.utils.paths import ensure_directory
+from data.schema import NewsArticle, NewsSearchResult
+from utils.paths import ensure_directory
 
 
 def persist_news_sources(
@@ -21,3 +21,4 @@ def persist_news_sources(
         encoding="utf-8",
     )
     return output_path
+

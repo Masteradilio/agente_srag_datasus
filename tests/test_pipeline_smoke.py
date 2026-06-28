@@ -1,6 +1,6 @@
-import pandas as pd
+﻿import pandas as pd
 
-from srag_agent.pipeline import run_pipeline
+from pipeline import run_pipeline
 
 
 def test_pipeline_smoke_generates_final_artifacts(tmp_path) -> None:
@@ -34,3 +34,4 @@ def test_pipeline_smoke_generates_final_artifacts(tmp_path) -> None:
     assert result.report_pdf_path.is_file()
     assert (run_dir / "charts" / "daily_cases_30d.png").is_file()
     assert (run_dir / "charts" / "monthly_cases_12m.png").is_file()
+

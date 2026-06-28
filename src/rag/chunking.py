@@ -1,6 +1,6 @@
-import hashlib
+﻿import hashlib
 
-from srag_agent.data.schema import DocumentChunk, DocumentSource
+from data.schema import DocumentChunk, DocumentSource
 
 
 def chunk_document(
@@ -64,3 +64,4 @@ def _split_sections(content: str) -> list[str]:
 def _chunk_id(source_path: str, section_index: int, start: int, content: str) -> str:
     digest = hashlib.sha256(f"{source_path}:{section_index}:{start}:{content}".encode()).hexdigest()
     return digest[:16]
+

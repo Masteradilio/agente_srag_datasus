@@ -1,4 +1,4 @@
-import json
+﻿import json
 import logging
 from collections.abc import Mapping
 from typing import Any
@@ -20,7 +20,7 @@ class JsonFormatter(logging.Formatter):
         return json.dumps(payload, ensure_ascii=False, default=str)
 
 
-def get_logger(name: str = "srag_agent", level: int = logging.INFO) -> logging.Logger:
+def get_logger(name: str = "src", level: int = logging.INFO) -> logging.Logger:
     logger = logging.getLogger(name)
     logger.setLevel(level)
 
@@ -31,3 +31,4 @@ def get_logger(name: str = "srag_agent", level: int = logging.INFO) -> logging.L
 
     logger.propagate = False
     return logger
+

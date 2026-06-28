@@ -1,6 +1,6 @@
-import pandas as pd
+﻿import pandas as pd
 
-from srag_agent.agents.tools import (
+from agents.tools import (
     generate_required_charts_tool,
     get_metric_summary_tool,
     search_srag_news_tool,
@@ -77,4 +77,5 @@ def test_validate_report_contract_tool_returns_errors_for_missing_source() -> No
 
     assert not result["is_valid"]
     assert any("nao cita fonte externa" in error for error in result["errors"])
+
 
