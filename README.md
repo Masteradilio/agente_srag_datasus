@@ -226,6 +226,9 @@ Responsáveis por:
 - bloquear aconselhamento médico individualizado;
 - exigir fontes para comentários baseados em notícias.
 
+A implementacao atual inclui guardrail de entrada, privacidade por tamanho minimo
+de grupo e validacao de saida antes da persistencia do relatorio.
+
 ### 6.8 Auditoria
 
 Cada execução deve gerar artefatos como:
@@ -241,6 +244,9 @@ artifacts/runs/<run_id>/
   report.pdf
   charts/
 ```
+
+O agente registra trace JSONL por no executado, tool chamada, status e resumos
+sanitizados, sem gravar segredos.
 
 ---
 

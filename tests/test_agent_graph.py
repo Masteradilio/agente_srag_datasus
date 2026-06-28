@@ -60,6 +60,9 @@ def test_agent_graph_calls_tools_and_persists_report(tmp_path) -> None:
     assert calls == ["metrics:run-graph", "charts:run-graph", "news", "rag"]
     assert state["validation_errors"] == []
     assert Path(state["final_report_path"]).is_file()
+    trace_path = tmp_path / "artifacts" / "run-graph" / "agent_trace.jsonl"
+    assert trace_path.is_file()
+    assert "validate_report" in trace_path.read_text(encoding="utf-8")
 
 
 def test_agent_graph_smoke_with_phase3_phase4_artifacts(tmp_path) -> None:
@@ -97,4 +100,3 @@ def test_agent_graph_smoke_with_phase3_phase4_artifacts(tmp_path) -> None:
     assert Path(state["final_report_path"]).is_file()
     assert (tmp_path / "artifacts" / run_id / "metrics.json").is_file()
     assert len(state["chart_paths"]) == 2
-

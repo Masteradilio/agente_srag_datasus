@@ -12,6 +12,9 @@ from srag_agent.agents.tools import (
     search_srag_news_tool,
     validate_report_contract_tool,
 )
+from srag_agent.audit.run_context import AgentTraceLogger
+from srag_agent.guardrails.input_guard import enforce_input_guard
+from srag_agent.guardrails.output_guard import enforce_output_guard
 from srag_agent.utils.paths import ensure_directory, resolve_project_path
 
 MetricTool = Callable[[str, Path | None, Path | None], dict[str, Any]]
@@ -48,22 +51,69 @@ def run_agent_graph(
 ) -> AgentState:
     deps = dependencies or AgentDependencies()
     state: AgentState = {"run_id": run_id, "user_request": user_request}
+    trace_logger = AgentTraceLogger(
+        run_id=run_id,
+        artifacts_dir=artifacts_dir or Path("artifacts/runs"),
+    )
 
-    validate_user_request(state)
-    load_run_context(state)
-    collect_metrics(state, deps, refined_dir, artifacts_dir)
-    collect_charts(state, deps, refined_dir, artifacts_dir)
-    search_news(state, deps, allowed_domains, news_candidates)
-    retrieve_methodology_context(state, deps, rag_persist_dir)
-    draft_report(state)
-    validate_report(state, deps)
-    persist_report(state, artifacts_dir)
+    _run_traced_node(
+        state,
+        trace_logger,
+        "validate_user_request",
+        None,
+        lambda: validate_user_request(state),
+    )
+    _run_traced_node(state, trace_logger, "load_run_context", None, lambda: load_run_context(state))
+    _run_traced_node(
+        state,
+        trace_logger,
+        "collect_metrics",
+        "get_metric_summary_tool",
+        lambda: collect_metrics(state, deps, refined_dir, artifacts_dir),
+    )
+    _run_traced_node(
+        state,
+        trace_logger,
+        "collect_charts",
+        "generate_required_charts_tool",
+        lambda: collect_charts(state, deps, refined_dir, artifacts_dir),
+    )
+    _run_traced_node(
+        state,
+        trace_logger,
+        "search_news",
+        "search_srag_news_tool",
+        lambda: search_news(state, deps, allowed_domains, news_candidates),
+    )
+    _run_traced_node(
+        state,
+        trace_logger,
+        "retrieve_methodology_context",
+        "retrieve_context_tool",
+        lambda: retrieve_methodology_context(state, deps, rag_persist_dir),
+    )
+    _run_traced_node(state, trace_logger, "draft_report", None, lambda: draft_report(state))
+    _run_traced_node(
+        state,
+        trace_logger,
+        "validate_report",
+        "validate_report_contract_tool",
+        lambda: validate_report(state, deps),
+    )
+    _run_traced_node(
+        state,
+        trace_logger,
+        "persist_report",
+        None,
+        lambda: persist_report(state, artifacts_dir),
+    )
     return state
 
 
 def validate_user_request(state: AgentState) -> AgentState:
     if not state.get("user_request", "").strip():
         raise ValueError("user_request nao pode ser vazio.")
+    enforce_input_guard(state["user_request"])
     return state
 
 
@@ -174,6 +224,7 @@ def draft_report(state: AgentState) -> AgentState:
 
 
 def validate_report(state: AgentState, dependencies: AgentDependencies) -> AgentState:
+    enforce_output_guard(state["draft_report"], requires_external_sources=True)
     result = dependencies.validate_report(
         state["draft_report"],
         state.get("metric_summary"),
@@ -235,3 +286,43 @@ def _format_limitations(summary: dict[str, Any]) -> list[str]:
         return ["- Interpretacoes dependem da completude e atualizacao do banco SRAG."]
     return [f"- {limitation}" for limitation in limitations]
 
+
+def _run_traced_node(
+    state: AgentState,
+    trace_logger: AgentTraceLogger,
+    node: str,
+    tool: str | None,
+    action: Callable[[], AgentState],
+) -> None:
+    try:
+        action()
+    except Exception as exc:
+        trace_logger.record(
+            node=node,
+            tool=tool,
+            status="error",
+            input_summary=_summarize_state(state),
+            output_summary={"error": str(exc)},
+        )
+        raise
+
+    trace_logger.record(
+        node=node,
+        tool=tool,
+        status="success",
+        input_summary={"run_id": state.get("run_id")},
+        output_summary=_summarize_state(state),
+    )
+
+
+def _summarize_state(state: AgentState) -> dict[str, Any]:
+    return {
+        "run_id": state.get("run_id"),
+        "has_metrics": bool(state.get("metric_summary")),
+        "chart_count": len(state.get("chart_paths", [])),
+        "news_count": len(state.get("news_evidence", [])),
+        "rag_count": len(state.get("rag_context", [])),
+        "has_draft_report": bool(state.get("draft_report")),
+        "validation_error_count": len(state.get("validation_errors", [])),
+        "has_final_report": bool(state.get("final_report_path")),
+    }
