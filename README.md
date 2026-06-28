@@ -413,3 +413,40 @@ A principal decisão de arquitetura é separar dados, métricas e linguagem natu
 O pipeline determinístico baixa, valida, transforma e calcula as métricas sobre a base SRAG. O agente GenAI não tem acesso livre ao banco nem calcula números por conta própria. Ele chama tools com contratos claros, recebe resultados agregados e usa o LLM para interpretar o cenário, escrever o relatório e contextualizar com notícias de fontes permitidas.
 
 Essa separação torna a solução mais segura, auditável, reproduzível e fácil de defender tecnicamente.
+
+---
+
+## 14. Execucao e Validacao
+
+```bash
+python -m venv .venv
+source .venv/Scripts/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pytest tests -q
+python -m ruff check .
+python -m mypy src
+streamlit run app/streamlit_app.py
+```
+
+No PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m pytest tests -q
+streamlit run app/streamlit_app.py
+```
+
+## 15. Artefatos por Execucao
+
+Cada run deve registrar `manifest.json`, `data_quality_report.json`,
+`metrics.json`, `news_sources.json` quando houver fontes externas,
+`agent_trace.jsonl`, `report.md`, `report.pdf` e graficos em `charts/`.
+
+## 16. Defesa Tecnica para Entrevista
+
+A solucao separa calculo deterministico de geracao textual. O LLM nao calcula
+metricas diretamente; ele chama tools auditaveis. O RAG e usado para documentacao
+e contexto textual, nao para calculo tabular. As fontes externas sao filtradas
+por allowlist. Cada execucao gera manifesto, metricas, fontes, trace e relatorio,
+permitindo auditoria e reprodutibilidade.
