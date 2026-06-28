@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "agente-srag-datasus"
 version = "0.1.0"
 description = "PoC para relatorios automatizados de SRAG com DataSUS/OpenDataSUS."
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.13"
 
 [tool.setuptools.packages.find]
 where = ["src"]

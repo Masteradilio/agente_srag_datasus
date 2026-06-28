@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from srag_agent.agents.graph import AgentDependencies, run_agent_graph
+from srag_agent.agents.graph import AgentDependencies, build_langgraph_workflow, run_agent_graph
 
 
 def _metric_summary() -> dict:
@@ -63,6 +63,14 @@ def test_agent_graph_calls_tools_and_persists_report(tmp_path) -> None:
     trace_path = tmp_path / "artifacts" / "run-graph" / "agent_trace.jsonl"
     assert trace_path.is_file()
     assert "validate_report" in trace_path.read_text(encoding="utf-8")
+
+
+def test_langgraph_workflow_topology_compiles() -> None:
+    workflow = build_langgraph_workflow()
+
+    result = workflow.invoke({"run_id": "run-topology", "user_request": "Relatorio SRAG"})
+
+    assert result["run_id"] == "run-topology"
 
 
 def test_agent_graph_smoke_with_phase3_phase4_artifacts(tmp_path) -> None:

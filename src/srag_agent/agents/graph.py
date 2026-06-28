@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from langgraph.graph import END, StateGraph  # type: ignore[import-untyped]
+
 from srag_agent.agents.prompts import SYSTEM_PROMPT
 from srag_agent.agents.state import AgentState
 from srag_agent.agents.tools import (
@@ -28,6 +30,18 @@ ValidationTool = Callable[
     [str, dict[str, Any] | None, list[str] | None, list[dict[str, Any]] | None],
     dict[str, Any],
 ]
+AGENT_STEP_ORDER = [
+    "validate_user_request",
+    "load_run_context",
+    "collect_metrics",
+    "collect_charts",
+    "search_news",
+    "retrieve_methodology_context",
+    "draft_report",
+    "validate_report",
+    "persist_report",
+]
+LANGGRAPH_NODE_ORDER = [f"node_{step}" for step in AGENT_STEP_ORDER]
 
 
 @dataclass(frozen=True)
@@ -37,6 +51,17 @@ class AgentDependencies:
     news: NewsTool = search_srag_news_tool
     rag: RagTool = retrieve_context_tool
     validate_report: ValidationTool = validate_report_contract_tool
+
+
+def build_langgraph_workflow() -> Any:
+    workflow = StateGraph(AgentState)
+    for node_name in LANGGRAPH_NODE_ORDER:
+        workflow.add_node(node_name, _passthrough_node)
+    workflow.set_entry_point(LANGGRAPH_NODE_ORDER[0])
+    for source, target in zip(LANGGRAPH_NODE_ORDER[:-1], LANGGRAPH_NODE_ORDER[1:], strict=True):
+        workflow.add_edge(source, target)
+    workflow.add_edge(LANGGRAPH_NODE_ORDER[-1], END)
+    return workflow.compile()
 
 
 def run_agent_graph(
@@ -326,3 +351,7 @@ def _summarize_state(state: AgentState) -> dict[str, Any]:
         "validation_error_count": len(state.get("validation_errors", [])),
         "has_final_report": bool(state.get("final_report_path")),
     }
+
+
+def _passthrough_node(state: AgentState) -> AgentState:
+    return state
