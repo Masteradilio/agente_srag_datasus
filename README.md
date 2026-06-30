@@ -538,7 +538,6 @@ O projeto deve incluir testes para:
 - [x] Implementar dashboard Streamlit.
 - [x] Gerar diagrama conceitual em PDF.
 - [x] Finalizar README técnico.
-- [x] Preparar defesa técnica da arquitetura.
 
 ---
 
@@ -578,12 +577,4 @@ streamlit run app/streamlit_app.py
 Cada run deve registrar `manifest.json`, `data_quality_report.json`,
 `metrics.json`, `news_sources.json` quando houver fontes externas,
 `agent_trace.jsonl`, `report.md`, `report.pdf` e graficos em `charts/`.
-
-## 17. Defesa Tecnica para Entrevista
-
-A solucao separa calculo deterministico de geracao textual. O LLM nao calcula
-metricas diretamente; ele chama tools auditaveis. O RAG e usado para documentacao
-e contexto textual, nao para calculo tabular. As fontes externas sao filtradas
-por allowlist. Cada execucao gera manifesto, metricas, fontes, trace e relatorio,
-permitindo auditoria e reprodutibilidade.
 
