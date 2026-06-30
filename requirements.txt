@@ -27,6 +27,7 @@ streamlit==1.38.0
 
 # Reports
 markdown==3.7
+reportlab==4.2.2
 weasyprint==62.3
 
 # Testing and quality

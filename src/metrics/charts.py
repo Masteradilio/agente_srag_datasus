@@ -55,6 +55,50 @@ def generate_monthly_cases_12m_chart(df: pd.DataFrame, output_path: Path) -> Pat
     return output_path
 
 
+def build_chart_context(df: pd.DataFrame) -> dict[str, object]:
+    case_dates = pd.to_datetime(df["canonical_case_date"], errors="coerce").dropna()
+    weighted_df = _case_date_weights(df)
+    reference_date = case_dates.max().normalize()
+    daily_start = reference_date - pd.Timedelta(days=29)
+    daily_index = pd.date_range(start=daily_start, end=reference_date, freq="D")
+    daily_counts = _weighted_counts_by_date(weighted_df, daily_start, reference_date).reindex(
+        daily_index,
+        fill_value=0,
+    )
+
+    reference_month = case_dates.max().to_period("M").to_timestamp()
+    monthly_start = reference_month - pd.DateOffset(months=11)
+    monthly_end = reference_month + pd.offsets.MonthEnd(0)
+    monthly_index = pd.period_range(start=monthly_start, end=reference_month, freq="M")
+    monthly_counts = _weighted_counts_by_month(
+        weighted_df,
+        monthly_start,
+        monthly_end,
+    ).reindex(monthly_index, fill_value=0)
+
+    return {
+        "daily_cases_30d": {
+            "start": daily_start.date().isoformat(),
+            "end": reference_date.date().isoformat(),
+            "total": int(daily_counts.sum()),
+            "first_value": int(daily_counts.iloc[0]),
+            "last_value": int(daily_counts.iloc[-1]),
+            "peak_date": daily_counts.idxmax().date().isoformat(),
+            "peak_value": int(daily_counts.max()),
+        },
+        "monthly_cases_12m": {
+            "start": str(monthly_index[0]),
+            "end": str(monthly_index[-1]),
+            "total": int(monthly_counts.sum()),
+            "first_value": int(monthly_counts.iloc[0]),
+            "last_value": int(monthly_counts.iloc[-1]),
+            "peak_month": str(monthly_counts.idxmax()),
+            "peak_value": int(monthly_counts.max()),
+            "series": {str(index): int(value) for index, value in monthly_counts.items()},
+        },
+    }
+
+
 def _case_date_weights(df: pd.DataFrame) -> pd.DataFrame:
     if "cases" in df.columns:
         parsed_cases = pd.to_numeric(df["cases"], errors="coerce")

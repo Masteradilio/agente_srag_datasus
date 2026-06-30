@@ -14,6 +14,12 @@ def test_allowed_url_blocks_unlisted_or_malicious_urls() -> None:
     assert not is_allowed_url("https://gov.br.evil.example/saude", ALLOWED)
 
 
+def test_allowed_url_continues_after_path_mismatch_for_specific_domain() -> None:
+    allowed = ["gov.br/saude", "infoms.saude.gov.br"]
+
+    assert is_allowed_url("https://infoms.saude.gov.br/extensions", allowed)
+
+
 def test_filter_allowed_urls() -> None:
     urls = [
         "https://www.who.int/news",

@@ -62,7 +62,50 @@ def write_data_quality_report(report: DataQualityReport, output_path: Path) -> P
         json.dumps(report.model_dump(mode="json"), ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    output_path.with_suffix(".md").write_text(_data_quality_markdown(report), encoding="utf-8")
     return output_path
+
+
+def _data_quality_markdown(report: DataQualityReport) -> str:
+    missing_optional = report.missing_optional_columns or ["nenhuma"]
+    missing_required = report.missing_required_columns or ["nenhuma"]
+    warnings = report.warnings or ["nenhum aviso"]
+    null_rates = [
+        f"- `{column}`: {rate:.2%}"
+        for column, rate in sorted(report.null_rate_by_selected_column.items())
+    ] or ["- Nenhuma coluna selecionada para calculo de nulos."]
+
+    return "\n".join(
+        [
+            "# Data Quality Report",
+            "",
+            "## Linhas e Colunas",
+            f"- Linhas brutas: {report.rows_raw}",
+            f"- Linhas refinadas: {report.rows_refined}",
+            f"- Colunas brutas: {report.columns_raw}",
+            f"- Colunas selecionadas: {report.columns_selected}",
+            f"- Linhas descartadas: {report.discarded_rows}",
+            "",
+            "## Colunas Obrigatorias Ausentes",
+            *(f"- `{column}`" for column in missing_required),
+            "",
+            "## Colunas Opcionais Ausentes",
+            *(f"- `{column}`" for column in missing_optional),
+            "",
+            "## Datas Invalidas",
+            *(
+                f"- `{column}`: {count}"
+                for column, count in sorted(report.invalid_dates.items())
+            ),
+            "",
+            "## Taxa de Nulos por Coluna Selecionada",
+            *null_rates,
+            "",
+            "## Avisos",
+            *(f"- {warning}" for warning in warnings),
+            "",
+        ]
+    )
 
 
 def _build_warnings(

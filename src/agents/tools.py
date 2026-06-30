@@ -1,4 +1,5 @@
-﻿from pathlib import Path
+import json
+from pathlib import Path
 from typing import Any
 
 import pandas as pd  # type: ignore[import-untyped]
@@ -7,9 +8,11 @@ from agents.output_contracts import validate_report_contract
 from config import load_news_sources, load_settings
 from metrics.calculators import calculate_metric_summary, write_metric_summary
 from metrics.charts import (
+    build_chart_context,
     generate_daily_cases_30d_chart,
     generate_monthly_cases_12m_chart,
 )
+from news.extract import extract_news_article
 from news.search import search_srag_news
 from rag.retriever import retrieve_context
 from utils.paths import ensure_directory, resolve_project_path
@@ -44,6 +47,10 @@ def generate_required_charts_tool(
     chart_dir = ensure_directory(resolved_artifacts_dir / run_id / "charts")
     daily_path = generate_daily_cases_30d_chart(df, chart_dir / "daily_cases_30d.png")
     monthly_path = generate_monthly_cases_12m_chart(df, chart_dir / "monthly_cases_12m.png")
+    (resolved_artifacts_dir / run_id / "chart_context.json").write_text(
+        json.dumps(build_chart_context(df), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
     return [str(daily_path), str(monthly_path)]
 
 
@@ -62,7 +69,21 @@ def search_srag_news_tool(
         max_results=limit,
         candidates=candidates,
     )
-    return [result.model_dump(mode="json") for result in results]
+    enriched_results: list[dict[str, Any]] = []
+    for result in results:
+        item = result.model_dump(mode="json")
+        article = extract_news_article(
+            result.url,
+            allowed_domains=domains,
+            timeout_seconds=settings.news.request_timeout_seconds,
+        )
+        if article.extraction_status == "success":
+            item["title"] = article.title or item["title"]
+            item["published_at"] = article.published_at or item.get("published_at")
+            item["excerpt"] = article.excerpt
+        item["extraction_status"] = article.extraction_status
+        enriched_results.append(item)
+    return enriched_results
 
 
 def retrieve_context_tool(
@@ -104,5 +125,3 @@ def _resolve_parquet_path(run_id: str, refined_dir: Path) -> Path:
             return candidate
     formatted = ", ".join(str(candidate) for candidate in candidates)
     raise FileNotFoundError(f"No refined parquet found for run_id={run_id}: {formatted}")
-
-

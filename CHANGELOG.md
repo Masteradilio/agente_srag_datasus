@@ -37,6 +37,19 @@
   `docs/limitations.md` e `docs/architecture_diagram.pdf`.
 - Smoke cumulativo de Fase 3 + Fase 4 cobrindo preprocessamento, metricas,
   graficos e artefatos.
+- Relatorio executivo comentado por LLM, com secoes `Metricas Principais`,
+  `Evolucao Historica`, `Noticias Recentes` e `Fontes Consultadas`.
+- Modulo de comentarios LLM com fallback local auditavel e controle por
+  `DISABLE_LLM_API`.
+- Busca de noticias allowlisted ampliada, com extracao de URLs reais,
+  ordenacao por data e persistencia das fontes usadas.
+- Documentos de avaliacao em `docs/cobertura_avaliacao.md` e
+  `docs/guardrails_security_matrix.md`.
+- Guardrails enterprise adicionais para entrada, saida e privacidade,
+  cobrindo escopo SRAG/DataSUS, prompt injection, jailbreak, exfiltracao,
+  segredos, PII, caminhos locais, dados sensiveis e grupos pequenos.
+- `.env.example` versionado com placeholders seguros para orientar quem clonar
+  o repositorio sem expor chaves reais.
 
 ### Changed
 
@@ -49,11 +62,21 @@
   real dos dados e adaptar o pipeline ao arquivo CSV oficial.
 - Codigo reorganizado para remover o pacote intermediario `src/srag_agent`; os
   modulos agora ficam diretamente em `src/`.
-- `.env.example` e `docs/descricao_vaga.md` passam a ser arquivos locais
+- `.env` e dados locais continuam ignorados; `.env.example` passa a ser
+  versionado com valores `sua_api_key_aqui`.
+- `docs/descricao_vaga.md` e `MASTER_BACKLOG.md` passam a ser arquivos locais
   ignorados pelo Git.
 - Dependencias foram reduzidas para as bibliotecas efetivamente usadas pela
   implementacao atual, mantendo instalacao limpa reproduzivel em Python
   `>=3.11,<3.13`.
+- Smoke de pipeline passou a simular busca/extracao de noticias para nao
+  depender de rede, LLM externo ou disponibilidade de portais durante testes.
+- README foi atualizado para refletir OpenDataSUS CSV como fonte primaria,
+  allowlist atual, cobertura dos criterios de avaliacao e instrucoes de
+  ambiente com `.env.example`.
+- Chat Streamlit, como demonstracao extra, passou a usar LLM com contexto
+  grounded em artefatos, parquet e busca externa allowlisted, retornando fontes
+  consultadas quando noticias entram na resposta.
 
 ### Verified
 
@@ -71,3 +94,9 @@
   `vaccination_value=0.4033807881628202`.
 - Regressao completa anterior: `python -m pytest tests -q` com 48 testes,
   `python -m ruff check .` sem achados e `python -m mypy src` com sucesso.
+- Validacao final de submissao, excluindo Streamlit/chat da conformidade:
+  `python -m pytest tests -q --ignore=tests/test_streamlit_smoke.py` com
+  94 testes, `python -m ruff check .` sem achados e `python -m mypy src`
+  com sucesso em 47 arquivos.
+- Varredura final de segredos sem chaves reais versionaveis; `.env`, dados,
+  refined, artefatos de runtime e materiais locais permanecem ignorados.

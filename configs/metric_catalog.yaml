@@ -25,7 +25,7 @@ metrics:
     limitations:
       - Inclui casos sem evolucao conhecida no denominador.
   icu_case_rate:
-    name: Proporcao de casos de SRAG com passagem por UTI
+    name: Taxa de ocupacao/uso de UTI em casos de SRAG
     formula: casos_com_uti / casos_totais
     numerator: casos_com_uti
     denominator: casos_totais
@@ -33,7 +33,7 @@ metrics:
     limitations:
       - Nao representa ocupacao hospitalar real de leitos sem base complementar de leitos disponiveis.
   registered_vaccination_case_rate:
-    name: Proporcao de casos de SRAG com vacinacao registrada
+    name: Taxa de vacinacao da populacao com SRAG
     formula: casos_com_vacinacao_registrada / casos_com_status_vacinal_conhecido
     numerator: casos_com_vacinacao_registrada
     denominator: casos_com_status_vacinal_conhecido

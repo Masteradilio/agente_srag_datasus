@@ -16,7 +16,8 @@ def is_allowed_url(url: str, allowed_domains: list[str]) -> bool:
         if hostname == allowed_host or hostname.endswith(f".{allowed_host}"):
             if not allowed_path:
                 return True
-            return normalized_path.startswith(allowed_path)
+            if normalized_path.startswith(allowed_path):
+                return True
 
     return False
 

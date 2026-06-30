@@ -73,7 +73,9 @@ def test_langgraph_workflow_topology_compiles() -> None:
     assert result["run_id"] == "run-topology"
 
 
-def test_agent_graph_smoke_with_phase3_phase4_artifacts(tmp_path) -> None:
+def test_agent_graph_smoke_with_phase3_phase4_artifacts(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("DISABLE_LLM_API", "1")
+
     run_id = "run-smoke"
     refined_dir = tmp_path / "refined" / run_id
     refined_dir.mkdir(parents=True)

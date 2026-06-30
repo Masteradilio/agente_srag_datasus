@@ -31,7 +31,7 @@ ENV/
 # Environment variables and secrets
 .env
 .env.*
-.env.example
+!.env.example
 
 # IDEs and editors
 .vscode/
@@ -66,6 +66,7 @@ data/refined/*
 
 # Local challenge/reference material
 docs/descricao_vaga.md
+MASTER_BACKLOG.md
 
 # Runtime artifacts
 artifacts/runs/*

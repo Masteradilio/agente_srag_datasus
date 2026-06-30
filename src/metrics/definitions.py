@@ -8,8 +8,8 @@ METRIC_NAMES = {
     CASE_GROWTH_RATE_7D: "Taxa de aumento de casos em 7 dias",
     KNOWN_MORTALITY_RATE: "Taxa de mortalidade conhecida",
     CRUDE_MORTALITY_RATE: "Taxa de mortalidade bruta",
-    ICU_CASE_RATE: "Proporcao de casos de SRAG com passagem por UTI",
-    REGISTERED_VACCINATION_CASE_RATE: "Proporcao de casos de SRAG com vacinacao registrada",
+    ICU_CASE_RATE: "Taxa de ocupacao/uso de UTI em casos de SRAG",
+    REGISTERED_VACCINATION_CASE_RATE: "Taxa de vacinacao da populacao com SRAG",
 }
 
 METRIC_LIMITATIONS = {

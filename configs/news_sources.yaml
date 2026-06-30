@@ -9,3 +9,13 @@ allowed_domains:
   - agenciabrasil.ebc.com.br
   - paho.org
   - who.int
+  - g1.globo.com
+  - cnnbrasil.com.br
+  - folha.uol.com.br
+  - estadao.com.br
+  - uol.com.br
+  - metropoles.com
+  - exame.com
+  - revistapesquisa.fapesp.br
+  - cienciahoje.org.br
+  - sbmt.org.br

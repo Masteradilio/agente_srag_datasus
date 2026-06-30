@@ -132,19 +132,34 @@ def run_preprocessing(
     raw_file: Path,
     run_id: str,
     *,
+    extra_raw_files: list[Path] | None = None,
     settings: Settings | None = None,
     project_root: Path | None = None,
 ) -> PreprocessingResult:
     loaded_settings = settings or load_settings()
-    raw_df = load_raw_srag_excel(raw_file)
+    raw_files = [raw_file, *(extra_raw_files or [])]
     mapping = load_column_mapping()
-    resolved_mapping = resolve_column_mapping(raw_df, mapping)
-    epidemiological_year = _infer_epidemiological_year(raw_file, run_id)
-    refined_df, invalid_dates = prepare_refined_dataframe(
-        raw_df,
-        resolved_mapping,
-        epidemiological_year=epidemiological_year,
-    )
+    raw_frames: list[pd.DataFrame] = []
+    refined_frames: list[pd.DataFrame] = []
+    invalid_dates: dict[str, int] = {}
+    resolved_mapping: dict[str, str | None] = {}
+
+    for current_raw_file in raw_files:
+        current_raw_df = load_raw_srag_excel(current_raw_file)
+        current_mapping = resolve_column_mapping(current_raw_df, mapping)
+        current_year = _infer_epidemiological_year(current_raw_file, run_id)
+        current_refined_df, current_invalid_dates = prepare_refined_dataframe(
+            current_raw_df,
+            current_mapping,
+            epidemiological_year=current_year,
+        )
+        raw_frames.append(current_raw_df)
+        refined_frames.append(current_refined_df)
+        resolved_mapping = _merge_resolved_mapping(resolved_mapping, current_mapping)
+        invalid_dates = _merge_invalid_dates(invalid_dates, current_invalid_dates)
+
+    raw_df = pd.concat(raw_frames, ignore_index=True) if raw_frames else pd.DataFrame()
+    refined_df = pd.concat(refined_frames, ignore_index=True) if refined_frames else pd.DataFrame()
 
     refined_dir = ensure_directory(
         resolve_project_path(loaded_settings.paths.refined_dir / run_id, root=project_root)
@@ -173,6 +188,27 @@ def run_preprocessing(
         rows_raw=len(raw_df),
         rows_refined=len(refined_df),
     )
+
+
+def _merge_resolved_mapping(
+    base_mapping: dict[str, str | None],
+    next_mapping: dict[str, str | None],
+) -> dict[str, str | None]:
+    merged = dict(base_mapping)
+    for canonical_name, source_column in next_mapping.items():
+        if merged.get(canonical_name) is None:
+            merged[canonical_name] = source_column
+    return merged
+
+
+def _merge_invalid_dates(
+    base_invalid_dates: dict[str, int],
+    next_invalid_dates: dict[str, int],
+) -> dict[str, int]:
+    merged = dict(base_invalid_dates)
+    for column, count in next_invalid_dates.items():
+        merged[column] = merged.get(column, 0) + count
+    return merged
 
 
 def _is_aggregated_srag_schema(resolved_mapping: dict[str, str | None]) -> bool:

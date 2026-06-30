@@ -1,29 +1,23 @@
-# Relatorio Automatizado de SRAG
+# Relatório Executivo de SRAG
 
-## 1. Sumario Executivo
-{{ executive_summary }}
+## 1. Métricas Principais
+{{ metrics_section }}
 
-## 2. Dados Utilizados
-{{ data_used }}
+## 2. Evolução Histórica
+{{ historical_chart_1_section }}
 
-## 3. Metricas Principais
-{{ metrics }}
+{{ chart_1 }}
 
-## 4. Evolucao Temporal
-{{ charts }}
+{{ historical_chart_2_section }}
 
-## 5. Contexto de Noticias e Fontes Oficiais
-{{ news_context }}
+{{ chart_2 }}
 
-## 6. Comentarios Analiticos do Agente
-{{ analytical_comments }}
+## 3. Notícias Recentes
+{{ news_section }}
 
-## 7. Limitacoes Metodologicas
-{{ limitations }}
-
-## 8. Fontes Consultadas
+## 4. Fontes Consultadas
 {{ sources }}
 
-## 9. Aviso de Uso
-{{ usage_notice }}
+Aviso de uso: {{ usage_notice }}
 
+{{ limitations }}

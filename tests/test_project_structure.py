@@ -7,8 +7,11 @@ def test_required_root_files_exist() -> None:
     required_files = [
         "README.md",
         ".gitignore",
+        ".env.example",
         "requirements.txt",
         "docs/PRD_srag_genai_agent.md",
+        "docs/cobertura_avaliacao.md",
+        "docs/guardrails_security_matrix.md",
         "MASTER_BACKLOG.md",
         "pyproject.toml",
     ]

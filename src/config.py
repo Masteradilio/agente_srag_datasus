@@ -26,6 +26,7 @@ class OpenDataSUSConfig(BaseModel):
     dataset_url: HttpUrl
     latest_csv_url: HttpUrl
     target_file: str
+    historical_csv_urls: list[HttpUrl] = Field(default_factory=list)
     csv_separator: str = ";"
     csv_encoding: str = "latin1"
 
@@ -57,7 +58,7 @@ class Settings(BaseModel):
 
 
 class NewsSourcesConfig(BaseModel):
-    allowed_domains: list[str] = Field(min_length=1, max_length=10)
+    allowed_domains: list[str] = Field(min_length=1, max_length=20)
 
 
 class ColumnMappingEntry(BaseModel):

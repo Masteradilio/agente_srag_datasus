@@ -20,9 +20,11 @@ def test_load_settings() -> None:
 def test_news_allowlist_has_expected_limit_and_domains() -> None:
     news_sources = load_news_sources()
 
-    assert len(news_sources.allowed_domains) <= 10
+    assert len(news_sources.allowed_domains) <= 20
     assert "gitlab.com/cgcovid/dados-abertos" in news_sources.allowed_domains
     assert "who.int" in news_sources.allowed_domains
+    assert "g1.globo.com" in news_sources.allowed_domains
+    assert "revistapesquisa.fapesp.br" in news_sources.allowed_domains
 
 
 def test_load_column_mapping() -> None:

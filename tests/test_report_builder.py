@@ -27,13 +27,28 @@ def test_build_report_markdown_renders_required_sections() -> None:
                     "source_domain": "www.who.int",
                 }
             ],
+            executive_sections={
+                "metrics_section": (
+                    "A taxa de aumento de casos, a mortalidade conhecida, a mortalidade bruta, "
+                    "a UTI e a vacinacao indicam estabilidade operacional."
+                ),
+                "historical_chart_1_section": "O primeiro grafico mostra a evolucao diaria.",
+                "historical_chart_2_section": "O segundo grafico mostra a evolucao mensal.",
+                "news_section": "As fontes recentes reforcam a vigilancia de SRAG.",
+            },
+            observability={"generated_at": "2026-06-29T16:30:00-03:00"},
         )
     )
 
-    assert "# Relatorio Automatizado de SRAG" in report
-    assert "## 3. Metricas Principais" in report
+    assert "# Relatório Executivo de SRAG" in report
+    assert "## 1. Métricas Principais" in report
+    assert "## 2. Evolução Histórica" in report
+    assert "## 3. Notícias Recentes" in report
+    assert "## 4. Fontes Consultadas" in report
     assert "daily_cases_30d.png" in report
     assert "https://www.who.int/news/srag" in report
-    assert "Aviso de Uso" in report
+    assert "Acesso em 29/06/2026, 16:30" in report
+    assert "Fontes usadas pelo LLM" not in report
+    assert "Aviso de uso" in report
 
 

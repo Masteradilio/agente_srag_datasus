@@ -15,6 +15,8 @@ opendatasus:
   dataset_url: https://dadosabertos.saude.gov.br/dataset/srag-2019-a-2026
   latest_csv_url: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2026/INFLUD26-22-06-2026.csv
   target_file: INFLUD26-22-06-2026.csv
+  historical_csv_urls:
+    - https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/2025/INFLUD25-22-06-2026.csv
   csv_separator: ;
   csv_encoding: latin1
 
@@ -28,5 +30,5 @@ privacy:
   min_group_size: 10
 
 news:
-  max_sources_per_report: 6
+  max_sources_per_report: 10
   request_timeout_seconds: 20

@@ -1,11 +1,14 @@
-﻿from collections.abc import Callable
+import json
+from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from langgraph.graph import END, StateGraph  # type: ignore[import-untyped]
 
-from agents.prompts import SYSTEM_PROMPT
+from agents.llm_comments import generate_executive_report_sections
 from agents.state import AgentState
 from agents.tools import (
     generate_required_charts_tool,
@@ -17,6 +20,7 @@ from agents.tools import (
 from audit.run_context import AgentTraceLogger
 from guardrails.input_guard import enforce_input_guard
 from guardrails.output_guard import enforce_output_guard
+from reporting.report_builder import ReportContext, build_report_markdown
 from utils.paths import ensure_directory, resolve_project_path
 
 MetricTool = Callable[[str, Path | None, Path | None], dict[str, Any]]
@@ -164,6 +168,7 @@ def collect_charts(
     artifacts_dir: Path | None,
 ) -> AgentState:
     state["chart_paths"] = dependencies.charts(state["run_id"], refined_dir, artifacts_dir)
+    state["chart_context"] = _read_chart_context(state["run_id"], artifacts_dir)
     return state
 
 
@@ -197,53 +202,29 @@ def retrieve_methodology_context(
 
 def draft_report(state: AgentState) -> AgentState:
     summary = state["metric_summary"]
-    charts = state.get("chart_paths", [])
     sources = state.get("news_evidence", [])
-    contexts = state.get("rag_context", [])
-
-    state["draft_report"] = "\n".join(
-        [
-            "# Relatorio tecnico de SRAG",
-            "",
-            "## Escopo",
-            (
-                "Relatorio gerado com tools deterministicas. "
-                "O agente nao calcula metricas diretamente."
-            ),
-            "",
-            "## Metricas calculadas",
-            f"- Data de referencia: {summary.get('reference_date')}",
-            f"- Total de casos: {summary.get('total_cases')}",
-            _format_metric("Taxa de aumento 7d", summary["case_growth_rate_7d"]),
-            _format_metric("Taxa de mortalidade conhecida", summary["known_mortality_rate"]),
-            _format_metric("Taxa de mortalidade bruta", summary["crude_mortality_rate"]),
-            _format_metric("Proporcao de casos com UTI", summary["icu_case_rate"]),
-            _format_metric(
-                "Proporcao de casos com vacinacao registrada",
-                summary["registered_vaccination_case_rate"],
-            ),
-            "",
-            "## Graficos",
-            *_format_charts(charts),
-            "",
-            "## Evidencias e interpretacao",
-            _format_contexts(contexts),
-            "",
-            "## Fontes",
-            *_format_sources(sources),
-            "",
-            "## Limitacoes",
-            *_format_limitations(summary),
-            "",
-            "## Aviso de uso",
-            (
-                "Este relatorio e informativo, usa dados agregados e nao substitui "
-                "avaliacao epidemiologica oficial ou aconselhamento medico individualizado."
-            ),
-            "",
-            "<!-- prompt_rules -->",
-            SYSTEM_PROMPT,
-        ]
+    executive_sections, observability = generate_executive_report_sections(
+        metric_summary=summary,
+        chart_context=state.get("chart_context", {}),
+        news_evidence=sources,
+    )
+    used_sources = _select_used_news_sources(
+        sources,
+        executive_sections.get("used_source_urls", []),
+    )
+    state["executive_sections"] = executive_sections
+    state["used_news_evidence"] = used_sources
+    observability["generated_at"] = datetime.now(ZoneInfo("America/Sao_Paulo")).isoformat()
+    state["observability"] = observability
+    state["draft_report"] = build_report_markdown(
+        ReportContext(
+            run_id=state["run_id"],
+            metric_summary=summary,
+            chart_paths=state.get("chart_paths", []),
+            news_evidence=used_sources,
+            executive_sections=executive_sections,
+            observability=observability,
+        )
     )
     return state
 
@@ -254,7 +235,7 @@ def validate_report(state: AgentState, dependencies: AgentDependencies) -> Agent
         state["draft_report"],
         state.get("metric_summary"),
         state.get("chart_paths"),
-        state.get("news_evidence"),
+        state.get("used_news_evidence"),
     )
     state["validation_errors"] = list(result.get("errors", []))
     if state["validation_errors"]:
@@ -271,45 +252,23 @@ def persist_report(state: AgentState, artifacts_dir: Path | None = None) -> Agen
     return state
 
 
-def _format_metric(label: str, metric: dict[str, Any]) -> str:
-    value = metric.get("value")
-    formatted_value = "indisponivel" if value is None else f"{float(value):.4f}"
-    return (
-        f"- {label}: {formatted_value} "
-        f"(numerador={metric.get('numerator')}, denominador={metric.get('denominator')})"
-    )
+def _read_chart_context(run_id: str, artifacts_dir: Path | None = None) -> dict[str, Any]:
+    base_dir = resolve_project_path(artifacts_dir or Path("artifacts/runs"))
+    chart_context_path = base_dir / run_id / "chart_context.json"
+    if not chart_context_path.is_file():
+        return {}
+    return json.loads(chart_context_path.read_text(encoding="utf-8"))
 
 
-def _format_charts(chart_paths: list[str]) -> list[str]:
-    if not chart_paths:
-        return ["- Nenhum grafico gerado."]
-    return [f"- {Path(chart_path).name}: {chart_path}" for chart_path in chart_paths]
-
-
-def _format_sources(sources: list[dict[str, Any]]) -> list[str]:
-    if not sources:
-        return ["- Nenhuma fonte externa recuperada."]
-    return [
-        f"- {source.get('title', 'Fonte')} ({source.get('source_domain', '')}): {source.get('url')}"
-        for source in sources
-    ]
-
-
-def _format_contexts(contexts: list[dict[str, Any]]) -> str:
-    if not contexts:
-        return "Contexto metodologico documental nao recuperado nesta execucao."
-    first = contexts[0]
-    return (
-        f"Contexto documental principal: {first.get('source_path')} "
-        f"(score={first.get('score')})."
-    )
-
-
-def _format_limitations(summary: dict[str, Any]) -> list[str]:
-    limitations = summary.get("limitations") or []
-    if not limitations:
-        return ["- Interpretacoes dependem da completude e atualizacao do banco SRAG."]
-    return [f"- {limitation}" for limitation in limitations]
+def _select_used_news_sources(
+    sources: list[dict[str, Any]],
+    used_source_urls: list[Any],
+) -> list[dict[str, Any]]:
+    used_urls = {str(url) for url in used_source_urls if url}
+    selected = [source for source in sources if str(source.get("url")) in used_urls]
+    if selected:
+        return selected[:5]
+    return sources[:5]
 
 
 def _run_traced_node(
@@ -345,7 +304,9 @@ def _summarize_state(state: AgentState) -> dict[str, Any]:
         "run_id": state.get("run_id"),
         "has_metrics": bool(state.get("metric_summary")),
         "chart_count": len(state.get("chart_paths", [])),
+        "has_chart_context": bool(state.get("chart_context")),
         "news_count": len(state.get("news_evidence", [])),
+        "used_news_count": len(state.get("used_news_evidence", [])),
         "rag_count": len(state.get("rag_context", [])),
         "has_draft_report": bool(state.get("draft_report")),
         "validation_error_count": len(state.get("validation_errors", [])),
@@ -355,4 +316,3 @@ def _summarize_state(state: AgentState) -> dict[str, Any]:
 
 def _passthrough_node(state: AgentState) -> AgentState:
     return state
-

@@ -34,3 +34,11 @@ def test_search_srag_news_filters_candidates_by_allowlist() -> None:
     assert len(results) == 1
     assert results[0].source_domain == "www.who.int"
 
+
+def test_search_srag_news_respects_empty_candidates(monkeypatch) -> None:
+    monkeypatch.setattr("news.search._search_allowlisted_web", lambda *args, **kwargs: [])
+
+    results = search_srag_news("SRAG", ["who.int"], 5, candidates=[])
+
+    assert results == []
+
