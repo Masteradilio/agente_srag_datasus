@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -10,9 +10,8 @@ def test_required_root_files_exist() -> None:
         ".env.example",
         "requirements.txt",
         "docs/PRD_srag_genai_agent.md",
-        "docs/cobertura_avaliacao.md",
+        "docs/cobertura_compliance.md",
         "docs/guardrails_security_matrix.md",
-        "MASTER_BACKLOG.md",
         "pyproject.toml",
     ]
 

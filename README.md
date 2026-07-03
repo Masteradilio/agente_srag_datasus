@@ -263,7 +263,7 @@ sanitizados, sem gravar segredos.
 
 O desafio avalia arquitetura, governança e transparência, guardrails, uso de
 tools, tratamento de dados sensíveis e clean code. A cobertura detalhada está
-documentada em `docs/cobertura_avaliacao.md`, com matriz complementar de
+documentada em `docs/cobertura_compliance.md`, com matriz complementar de
 seguranca e privacidade em `docs/guardrails_security_matrix.md`.
 
 ### 7.1 Governança e Transparência
@@ -555,7 +555,7 @@ Essa separação torna a solução mais segura, auditável, reproduzível e fác
 
 ```bash
 python -m venv .venv
-source .venv/Scripts/activate
+.venv/Scripts/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 python -m pytest tests -q

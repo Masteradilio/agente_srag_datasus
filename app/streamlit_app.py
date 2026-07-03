@@ -311,7 +311,7 @@ def answer_chat_question(question: str, run_id: str, paths: dict[str, Path]) -> 
         f"RELATORIO={report_text[:1800]}\n\n"
         f"CONTEXTO_RAG={context[:2200]}"
     )
-    answer = _call_chat_llm(system_prompt, user_prompt)
+    answer = _call_chat_llm(system_prompt, user_prompt, observability_path=paths.get("observability"))
     return _guard_chat_answer(answer)
 
 
@@ -570,41 +570,120 @@ def _summarize_refined_parquet_if_needed(question: str, run_id: str) -> str:
     return json.dumps(summary, ensure_ascii=False)
 
 
-def _call_chat_llm(system_prompt: str, user_prompt: str) -> str:
+def _approx_tokens(text: str) -> int:
+    return len(text) // 4
+
+
+def _update_observability_chat(
+    observability_path: Path,
+    prompt_tokens: int,
+    completion_tokens: int,
+    total_tokens: int,
+) -> None:
+    try:
+        if not observability_path.is_file():
+            return
+        data = json.loads(observability_path.read_text(encoding="utf-8"))
+        data["llm_call_count"] = data.get("llm_call_count", 0) + 1
+        data["prompt_tokens"] = data.get("prompt_tokens", 0) + prompt_tokens
+        data["completion_tokens"] = data.get("completion_tokens", 0) + completion_tokens
+        data["total_tokens"] = data.get("total_tokens", 0) + total_tokens
+
+        observability_path.write_text(
+            json.dumps(data, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        print(
+            f"[Chat LLM] Chamada registrada em {observability_path.name}. "
+            f"+{prompt_tokens} prompt, +{completion_tokens} completion. "
+            f"Total acumulado de tokens no run: {data['total_tokens']}"
+        )
+    except Exception as exc:
+        print(f"[Chat LLM] Erro ao gravar observabilidade: {type(exc).__name__}")
+
+
+def _call_chat_llm(system_prompt: str, user_prompt: str, observability_path: Path | None = None) -> str:
     load_dotenv()
     if os.getenv("DISABLE_LLM_API") == "1":
         return _fallback_chat_answer(user_prompt)
-    api_key = os.getenv("NVIDIA_API_KEY") or os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY")
-    if not api_key:
-        return _fallback_chat_answer(user_prompt)
-    endpoint = (
-        "https://integrate.api.nvidia.com/v1/chat/completions"
-        if os.getenv("NVIDIA_API_KEY")
-        else "https://api.openai.com/v1/chat/completions"
-    )
-    model = os.getenv("LLM_MODEL", "gpt-4.1-mini")
-    try:
-        response = requests.post(
-            endpoint,
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": system_prompt,
-                    },
-                    {"role": "user", "content": user_prompt},
-                ],
-                "temperature": 0.2,
-                "max_tokens": 1000,
-            },
-            timeout=45,
-        )
-        response.raise_for_status()
-        return str(response.json()["choices"][0]["message"]["content"]).strip()
-    except Exception:
-        return _fallback_chat_answer(user_prompt)
+
+    # Ler e limpar chaves e modelos
+    nvidia_key = (os.getenv("NVIDIA_API_KEY") or "").strip().strip('"').strip("'")
+    nvidia_model = (os.getenv("LLM_MODEL") or "").strip().strip('"').strip("'") or "minimaxai/minimax-m3"
+
+    openrouter_key = (os.getenv("OPENROUTER_API_KEY") or "").strip().strip('"').strip("'")
+    openrouter_model = (os.getenv("OPENROUTER_MODEL") or "").strip().strip('"').strip("'") or "minimax/minimax-m3"
+
+    # Tentativa 1: NVIDIA
+    if nvidia_key:
+        try:
+            response = requests.post(
+                "https://integrate.api.nvidia.com/v1/chat/completions",
+                headers={"Authorization": f"Bearer {nvidia_key}", "Content-Type": "application/json"},
+                json={
+                    "model": nvidia_model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    "temperature": 0.2,
+                    "max_tokens": 1000,
+                },
+                timeout=20,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            answer = str(payload["choices"][0]["message"]["content"]).strip()
+
+            if observability_path:
+                usage = payload.get("usage", {})
+                p_tokens = int(usage.get("prompt_tokens") or _approx_tokens(system_prompt + user_prompt))
+                c_tokens = int(usage.get("completion_tokens") or _approx_tokens(answer))
+                t_tokens = int(usage.get("total_tokens") or (p_tokens + c_tokens))
+                _update_observability_chat(observability_path, p_tokens, c_tokens, t_tokens)
+
+            return answer
+        except Exception:
+            pass
+
+    # Tentativa 2 (Fallback): OpenRouter
+    if openrouter_key:
+        try:
+            response = requests.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {openrouter_key}",
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://github.com/Masteradilio/agente_srag_datasus",
+                    "X-Title": "Agente SRAG DataSUS",
+                },
+                json={
+                    "model": openrouter_model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    "temperature": 0.2,
+                    "max_tokens": 1000,
+                },
+                timeout=25,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            answer = str(payload["choices"][0]["message"]["content"]).strip()
+
+            if observability_path:
+                usage = payload.get("usage", {})
+                p_tokens = int(usage.get("prompt_tokens") or _approx_tokens(system_prompt + user_prompt))
+                c_tokens = int(usage.get("completion_tokens") or _approx_tokens(answer))
+                t_tokens = int(usage.get("total_tokens") or (p_tokens + c_tokens))
+                _update_observability_chat(observability_path, p_tokens, c_tokens, t_tokens)
+
+            return answer
+        except Exception:
+            pass
+
+    return _fallback_chat_answer(user_prompt)
 
 
 def _fallback_chat_answer(prompt: str) -> str:

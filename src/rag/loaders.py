@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 from data.schema import DocumentSource
 from utils.paths import resolve_project_path
@@ -6,7 +6,6 @@ from utils.paths import resolve_project_path
 DEFAULT_DOCUMENT_PATHS = [
     "README.md",
     "docs/PRD_srag_genai_agent.md",
-    "MASTER_BACKLOG.md",
     "configs/metric_catalog.yaml",
     "docs/limitations.md",
 ]

@@ -40,7 +40,7 @@ def test_streamlit_chat_allows_contextual_report_question(tmp_path, monkeypatch)
     module = _load_streamlit_app()
     llm_call = {}
 
-    def fake_call(system_prompt: str, user_prompt: str) -> str:
+    def fake_call(system_prompt: str, user_prompt: str, observability_path=None) -> str:
         llm_call["system_prompt"] = system_prompt
         llm_call["user_prompt"] = user_prompt
         return "Resposta gerada pelo LLM com base nos dados fornecidos."

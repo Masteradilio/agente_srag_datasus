@@ -16,60 +16,87 @@ def generate_executive_report_sections(
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     started = time.perf_counter()
     load_dotenv()
-    model = os.getenv("LLM_MODEL", "gpt-4.1-mini")
     disable_api = os.getenv("DISABLE_LLM_API") == "1"
-    nvidia_key = None if disable_api else os.getenv("NVIDIA_API_KEY")
-    openai_key = None if disable_api else os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY")
-    api_key = nvidia_key or openai_key
-    provider = "nvidia_openai_compatible" if nvidia_key else "openai_chat_completions"
-    if not api_key:
-        provider = "local_deterministic"
-    endpoint = (
-        "https://integrate.api.nvidia.com/v1/chat/completions"
-        if nvidia_key
-        else "https://api.openai.com/v1/chat/completions"
-    )
+
+    # Ler e limpar chaves e modelos
+    nvidia_key = "" if disable_api else (os.getenv("NVIDIA_API_KEY") or "").strip().strip('"').strip("'")
+    nvidia_model = (os.getenv("LLM_MODEL") or "").strip().strip('"').strip("'") or "minimaxai/minimax-m3"
+
+    openrouter_key = "" if disable_api else (os.getenv("OPENROUTER_API_KEY") or "").strip().strip('"').strip("'")
+    openrouter_model = (os.getenv("OPENROUTER_MODEL") or "").strip().strip('"').strip("'") or "minimax/minimax-m3"
 
     prompt = _build_prompt(metric_summary, chart_context, news_evidence)
-    observability = _base_observability(provider, model)
+    observability = _base_observability("local_deterministic", nvidia_model)
 
-    if not api_key:
-        sections = _fallback_sections(metric_summary, chart_context, news_evidence)
-        return _finish_local(started, prompt, sections, observability, "local_no_api_key")
+    # Tentativa 1: NVIDIA
+    if nvidia_key:
+        endpoint = "https://integrate.api.nvidia.com/v1/chat/completions"
+        observability = _base_observability("nvidia_openai_compatible", nvidia_model)
+        try:
+            response = _post_chat_completion(endpoint, nvidia_key, nvidia_model, prompt)
+            response.raise_for_status()
+            payload = response.json()
+            content = str(payload["choices"][0]["message"]["content"]).strip()
+            sections = _parse_sections(content, metric_summary, chart_context, news_evidence)
+            usage = payload.get("usage", {})
+            parse_status = "success" if sections.get("_generated_by_llm") else "parse_fallback"
+            sections.pop("_generated_by_llm", None)
+            observability.update(
+                {
+                    "status": parse_status,
+                    "llm_call_count": 1,
+                    "prompt_tokens": int(usage.get("prompt_tokens", _approx_tokens(prompt))),
+                    "completion_tokens": int(
+                        usage.get("completion_tokens", _approx_tokens(content))
+                    ),
+                    "total_tokens": int(usage.get("total_tokens", _approx_tokens(prompt + content))),
+                    "latency_ms": int((time.perf_counter() - started) * 1000),
+                }
+            )
+            return sections, observability
+        except Exception as exc:
+            observability["error_type_nvidia"] = type(exc).__name__
 
-    try:
-        response = _post_chat_completion(endpoint, api_key, model, prompt)
-        response.raise_for_status()
-        payload = response.json()
-        content = str(payload["choices"][0]["message"]["content"]).strip()
-        sections = _parse_sections(content, metric_summary, chart_context, news_evidence)
-        usage = payload.get("usage", {})
-        parse_status = "success" if sections.get("_generated_by_llm") else "parse_fallback"
-        sections.pop("_generated_by_llm", None)
-        observability.update(
-            {
-                "status": parse_status,
-                "llm_call_count": 1,
-                "prompt_tokens": int(usage.get("prompt_tokens", _approx_tokens(prompt))),
-                "completion_tokens": int(
-                    usage.get("completion_tokens", _approx_tokens(content))
-                ),
-                "total_tokens": int(usage.get("total_tokens", _approx_tokens(prompt + content))),
-                "latency_ms": int((time.perf_counter() - started) * 1000),
-            }
-        )
-        return sections, observability
-    except Exception as exc:
-        sections = _fallback_sections(metric_summary, chart_context, news_evidence)
-        sections, observability = _finish_local(
-            started,
-            prompt,
-            sections,
-            observability,
-            "local_after_api_error",
-        )
-        observability["error_type"] = type(exc).__name__
-        return sections, observability
+    # Tentativa 2 (Fallback): OpenRouter
+    if openrouter_key:
+        endpoint = "https://openrouter.ai/api/v1/chat/completions"
+        observability = _base_observability("openrouter", openrouter_model)
+        try:
+            response = _post_chat_completion(endpoint, openrouter_key, openrouter_model, prompt)
+            response.raise_for_status()
+            payload = response.json()
+            content = str(payload["choices"][0]["message"]["content"]).strip()
+            sections = _parse_sections(content, metric_summary, chart_context, news_evidence)
+            usage = payload.get("usage", {})
+            parse_status = "success" if sections.get("_generated_by_llm") else "parse_fallback"
+            sections.pop("_generated_by_llm", None)
+            observability.update(
+                {
+                    "status": parse_status,
+                    "llm_call_count": 1,
+                    "prompt_tokens": int(usage.get("prompt_tokens", _approx_tokens(prompt))),
+                    "completion_tokens": int(
+                        usage.get("completion_tokens", _approx_tokens(content))
+                    ),
+                    "total_tokens": int(usage.get("total_tokens", _approx_tokens(prompt + content))),
+                    "latency_ms": int((time.perf_counter() - started) * 1000),
+                }
+            )
+            return sections, observability
+        except Exception as exc:
+            observability["error_type_openrouter"] = type(exc).__name__
+
+    # Se ambas falharem ou não houver chaves
+    observability = _base_observability("local_deterministic", nvidia_model)
+    sections = _fallback_sections(metric_summary, chart_context, news_evidence)
+    sections, observability = _finish_local(
+        started,
+        prompt,
+        sections,
+        observability,
+        "local_after_api_error",
+    )
+    return sections, observability
 
 
 def _build_prompt(

@@ -43,7 +43,7 @@
   `DISABLE_LLM_API`.
 - Busca de noticias allowlisted ampliada, com extracao de URLs reais,
   ordenacao por data e persistencia das fontes usadas.
-- Documentos de avaliacao em `docs/cobertura_avaliacao.md` e
+- Documentos de avaliacao em `docs/cobertura_compliance.md` e
   `docs/guardrails_security_matrix.md`.
 - Guardrails enterprise adicionais para entrada, saida e privacidade,
   cobrindo escopo SRAG/DataSUS, prompt injection, jailbreak, exfiltracao,

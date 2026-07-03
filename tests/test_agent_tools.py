@@ -1,4 +1,4 @@
-﻿import pandas as pd
+import pandas as pd
 
 from agents.tools import (
     generate_required_charts_tool,
@@ -43,7 +43,24 @@ def test_agent_metric_and_chart_tools_write_artifacts(tmp_path) -> None:
     assert all(path.endswith(".png") for path in charts)
 
 
-def test_search_srag_news_tool_uses_allowlist() -> None:
+def test_search_srag_news_tool_uses_allowlist(monkeypatch) -> None:
+    # Evitar busca real na internet
+    monkeypatch.setattr("news.search._search_allowlisted_web", lambda *args, **kwargs: [])
+
+    # Evitar extração real de artigos pela rede
+    from data.schema import NewsArticle
+    monkeypatch.setattr(
+        "agents.tools.extract_news_article",
+        lambda url, allowed_domains, timeout_seconds=8: NewsArticle(
+            title="SRAG",
+            url=url,
+            source_domain="www.who.int",
+            published_at=None,
+            excerpt="SRAG",
+            extraction_status="success",
+        ),
+    )
+
     results = search_srag_news_tool(
         "SRAG",
         allowed_domains=["who.int"],

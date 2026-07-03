@@ -1,4 +1,4 @@
-﻿from data.schema import NewsSearchResult
+from data.schema import NewsSearchResult
 from news.rank import rank_news_results
 from news.search import search_srag_news
 
@@ -23,7 +23,8 @@ def test_news_ranking_prioritizes_official_relevant_recent_sources() -> None:
     assert rank_news_results(results)[0].source_domain == "www.gov.br"
 
 
-def test_search_srag_news_filters_candidates_by_allowlist() -> None:
+def test_search_srag_news_filters_candidates_by_allowlist(monkeypatch) -> None:
+    monkeypatch.setattr("news.search._search_allowlisted_web", lambda *args, **kwargs: [])
     candidates = [
         {"title": "SRAG", "url": "https://www.who.int/news/srag", "snippet": "SRAG"},
         {"title": "fora", "url": "https://example.com/srag", "snippet": "SRAG"},
