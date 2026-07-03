@@ -5,7 +5,7 @@ guardrails, segurança, tratamento de dados sensíveis e transparência técnica
 
 ## Mapa de cobertura
 
-| Camada | Já cobria | Incremento enterprise | Evidência |
+| Camada | Versão Inicial | Versão Final | Evidência |
 |---|---|---|---|
 | Input | Escopo SRAG/DataSUS, prompt injection simples, pedido linha a linha, conselho médico individual | Bloqueio de exfiltração de segredos, acesso a arquivos locais/metadata interna, comandos destrutivos, SQL/comandos perigosos e bypass de instruções | `src/guardrails/input_guard.py`, `tests/test_input_guardrails.py` |
 | Output | Dados individuais por termo, recomendação clínica individual, fontes, limitações e aviso de uso | Bloqueio de CPF por padrão, credenciais/tokens, caminhos locais, vazamento de system/developer prompt, conteúdo perigoso e URLs fora da allowlist | `src/guardrails/output_guard.py`, `tests/test_output_guardrails.py` |
