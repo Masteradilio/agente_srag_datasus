@@ -404,7 +404,7 @@ Essa métrica não deve ser descrita como cobertura vacinal populacional geral s
 
 ```bash
 python -m venv .venv
-source .venv/Scripts/activate
+.venv/Scripts/activate
 ```
 
 No Linux/macOS:
