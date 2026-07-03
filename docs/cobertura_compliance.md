@@ -1,4 +1,4 @@
-# Cobertura dos Critérios de Avaliação
+# Cobertura de Compliance
 
 Este documento mapeia os critérios de avaliação do desafio para evidências
 concretas no repositório. O critério de escolha da arquitetura é tratado em
