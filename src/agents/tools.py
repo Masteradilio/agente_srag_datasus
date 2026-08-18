@@ -9,7 +9,9 @@ from config import load_news_sources, load_settings
 from metrics.calculators import calculate_metric_summary, write_metric_summary
 from metrics.charts import (
     build_chart_context,
+    generate_age_group_cases_chart,
     generate_daily_cases_30d_chart,
+    generate_etiology_distribution_chart,
     generate_monthly_cases_12m_chart,
 )
 from news.extract import extract_news_article
@@ -47,11 +49,13 @@ def generate_required_charts_tool(
     chart_dir = ensure_directory(resolved_artifacts_dir / run_id / "charts")
     daily_path = generate_daily_cases_30d_chart(df, chart_dir / "daily_cases_30d.png")
     monthly_path = generate_monthly_cases_12m_chart(df, chart_dir / "monthly_cases_12m.png")
+    etiology_path = generate_etiology_distribution_chart(df, chart_dir / "etiology_distribution.png")
+    age_path = generate_age_group_cases_chart(df, chart_dir / "age_group_cases.png")
     (resolved_artifacts_dir / run_id / "chart_context.json").write_text(
         json.dumps(build_chart_context(df), ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-    return [str(daily_path), str(monthly_path)]
+    return [str(daily_path), str(monthly_path), str(etiology_path), str(age_path)]
 
 
 def search_srag_news_tool(

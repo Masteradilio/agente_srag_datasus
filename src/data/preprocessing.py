@@ -1,4 +1,4 @@
-﻿import json
+import json
 import re
 import unicodedata
 from datetime import date
@@ -79,7 +79,15 @@ def prepare_refined_dataframe(
         invalid_dates[column] = int(original_non_null.sum() - converted.notna().sum())
         refined[column] = converted
 
-    refined["canonical_case_date"] = refined["case_date"].fillna(refined["notification_date"])
+    case_date_series = (
+        refined["case_date"] if "case_date" in refined.columns else pd.Series(pd.NaT, index=refined.index)
+    )
+    notif_date_series = (
+        refined["notification_date"]
+        if "notification_date" in refined.columns
+        else pd.Series(pd.NaT, index=refined.index)
+    )
+    refined["canonical_case_date"] = case_date_series.fillna(notif_date_series)
     refined = refined[refined["canonical_case_date"].notna()].copy()
     refined["canonical_case_date"] = _parse_datetime_series(refined["canonical_case_date"])
     refined = refined[refined["canonical_case_date"].notna()].copy()
@@ -87,6 +95,9 @@ def prepare_refined_dataframe(
     for column in ["evolution", "icu", "vaccination", "state", "city", "final_classification"]:
         if column in refined.columns:
             refined[column] = refined[column].map(_normalize_value)
+
+    refined["canonical_etiology"] = _derive_etiology_series(refined)
+    refined["canonical_age_group"] = _derive_age_group_series(refined)
 
     return refined.reset_index(drop=True), invalid_dates
 
@@ -123,6 +134,8 @@ def prepare_aggregated_refined_dataframe(
     refined["canonical_case_date"] = refined["epidemiological_week"].map(
         lambda week: _epidemiological_week_start(year, int(week))
     )
+    refined["canonical_etiology"] = "SRAG Total"
+    refined["canonical_age_group"] = refined["age_group"].fillna("Não Informado")
     refined["source_schema"] = "aggregated"
 
     return refined.reset_index(drop=True), invalid_dates
@@ -302,4 +315,66 @@ def _normalize_value(value: object) -> object:
     return value
 
 
+def _derive_etiology_series(df: pd.DataFrame) -> pd.Series:
+    def _safe_str(val: Any) -> str:
+        if val is None or pd.isna(val):
+            return ""
+        return str(val).strip().upper()
 
+    def _map_row(row: Any) -> str:
+        fc = _safe_str(row.get("final_classification"))
+        pcr = _safe_str(row.get("pcr_result"))
+        ov = _safe_str(row.get("other_virus"))
+
+        if fc in {"5", "5.0"} or "COVID" in fc or "SARS" in pcr:
+            return "COVID-19"
+        if fc in {"1", "1.0"} or "FLU" in pcr or "INFLUENZA" in pcr or "INFLUENZA" in fc:
+            return "Influenza"
+        if fc in {"2", "2.0"} or "SINCICIAL" in ov or "VSR" in ov or "SINCICIAL" in fc:
+            return "VSR"
+        if fc in {"3", "3.0"} or ov in {"1", "1.0", "SIM", "TRUE"}:
+            return "Outros Vírus"
+        if fc in {"4", "4.0"}:
+            return "Outros Agentes"
+        return "Não Especificado"
+
+    return df.apply(_map_row, axis=1)
+
+
+def _derive_age_group_series(df: pd.DataFrame) -> pd.Series:
+    raw_age = df.get("age", df.get("age_group", pd.Series(pd.NA, index=df.index)))
+
+    def _map_age(val: Any) -> str:
+        if pd.isna(val) or val is None:
+            return "Não Informado"
+        text = str(val).strip()
+        if not text or text in {"NAN", "NONE", "<NA>", "999", "99"}:
+            return "Não Informado"
+        digits = re.findall(r"\d+", text)
+        if not digits:
+            return text if len(text) > 3 else "Não Informado"
+        try:
+            raw_num = int(digits[0])
+            if raw_num == 999 or raw_num > 4130:
+                return "Não Informado"
+            if raw_num >= 4000:
+                num = float(raw_num - 4000)
+            elif 1000 <= raw_num < 4000:
+                num = 0.5
+            elif raw_num > 125:
+                return "Não Informado"
+            else:
+                num = float(raw_num)
+
+            if num < 5:
+                return "0-4 anos"
+            elif num < 20:
+                return "5-19 anos"
+            elif num < 60:
+                return "20-59 anos"
+            else:
+                return "60+ anos"
+        except Exception:
+            return "Não Informado"
+
+    return raw_age.map(_map_age)

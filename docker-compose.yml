@@ -1,0 +1,15 @@
+services:
+  srag-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: datasus_epidemiological_rag_agent
+    ports:
+      - "8501:8501"
+    environment:
+      - APP_ENV=production
+      - DISABLE_LLM_API=0
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+    restart: unless-stopped

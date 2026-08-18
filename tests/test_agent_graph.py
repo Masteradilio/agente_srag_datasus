@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 import pandas as pd
 
@@ -109,5 +109,5 @@ def test_agent_graph_smoke_with_phase3_phase4_artifacts(tmp_path, monkeypatch) -
 
     assert Path(state["final_report_path"]).is_file()
     assert (tmp_path / "artifacts" / run_id / "metrics.json").is_file()
-    assert len(state["chart_paths"]) == 2
+    assert len(state["chart_paths"]) == 4
 

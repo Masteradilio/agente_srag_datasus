@@ -152,18 +152,20 @@ def _write_observability(
     rows_raw: int,
     rows_refined: int,
     extra_raw_files: list[Path],
+    eval_scores: dict[str, float] | None = None,
 ) -> Path:
-    payload = dict(observability)
-    payload.update(
-        {
-            "generated_at": datetime.now(ZoneInfo("America/Sao_Paulo")).isoformat(),
-            "pipeline_latency_ms": int((time.perf_counter() - started_at) * 1000),
-            "rows_raw": rows_raw,
-            "rows_refined": rows_refined,
-            "historical_raw_files_count": len(extra_raw_files),
-            "historical_raw_files": [str(path) for path in extra_raw_files],
-        }
+    from audit.observability import build_observability_payload
+
+    payload = build_observability_payload(
+        observability,
+        started_at=started_at,
+        rows_raw=rows_raw,
+        rows_refined=rows_refined,
+        eval_scores=eval_scores,
     )
+    payload["historical_raw_files_count"] = len(extra_raw_files)
+    payload["historical_raw_files"] = [str(path) for path in extra_raw_files]
+
     output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     return output_path
 

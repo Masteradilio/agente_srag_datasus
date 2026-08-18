@@ -52,6 +52,36 @@ class MetricValue(BaseModel):
     limitations: list[str] = Field(default_factory=list)
 
 
+class EtiologyCount(BaseModel):
+    etiology: str
+    cases: int = Field(ge=0)
+    percentage: float = Field(ge=0.0, le=1.0)
+
+
+class AgeGroupCount(BaseModel):
+    age_group: str
+    cases: int = Field(ge=0)
+    percentage: float = Field(ge=0.0, le=1.0)
+    icu_rate: float | None = None
+    mortality_rate: float | None = None
+
+
+class AnomalyAlert(BaseModel):
+    dimension: str
+    category: str
+    z_score: float
+    current_period_cases: int
+    previous_period_cases: int
+    growth_rate: float | None
+    severity: str = "warning"  # info, warning, critical
+    description: str
+
+
+class AnomalySummary(BaseModel):
+    total_anomalies: int = Field(ge=0)
+    alerts: list[AnomalyAlert] = Field(default_factory=list)
+
+
 class MetricSummary(BaseModel):
     reference_date: str
     total_cases: int = Field(ge=0)
@@ -60,6 +90,9 @@ class MetricSummary(BaseModel):
     crude_mortality_rate: MetricValue
     icu_case_rate: MetricValue
     registered_vaccination_case_rate: MetricValue
+    etiology_distribution: list[EtiologyCount] = Field(default_factory=list)
+    age_distribution: list[AgeGroupCount] = Field(default_factory=list)
+    anomalies: AnomalySummary = Field(default_factory=lambda: AnomalySummary(total_anomalies=0, alerts=[]))
     limitations: list[str] = Field(default_factory=list)
 
 
@@ -69,6 +102,7 @@ class NewsSearchResult(BaseModel):
     source_domain: str
     published_at: str | None = None
     snippet: str = ""
+    source_channel: str = "web"
 
 
 class NewsArticle(BaseModel):
@@ -79,6 +113,7 @@ class NewsArticle(BaseModel):
     content: str = ""
     excerpt: str = ""
     extraction_status: str = "success"
+    source_channel: str = "web"
 
 
 class DocumentSource(BaseModel):

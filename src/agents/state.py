@@ -7,11 +7,19 @@ class AgentState(TypedDict, total=False):
     metric_summary: dict[str, Any]
     chart_paths: list[str]
     chart_context: dict[str, Any]
+    official_evidence: list[dict[str, Any]]
+    social_evidence: list[dict[str, Any]]
+    media_evidence: list[dict[str, Any]]
     news_evidence: list[dict[str, Any]]
     used_news_evidence: list[dict[str, Any]]
     rag_context: list[dict[str, Any]]
     executive_sections: dict[str, Any]
     observability: dict[str, Any]
+    multi_artifacts: dict[str, str]
     draft_report: str
+    reflection_feedback: list[str]
+    reflection_iteration: int
     validation_errors: list[str]
     final_report_path: str
+    vector_store_indexed: bool
+    eval_scores: dict[str, float]

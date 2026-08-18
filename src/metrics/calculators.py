@@ -1,11 +1,11 @@
-﻿import json
+import json
 import unicodedata
 from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd  # type: ignore[import-untyped]
 
-from data.schema import MetricSummary, MetricValue
+from data.schema import AgeGroupCount, AnomalyAlert, AnomalySummary, EtiologyCount, MetricSummary, MetricValue
 from metrics.definitions import (
     CASE_GROWTH_RATE_7D,
     CRUDE_MORTALITY_RATE,
@@ -21,6 +21,152 @@ DEATH_CODES = {"2", "OBITO", "OBITO POR SRAG"}
 KNOWN_EVOLUTION_CODES = {"1", "2", "CURA", "OBITO", "OBITO POR SRAG"}
 YES_CODES = {"1", "SIM", "YES", "TRUE"}
 KNOWN_STATUS_CODES = {"1", "2", "SIM", "NAO"}
+
+
+def calculate_etiology_distribution(df: pd.DataFrame) -> list[EtiologyCount]:
+    total = _total_cases(df)
+    if total == 0:
+        return []
+    if "canonical_etiology" in df.columns:
+        counts = df["canonical_etiology"].value_counts()
+    else:
+        counts = pd.Series({"Não Especificado": total})
+
+    results = []
+    for etio, count in counts.items():
+        cnt = int(count)
+        results.append(
+            EtiologyCount(
+                etiology=str(etio),
+                cases=cnt,
+                percentage=round(cnt / total, 4) if total > 0 else 0.0,
+            )
+        )
+    return sorted(results, key=lambda x: x.cases, reverse=True)
+
+
+def calculate_age_distribution(df: pd.DataFrame) -> list[AgeGroupCount]:
+    total = _total_cases(df)
+    if total == 0:
+        return []
+    age_col = "canonical_age_group" if "canonical_age_group" in df.columns else "age_group"
+    if age_col not in df.columns:
+        return []
+
+    groups = df.groupby(age_col, observed=True)
+    results = []
+    for name, group in groups:
+        grp_cases = len(group)
+        pct = round(grp_cases / total, 4)
+        icu_val = None
+        if "icu" in group.columns:
+            icu_series = _normalized_series(group["icu"])
+            icu_cases = int(icu_series.isin(YES_CODES).sum())
+            icu_val = round(icu_cases / grp_cases, 4) if grp_cases > 0 else None
+
+        mort_val = None
+        if "evolution" in group.columns:
+            evo_series = _normalized_series(group["evolution"])
+            deaths = int(evo_series.isin(DEATH_CODES).sum())
+            known = int(evo_series.isin(KNOWN_EVOLUTION_CODES).sum())
+            mort_val = round(deaths / known, 4) if known > 0 else None
+
+        results.append(
+            AgeGroupCount(
+                age_group=str(name),
+                cases=grp_cases,
+                percentage=pct,
+                icu_rate=icu_val,
+                mortality_rate=mort_val,
+            )
+        )
+    return sorted(results, key=lambda x: x.cases, reverse=True)
+
+
+def detect_statistical_anomalies(df: pd.DataFrame, reference_date: date) -> AnomalySummary:
+    alerts: list[AnomalyAlert] = []
+    case_dates = pd.to_datetime(df["canonical_case_date"], errors="coerce").dt.date
+    current_start = reference_date - timedelta(days=14)
+    prev_start = reference_date - timedelta(days=28)
+    prev_end = reference_date - timedelta(days=15)
+
+    current_mask = (case_dates >= current_start) & (case_dates <= reference_date)
+    prev_mask = (case_dates >= prev_start) & (case_dates <= prev_end)
+
+    curr_df = df[current_mask]
+    prev_df = df[prev_mask]
+
+    if "canonical_etiology" in df.columns and not curr_df.empty and not prev_df.empty:
+        for etio in curr_df["canonical_etiology"].unique():
+            if pd.isna(etio) or str(etio) in {"Não Especificado", "SRAG Total"}:
+                continue
+            curr_c = int((curr_df["canonical_etiology"] == etio).sum())
+            prev_c = int((prev_df["canonical_etiology"] == etio).sum())
+            if prev_c >= 5 and curr_c > prev_c:
+                growth = (curr_c - prev_c) / prev_c
+                if growth >= 0.20:
+                    z = round((curr_c - prev_c) / max(1.0, (prev_c ** 0.5)), 2)
+                    severity = "critical" if growth >= 0.50 and curr_c >= 30 else "warning"
+                    alerts.append(
+                        AnomalyAlert(
+                            dimension="Etiologia",
+                            category=str(etio),
+                            z_score=z,
+                            current_period_cases=curr_c,
+                            previous_period_cases=prev_c,
+                            growth_rate=round(growth, 4),
+                            severity=severity,
+                            description=f"Aumento expressivo de {round(growth*100, 1)}% nos casos de {etio} nas últimas duas semanas.",
+                        )
+                    )
+
+    age_col = "canonical_age_group" if "canonical_age_group" in df.columns else "age_group"
+    if age_col in df.columns and not curr_df.empty and not prev_df.empty:
+        for grp in curr_df[age_col].unique():
+            if pd.isna(grp) or str(grp) == "Não Informado":
+                continue
+            curr_c = int((curr_df[age_col] == grp).sum())
+            prev_c = int((prev_df[age_col] == grp).sum())
+            if prev_c >= 5 and curr_c > prev_c:
+                growth = (curr_c - prev_c) / prev_c
+                if growth >= 0.20:
+                    z = round((curr_c - prev_c) / max(1.0, (prev_c ** 0.5)), 2)
+                    severity = "critical" if growth >= 0.40 and curr_c >= 30 else "warning"
+                    alerts.append(
+                        AnomalyAlert(
+                            dimension="Faixa Etária",
+                            category=str(grp),
+                            z_score=z,
+                            current_period_cases=curr_c,
+                            previous_period_cases=prev_c,
+                            growth_rate=round(growth, 4),
+                            severity=severity,
+                            description=f"Alerta epidemiológico: alta de {round(growth*100, 1)}% em internações na faixa {grp}.",
+                        )
+                    )
+
+    return AnomalySummary(total_anomalies=len(alerts), alerts=alerts)
+
+
+def calculate_metric_summary(parquet_path: Path) -> MetricSummary:
+    df = pd.read_parquet(parquet_path)
+    reference_date = calculate_reference_date(df)
+    mortality_rates = calculate_mortality_rates(df)
+
+    summary = MetricSummary(
+        reference_date=reference_date.isoformat(),
+        total_cases=_total_cases(df),
+        case_growth_rate_7d=calculate_case_growth_rate(df, reference_date),
+        known_mortality_rate=mortality_rates["known"],
+        crude_mortality_rate=mortality_rates["crude"],
+        icu_case_rate=calculate_icu_rate(df),
+        registered_vaccination_case_rate=calculate_vaccination_rate(df),
+        etiology_distribution=calculate_etiology_distribution(df),
+        age_distribution=calculate_age_distribution(df),
+        anomalies=detect_statistical_anomalies(df, reference_date),
+    )
+    summary.limitations = _collect_limitations(summary)
+    return summary
 
 
 def calculate_reference_date(df: pd.DataFrame) -> date:

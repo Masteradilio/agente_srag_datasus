@@ -1,34 +1,14 @@
-# Limitacoes
+# Limitações Metodológicas e Governança de Dados (v2.0.0)
 
-## Atualizacao da base
+## 1. Natureza Dinâmica dos Dados do OpenDataSUS
+- A base do SIVEP-Gripe / SRAG é um banco de dados vivo, sujeito a inserções retroativas de fichas de notificação, revisões diagnósticas e encerramentos tardios de investigação epidemiológica.
 
-O banco vivo do OpenDataSUS tem data de corte e pode ser revisado. Metricas
-calculadas hoje podem mudar quando novos registros forem inseridos ou corrigidos.
+## 2. Proxies Epidemiológicos vs. Métricas Populacionais Reais
+- **Indicador de UTI:** Representa estritamente a proporção de pacientes notificados com SRAG que tiveram registro de admissão em unidade de terapia intensiva. Não reflete a taxa de ocupação total de leitos clínicos e de UTI do SUS.
+- **Indicador Vacinal:** Representa a proporção de casos de SRAG com registro positivo de vacinação no momento da notificação hospitalar, não correspondendo à taxa de cobertura vacinal da população geral.
 
-## Nulos e codificacao
+## 3. Coleta Multi-Canal (Agent Reach)
+- Relatos em redes sociais e transcrições de mídia capturam percepções públicas e sinais precoces de demanda assistencial, devendo ser interpretados como dados qualitativos contextuais e não como estatísticas epidemiológicas oficiais.
 
-Campos de evolucao, UTI e vacinacao podem ter nulos, ignorados ou codigos
-inconsistentes. O pipeline normaliza codigos conhecidos, mas nao inventa valores.
-
-## UTI
-
-A metrica de UTI representa proporcao de casos de SRAG com passagem por UTI
-registrada. Ela nao mede ocupacao de leitos, disponibilidade hospitalar ou
-pressao assistencial sem uma fonte complementar de leitos.
-
-## Vacinacao
-
-A metrica de vacinacao representa proporcao de casos com vacinacao registrada
-entre status conhecidos. Ela nao e cobertura vacinal populacional.
-
-## Noticias externas
-
-Fontes externas sao filtradas por allowlist e usadas como contexto. Elas nao
-substituem boletins oficiais nem podem alterar instrucoes internas do agente.
-
-## Uso analitico
-
-O relatorio e informativo e baseado em dados agregados. Nao substitui analise
-epidemiologica oficial, decisao de politica publica, diagnostico medico ou
-tratamento individual.
-
+## 4. Uso Informativo e Isenção de Responsabilidade
+- Os artefatos e relatórios gerados por este sistema possuem finalidade analítica e de suporte à decisão. Não substituem boletins oficiais dos órgãos de vigilância em saúde nem constituem orientação médica individualizada.

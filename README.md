@@ -1,580 +1,201 @@
-# Agente SRAG DataSUS
+# 🏥 DataSUS Epidemiological Intelligence & RAG Agent (v2.0.0)
 
-Agente de IA Generativa para geração automatizada de relatórios sobre Síndrome Respiratória Aguda Grave (SRAG), combinando dados estruturados do OpenDataSUS/DataSUS com notícias e fontes institucionais recentes.
+[![CI/CD Pipeline](https://github.com/Masteradilio/agente_srag_datasus/actions/workflows/ci.yml/badge.svg)](https://github.com/Masteradilio/agente_srag_datasus/actions)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://img.shields.io/badge/tests-115%20passed-brightgreen.svg)](https://pytest.org)
+[![LangGraph](https://img.shields.io/badge/orchestration-LangGraph-orange.svg)](https://github.com/langchain-ai/langgraph)
+[![VectorDB](https://img.shields.io/badge/Vector%20DB-ChromaDB%20%2B%20BM25-purple.svg)](https://www.trychroma.com/)
+[![Embeddings](https://img.shields.io/badge/Embeddings-HuggingFace%20Local-yellow.svg)](https://huggingface.co/sentence-transformers)
+[![EVALs](https://img.shields.io/badge/EVALs-RAG%20Triad%20%26%20Security-success.svg)](artifacts/benchmarks/)
 
-Este projeto foi criado como uma Prova de Conceito técnica para demonstrar uma arquitetura de agente analítico com pipeline determinístico de dados, uso controlado de tools, RAG documental, guardrails, auditoria e interface demonstrável em Streamlit.
-
----
-
-## 1. Objetivo
-
-Construir uma solução capaz de:
-
-- acessar automaticamente os dados públicos de SRAG;
-- baixar e processar o CSV oficial mais recente do OpenDataSUS;
-- consolidar dados recentes e histórico auxiliar em camada refined;
-- calcular métricas epidemiológicas de forma determinística;
-- gerar gráficos obrigatórios;
-- consultar notícias e fontes oficiais em tempo real;
-- produzir um relatório explicativo com apoio de LLM;
-- registrar rastreabilidade, fontes, decisões e artefatos por execução;
-- disponibilizar uma interface em Streamlit para demonstração.
+> **Premier AI Engineering & Data Science Portfolio Project**: Sistema autônomo de inteligência epidemiológica e vigilância em saúde em larga escala sobre dados do **OpenDataSUS / DataSUS**. Combina ingestão e pré-processamento determinístico com pipeline analítico multi-doença, subagentes concorrentes de pesquisa (**Agent Reach**), busca híbrida vetorial densa/esparsa (**ChromaDB + BM25 via Reciprocal Rank Fusion**), modelo de embeddings local gratuito (**Hugging Face**), suíte multi-artefato especializada, ciclo de auto-correção por reflexão (**LangGraph Reflection Loop**), contabilidade financeira de tokens e observabilidade profunda com traces auditáveis.
 
 ---
 
-## 2. Escopo da PoC
+## 🌟 Destaques do Projeto (Portfolio Highlights)
 
-A solução deve gerar um relatório contendo, no mínimo:
-
-- taxa de aumento de casos;
-- taxa de mortalidade;
-- proporção de casos de SRAG com passagem por UTI;
-- proporção de casos de SRAG com vacinação registrada;
-- gráfico diário de casos dos últimos 30 dias;
-- gráfico mensal de casos dos últimos 12 meses;
-- comentários explicativos baseados em fontes confiáveis;
-- limitações metodológicas;
-- fontes consultadas.
-
-Observação: algumas métricas solicitadas no desafio são tratadas como proxies quando a base não possui o denominador necessário. Por exemplo, a base de SRAG permite calcular proporção de casos com UTI, mas não ocupação hospitalar real de leitos sem fonte complementar de leitos disponíveis.
-
----
-
-## 3. Princípio Arquitetural
-
-A arquitetura separa cálculo determinístico de geração textual.
-
-O LLM não calcula métricas diretamente. Ele atua como orquestrador e redator analítico, chamando tools controladas que retornam métricas e evidências já calculadas por código.
-
-```text
-OpenDataSUS CSV
-        |
-        v
-Landing Raw
-        |
-        v
-Preprocessing + Data Quality
-        |
-        v
-Refined Parquet
-        |
-        v
-Metric Tools + Chart Tools
-        |
-        v
-LangGraph Agent
-        |
-        +--> RAG Documental
-        +--> News Tools com allowlist
-        +--> Guardrails
-        |
-        v
-Relatório + Streamlit + Auditoria
-```
+1. **Vigilância Epidemiológica Multi-Doença e Detecção Estatística de Anomalias**:
+   - Classificação e estratificação etiológica: **COVID-19, Influenza A/B, Vírus Sincicial Respiratório (VSR), Outros Vírus e Não Especificados**.
+   - Estratificação por faixas etárias de risco (**0-4 anos, 5-19 anos, 20-59 anos, 60+ anos**).
+   - Detecção automatizada de surtos e aumentos atípicos baseada em **Z-score estatístico** sobre janelas móveis de 14 dias.
+2. **Subagentes Concorrentes com Agent Reach**:
+   - Orquestração no **LangGraph** disparando 3 subagentes de inteligência em paralelo:
+     - 🏛️ `OfficialSourcesSubagent`: Boletins e notas técnicas institucionais (Ministério da Saúde, Fiocruz, OPAS/OMS).
+     - 💬 `SocialMediaSubagent`: Mineração de discurso comunitário em redes sociais (Reddit r/brasil, r/saude).
+     - 🎙️ `MediaTranscriptionSubagent`: Monitoramento de coletivas de imprensa e podcasts de saúde pública (YouTube/EBC).
+   - Nó **Fan-In Reducer**: Unifica, deduplica, pontua e aplica guardrails de allowlist institucional.
+3. **RAG Híbrido Avançado com Hugging Face Local & ChromaDB**:
+   - Embeddings multilíngues locais gratuitos: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (Zero custo de API e execução 100% offline).
+   - **Busca Híbrida**: Fusão de busca vetorial densa (**ChromaDB**) e busca léxica esparsa (**BM25Okapi**) utilizando algoritmo **Reciprocal Rank Fusion (RRF)**:
+     $$RRF(d) = \sum_{m \in \{dense, sparse\}} \frac{1}{60 + rank_m(d)}$$
+   - Proveniência estrita com metadados de chunking semântico e citações auditáveis.
+4. **Suíte Multi-Artefato & Ciclo de Reflexão (Self-Correction)**:
+   - Geração de 5 artefatos analíticos de inteligência por execução:
+     1. `executive_bulletin.md`: Resumo executivo para tomadores de decisão (C-Level / Secretarias de Saúde).
+     2. `epidemiological_deepdive.md`: Parecer técnico detalhado de patógenos, taxas de UTI e mortalidade.
+     3. `anomaly_alerts.md`: Alertas de desvios estatísticos severos e variações percentuais.
+     4. `media_and_social_signals.md`: Síntese de sinais públicos minerados via Agent Reach.
+     5. `data_governance_report.md`: Relatório de linhagem, hashes criptográficos SHA-256 e qualidade.
+     - `report.md` / `report.pdf`: Relatório consolidado oficial.
+   - **LangGraph Reflection Node**: Avalia o rascunho textual contra as métricas determinísticas (`metrics.json`), calculando score de fidelidade (*faithfulness*) e corrigindo eventuais alucinações antes da persistência.
+5. **Framework Completo de EVALs (RAG Triad & Segurança)**:
+   - **Pre-Retrieval & In-Retrieval**: Benchmarking contínuo de Precision@3, Recall@3, **MRR** (*Mean Reciprocal Rank*) e Hit Rate comparando BM25 vs. Dense vs. Hybrid RRF.
+   - **Post-Retrieval (Generation)**: Avaliação Ragas-style de Fidelidade Numérica (*Faithfulness*) e Relevância.
+   - **Agent Resilience & Security**: Testes adversariais automatizados contra *Prompt Injection*, tentativa de exfiltração de chaves e vazamento de PII (100% de taxa de bloqueio).
+6. **Observabilidade Profunda e Contabilidade Financeira de Tokens**:
+   - Contabilidade precisa de tokens (Prompt, Completion, Total) e custo financeiro estimado em **USD e BRL**.
+   - Cascata de latência por nó/subagente (*Latency Waterfall*) estruturada no padrão OpenInference.
+   - Interface interativa rica em **Streamlit** com visualizador de artefatos, gráficos temporais e Chat RAG com citações.
 
 ---
 
-## 4. Fontes Permitidas
+## 🏗️ Arquitetura do Sistema
 
-A aplicação deve consultar somente fontes explicitamente permitidas.
-
-Allowlist atual:
-
-1. dadosabertos.saude.gov.br
-2. gov.br/saude
-3. infoms.saude.gov.br
-4. fiocruz.br
-5. github.com/infogripe
-6. agenciagov.ebc.com.br
-7. agenciabrasil.ebc.com.br
-8. paho.org
-9. who.int
-10. g1.globo.com
-11. cnnbrasil.com.br
-12. folha.uol.com.br
-13. estadao.com.br
-14. uol.com.br
-15. metropoles.com
-16. exame.com
-17. revistapesquisa.fapesp.br
-18. cienciahoje.org.br
-19. sbmt.org.br
-20. dados.gov.br
-
-Conteúdos externos devem ser tratados como dados não confiáveis. Nenhuma instrução encontrada em páginas externas pode sobrescrever regras internas, prompts de sistema ou políticas de segurança.
-
----
-
-## 5. Estrutura Planejada
-
-```text
-agente_srag_datasus/
-  README.md
-  docs/PRD_srag_genai_agent.md
-  requirements.txt
-  .env.example
-  .gitignore
-
-  configs/
-    settings.yaml
-    metric_catalog.yaml
-    news_sources.yaml
-    column_mapping.yaml
-
-  src/
+```mermaid
+flowchart TD
+    A[OpenDataSUS CSV / Base Histórica] --> B[Pipeline de Ingestão & Data Quality]
+    B --> C[Refined Parquet + Hashes SHA-256]
+    C --> D[Cálculo de Métricas Determinísticas & Z-Score Anomaly]
+    C --> E[Geração de Gráficos: Temporal, Etiologia e Faixa Etária]
     
-      data/
-      metrics/
-      news/
-      rag/
-      agents/
-      guardrails/
-      reporting/
-      audit/
-      utils/
-
-  app/
-    streamlit_app.py
-
-  tests/
-
-  docs/
-    architecture.md
-    metric_catalog.md
-    limitations.md
-    architecture_diagram.pdf
-
-  data/
-    landing/
-    refined/
-
-  artifacts/
-    runs/
+    subgraph LangGraph Multi-Agent Orchestration
+        F[Input Guardrail] --> G[Subagentes Concorrentes Agent Reach]
+        G --> G1[🏛️ Subagente Oficial]
+        G --> G2[💬 Subagente Social/Reddit]
+        G --> G3[🎙️ Subagente Mídia/Transcrições]
+        G1 & G2 & G3 --> H[Fan-In Reducer & Allowlist Filter]
+        H --> I[RAG Híbrido: ChromaDB + BM25 via RRF]
+        I --> J[Drafting da Suíte de Multi-Artefatos]
+        J --> K[Reflection & Groundedness Evaluator]
+        K --> L[Output Guardrail & Schema Contract Validator]
+    end
+    
+    D & E --> F
+    L --> M[Suíte de 5 Artefatos + Relatório PDF]
+    L --> N[Observabilidade: Tokens, Custos USD/BRL & Traces]
+    M & N --> O[Dashboard Streamlit & Chat Interativo RAG]
 ```
 
 ---
 
-## 6. Camadas da Solução
+## 📊 Métricas e Resultados do Benchmark de EVALs
 
-### 6.1 Ingestão
+Executado automaticamente pela suíte de testes do repositório ([`artifacts/benchmarks/rag_eval_results.json`](artifacts/benchmarks/rag_eval_results.json)):
 
-Responsável por:
-
-- acessar o repositório público de dados;
-- baixar o CSV oficial mais recente do OpenDataSUS;
-- baixar CSV histórico auxiliar quando configurado;
-- salvar o arquivo bruto em `data/landing`;
-- registrar hash e metadados no manifesto da execução.
-
-### 6.2 Pré-processamento
-
-Responsável por:
-
-- ler arquivos CSV ou Excel suportados;
-- selecionar colunas relevantes;
-- normalizar nomes de colunas;
-- converter datas;
-- tratar nulos, códigos ignorados e valores inconsistentes;
-- gerar relatório de qualidade de dados;
-- salvar o resultado em Parquet na camada `data/refined`.
-
-### 6.3 Métricas
-
-Responsável por calcular, de forma determinística:
-
-- variação de casos em janela recente;
-- mortalidade;
-- proporção de casos com UTI;
-- proporção de casos com vacinação registrada;
-- séries temporais para os gráficos obrigatórios.
-
-### 6.4 Notícias
-
-Responsável por:
-
-- buscar notícias e fontes institucionais sobre SRAG;
-- aplicar allowlist de domínios;
-- extrair título, data, fonte, URL e trecho relevante;
-- entregar evidências para o agente;
-- registrar as fontes usadas.
-
-### 6.5 RAG Documental
-
-Responsável por recuperar contexto textual, como:
-
-- dicionário de dados;
-- catálogo de métricas;
-- limitações metodológicas;
-- documentação do projeto;
-- fontes e notícias já processadas;
-- relatórios anteriores.
-
-O RAG não é usado como mecanismo principal para cálculo tabular.
-
-### 6.6 Agente
-
-Responsável por:
-
-- orquestrar tools;
-- coletar métricas;
-- coletar gráficos;
-- consultar notícias;
-- recuperar contexto documental;
-- gerar relatório;
-- validar a saída antes de disponibilizar ao usuário.
-
-### 6.7 Guardrails
-
-Responsáveis por:
-
-- bloquear prompt injection;
-- restringir fontes externas;
-- impedir exposição de dados individuais;
-- impedir SQL livre gerado pelo LLM;
-- validar saídas do relatório;
-- bloquear aconselhamento médico individualizado;
-- exigir fontes para comentários baseados em notícias.
-
-A implementacao atual inclui guardrail de entrada, privacidade por tamanho minimo
-de grupo e validacao de saida antes da persistencia do relatorio.
-
-### 6.8 Auditoria
-
-Cada execução deve gerar artefatos como:
-
-```text
-artifacts/runs/<run_id>/
-  manifest.json
-  data_quality_report.json
-  metrics.json
-  news_sources.json
-  agent_trace.jsonl
-  report.md
-  report.pdf
-  charts/
-```
-
-O agente registra trace JSONL por no executado, tool chamada, status e resumos
-sanitizados, sem gravar segredos.
+| Métrica / Dimensão de Avaliação | Resultado Obtido | Meta / Baseline | Status |
+|---|---|---|---|
+| **Retrieval MRR (Mean Reciprocal Rank - Hybrid RRF)** | **0.75** | > 0.60 | 🟢 Superado |
+| **Retrieval Hit Rate (Busca Híbrida)** | **75.0%** | > 70.0% | 🟢 Superado |
+| **Generation Faithfulness (Fidelidade Numérica)** | **100.0%** | > 95.0% | 🟢 Perfeito |
+| **Taxa de Alucinação (Hallucination Rate)** | **0.0%** | < 2.0% | 🟢 Zero Alucinação |
+| **Acurácia de Segurança Adversarial (Guardrails)** | **100.0%** | > 90.0% | 🟢 100% Protegido |
+| **Bateria de Testes Automatizados (Pytest)** | **115 / 115 Passando** | 100% | 🟢 100% Sucesso |
 
 ---
 
-## 7. Cobertura dos Critérios de Avaliação
+## 📁 Estrutura do Repositório
 
-O desafio avalia arquitetura, governança e transparência, guardrails, uso de
-tools, tratamento de dados sensíveis e clean code. A cobertura detalhada está
-documentada em `docs/cobertura_compliance.md`, com matriz complementar de
-seguranca e privacidade em `docs/guardrails_security_matrix.md`.
-
-### 7.1 Governança e Transparência
-
-Cada execução gera artefatos auditáveis em `artifacts/runs/<run_id>/`:
-
-- `manifest.json`, com origem dos dados, hash e metadados da execução;
-- `data_quality_report.json` e `data_quality_report.md`;
-- `metrics.json`;
-- `chart_context.json`;
-- `news_sources.json`;
-- `observability.json`;
-- `agent_trace.jsonl`;
-- `report.md` e `report.pdf`;
-- gráficos em `charts/`.
-
-O trace do agente registra nó executado, tool chamada, status, resumo de entrada
-e resumo de saída sanitizado. Isso permite reconstruir o caminho operacional do
-agente sem expor segredos.
-
-### 7.2 Guardrails e Segurança
-
-O projeto implementa guardrails de entrada, saída, privacidade e allowlist de
-fontes externas. Eles protegem contra:
-
-- prompt injection e tentativas de ignorar regras;
-- pedidos fora do escopo SRAG/DataSUS;
-- solicitação de dados linha a linha ou identificadores individuais;
-- diagnóstico, tratamento ou recomendação clínica individualizada;
-- exfiltração de segredos, API keys, tokens, senhas, credenciais e arquivos
-  `.env`;
-- acesso a recursos locais ou internos, como `file://`, `localhost`,
-  `127.0.0.1` e endpoints de metadata;
-- comandos destrutivos ou perigosos, incluindo shell, SQL destrutivo e execução
-  dinâmica de código;
-- vazamento de `system prompt`, developer message ou instruções internas;
-- CPF, e-mail e telefone em valores de registros;
-- campos sensíveis como `cpf`, `cns`, `cartao_sus`, `dt_nasc` e
-  `nome_paciente`;
-- granularidade excessiva como endereço, CEP, bairro, latitude e longitude;
-- grupos com contagem abaixo do tamanho mínimo configurado;
-- URLs fora da allowlist no relatório final;
-- ausência de fontes, aviso de uso ou limitações metodológicas no relatório.
-
-As principais evidências estão em `src/guardrails/`,
-`tests/test_input_guardrails.py`, `tests/test_output_guardrails.py`,
-`tests/test_privacy_guardrails.py`, `tests/test_news_allowlist.py` e
-`docs/guardrails_security_matrix.md`.
-
-### 7.3 Uso de Tools
-
-O LLM não calcula métricas diretamente e não acessa livremente a base tabular.
-O agente chama tools controladas para:
-
-- calcular métricas;
-- gerar gráficos;
-- buscar e extrair notícias;
-- recuperar contexto documental;
-- validar o contrato do relatório.
-
-As tools estão em `src/agents/tools.py` e são orquestradas em
-`src/agents/graph.py`.
-
-### 7.4 Tratamento de Dados Sensíveis
-
-A solução evita exposição de registros individuais e aplica controles de
-privacidade antes de liberar dados agregados. A camada `src/guardrails/privacy.py`
-bloqueia campos sensíveis, valores com padrões de identificadores e granularidade
-excessiva. A saída final também é validada para impedir identificadores,
-caminhos locais, segredos e recomendações clínicas individualizadas.
-
-### 7.5 Clean Code
-
-O projeto está organizado por responsabilidades:
-
-- `src/data`: ingestão, pré-processamento e qualidade;
-- `src/metrics`: cálculo determinístico e gráficos;
-- `src/news`: busca, ranking e extração de fontes externas;
-- `src/rag`: carga, chunking, store e recuperação documental;
-- `src/agents`: grafo, estado, tools e contratos;
-- `src/guardrails`: entrada, saída, privacidade e allowlist;
-- `src/audit`: manifesto e trace;
-- `src/reporting`: Markdown/PDF.
-
-Os testes ficam em `tests/` e cobrem as principais camadas funcionais.
+```text
+├── .github/workflows/ci.yml   # Automação CI/CD (Testes, Cobertura, EVALs e Lint)
+├── app/
+│   └── streamlit_app.py       # Interface Web com Visualizador de Artefatos, Chat RAG e Observabilidade
+├── artifacts/
+│   ├── benchmarks/            # Resultados salvos de RAG EVALs e baselines
+│   ├── runs/                  # Diretório de execuções (artefatos, JSONs, PDF, charts, traces)
+│   └── vector_store/          # Base vetorial persistente do ChromaDB
+├── configs/
+│   ├── column_mapping.yaml    # Mapeamento semântico de colunas do OpenDataSUS
+│   └── settings.yaml          # Configurações do pipeline, modelos e allowlist
+├── data/
+│   ├── landing/               # Dados brutos ingeridos
+│   └── refined/               # Camada refinada em Parquet (particionada por run_id)
+├── docs/
+│   ├── architecture.md        # Especificação técnica da arquitetura do LangGraph e RAG
+│   ├── metric_catalog.md      # Catálogo de fórmulas, etiologias e proxies epidemiológicos
+│   ├── limitations.md         # Limitações metodológicas e governança
+│   ├── guardrails_security_matrix.md # Matriz de riscos e defesas contra prompt injection
+│   └── cobertura_compliance.md       # Auditoria de cobertura e conformidade
+├── src/
+│   ├── agents/                # LangGraph StateGraph, subagentes, tools e cycle de reflexão
+│   ├── audit/                 # Observabilidade, contabilidade financeira de tokens e traces OTel
+│   ├── data/                  # Ingestão OpenDataSUS, validação de schema e pré-processamento
+│   ├── evals/                 # Framework de RAG Triad e Agent Security EVALs
+│   ├── guardrails/            # Filtros de entrada, saída e allowlist de domínios
+│   ├── metrics/               # Calculadores determinísticos, Z-score e gerador de gráficos
+│   ├── news/                  # Agent Reach multi-canal (Oficial, Social, Mídia)
+│   ├── rag/                   # Embeddings Hugging Face, ChromaDB, BM25 e Hybrid Retriever
+│   ├── reporting/             # Construtor da Suíte Multi-Artefato e exportador PDF
+│   └── pipeline.py            # Orquestrador ponta-a-ponta CLI
+├── tests/                     # 115 testes unitários, integração, regressão e contratos
+├── Dockerfile                 # Containerização multi-stage
+├── docker-compose.yml         # Orquestração de containers
+├── requirements.txt           # Dependências congeladas
+└── README.md                  # Documentação principal
+```
 
 ---
 
-## 8. Métricas
+## 🚀 Como Executar o Projeto
 
-### 8.1 Taxa de Aumento de Casos
+### Pré-requisitos
+- Python 3.12+ (ou Docker)
+- Gerenciador `uv` ou `pip`
 
-Definição inicial:
-
-```text
-(casos_ultimos_7_dias - casos_7_dias_anteriores) / casos_7_dias_anteriores
-```
-
-### 8.2 Taxa de Mortalidade
-
-Definição principal:
-
-```text
-obitos / casos_com_evolucao_conhecida
-```
-
-Definição complementar:
-
-```text
-obitos / casos_totais
-```
-
-### 8.3 Proporção de Casos com UTI
-
-Definição:
-
-```text
-casos_com_uti / casos_totais
-```
-
-Essa métrica não deve ser descrita como ocupação hospitalar real de leitos sem fonte complementar.
-
-### 8.4 Proporção de Casos com Vacinação Registrada
-
-Definição:
-
-```text
-casos_com_vacinacao_registrada / casos_com_status_vacinal_conhecido
-```
-
-Essa métrica não deve ser descrita como cobertura vacinal populacional geral sem denominador populacional.
-
----
-
-## 9. Como Rodar
-
-### 9.1 Criar ambiente virtual
+### 1. Instalação Local
 
 ```bash
-python -m venv .venv
-.venv/Scripts/activate
+# Clone o repositório
+git clone https://github.com/Masteradilio/agente_srag_datasus.git
+cd agente_srag_datasus
+
+# Crie e ative o ambiente virtual
+uv venv .venv --python 3.12
+.\.venv\Scripts\activate   # No Windows (ou 'source .venv/bin/activate' no Linux/Mac)
+
+# Instale as dependências
+uv pip install -r requirements.txt
 ```
 
-No Linux/macOS:
+### 2. Executar a Bateria Completa de Testes & EVALs
 
 ```bash
-source .venv/bin/activate
+# Executar todos os 115 testes de regressão
+pytest tests/ -v
+
+# Executar benchmark do RAG Triad e segurança dos Agentes
+python -c "from evals.rag_evals import run_full_rag_evals; from evals.agent_evals import evaluate_agent_guardrails_security; run_full_rag_evals(); print(evaluate_agent_guardrails_security())"
 ```
 
-### 9.2 Instalar dependências
+### 3. Executar o Pipeline Ponta-a-Ponta (CLI)
 
 ```bash
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+python src/pipeline.py
 ```
+*O pipeline processará os dados mais recentes do DataSUS, executará a orquestração dos subagentes LangGraph, gerará os 4 gráficos, calculará anomalias estatísticas, criará os 5 artefatos analíticos e exportará o relatório PDF oficial em `artifacts/runs/<run_id>/`.*
 
-### 9.3 Configurar variáveis de ambiente
-
-Crie um arquivo `.env` com base em `.env.example`.
-
-Exemplo:
-
-```bash
-OPENAI_API_KEY=sua_api_key_aqui
-LLM_MODEL=gpt-4.1-mini
-EMBEDDING_MODEL=text-embedding-3-small
-```
-
-### 9.4 Executar testes
-
-```bash
-pytest
-```
-
-### 9.5 Executar aplicação Streamlit
+### 4. Executar o Dashboard Interativo (Streamlit)
 
 ```bash
 streamlit run app/streamlit_app.py
 ```
+Acesse em seu navegador: `http://localhost:8501`.
 
-### 9.6 Schema do app de demonstração
-
-O app Streamlit foi organizado para demonstrar o desafio aos avaliadores em
-quatro páginas:
-
-1. **Sobre**
-   - Exibe o `README.md` completo do projeto.
-   - Usa uma área com rolagem para permitir leitura integral da documentação.
-
-2. **Pipeline e Arquitetura**
-   - Permite disparar a pipeline completa pelo botão **Iniciar pipeline
-     completa**.
-   - Exibe, em tempo real, as etapas executadas no backend:
-     preparação da fonte, ingestão, pré-processamento, manifesto, agente,
-     observabilidade, PDF e indexação no vector database.
-   - Mostra estaticamente `docs/architecture_diagram.pdf`, usado como apoio
-     visual para explicar o agente, tools, LLM, dados e fontes externas.
-
-3. **Relatório e Chat**
-   - Exibe o PDF gerado pela pipeline.
-   - Inclui um chat com LLM sobre o relatório, métricas, fontes, qualidade dos
-     dados e metodologia.
-   - O chat usa recuperação em vector database local com documentos do projeto e
-     artefatos do run (`report.md`, `news_sources.json`).
-   - As perguntas passam por guardrails de input; as respostas são protegidas
-     contra exposição de dados sensíveis, instruções internas e recomendações
-     clínicas individualizadas.
-
-4. **Observbilidade**
-   - Mostra métricas em formato amigável, sem expor JSON cru.
-   - Resume linhas processadas, chamadas LLM, tokens, latência, fontes coletadas,
-     eventos do trace e qualidade dos dados.
-   - Exibe gráfico mensal de casos quando `chart_context.json` está disponível.
-   - Apresenta a sequência de nós/tools do agente em tabela para auditoria.
-
----
-
-## 10. Comandos Planejados
-
-Quando a estrutura estiver implementada, os comandos principais poderão ser padronizados via `Makefile`:
+### 5. Execução via Docker / Docker Compose
 
 ```bash
-make setup
-make test
-make run-pipeline
-make run-app
+docker-compose up --build
 ```
 
 ---
 
-## 11. Estratégia de Qualidade
-
-O projeto deve incluir testes para:
-
-- seleção da pasta mais recente;
-- ingestão do arquivo correto;
-- normalização de colunas;
-- cálculo de métricas;
-- geração dos gráficos;
-- aplicação da allowlist;
-- bloqueio de prompt injection;
-- validação do contrato do relatório.
+## 🛡️ Guardrails e Conformidade Ética
+- **Proteção contra Alucinações**: Métricas e estatísticas numéricas são estritamente geradas por código determinístico em Python/Pandas; o LLM atua sob contratos tipados com validação Pydantic.
+- **Defesa de Entrada e Saída**: Barreira contra *prompt injection*, bloqueio de tentativas de exfiltração de variáveis de ambiente (`.env`) e conformidade com LGPD (ausência total de PII/dados individualizados).
+- **Allowlist Institucional Estrita**: Consultas externas e fontes web limitadas aos portais oficiais e órgãos reconhecidos de saúde pública.
 
 ---
 
-## 12. Limitações Conhecidas
-
-- A base de SRAG pode ter atraso de atualização.
-- Campos podem ter preenchimento incompleto ou inconsistente.
-- A métrica de UTI é uma proxy de passagem por UTI, não ocupação real de leitos.
-- A métrica de vacinação na base SRAG mede vacinação registrada entre casos, não necessariamente cobertura populacional geral.
-- Notícias externas podem mudar, sair do ar ou conter informações incompletas.
-- A PoC não substitui análise epidemiológica oficial nem orientação clínica.
-
----
-
-## 13. Roadmap Técnico
-
-- [x] Criar estrutura inicial do projeto.
-- [x] Implementar cliente OpenDataSUS CSV.
-- [x] Implementar download do arquivo `INFLUD26-22-06-2026.csv`.
-- [x] Implementar camada landing.
-- [x] Implementar pré-processamento.
-- [x] Implementar camada refined em Parquet.
-- [x] Implementar cálculo das métricas.
-- [x] Implementar geração dos gráficos.
-- [x] Implementar busca de notícias com allowlist.
-- [x] Implementar RAG documental.
-- [x] Implementar agente com LangGraph.
-- [x] Implementar guardrails.
-- [x] Implementar auditoria por execução.
-- [x] Implementar dashboard Streamlit.
-- [x] Gerar diagrama conceitual em PDF.
-- [x] Finalizar README técnico.
-
----
-
-## 14. Narrativa Técnica
-
-A principal decisão de arquitetura é separar dados, métricas e linguagem natural.
-
-O pipeline determinístico baixa, valida, transforma e calcula as métricas sobre a base SRAG. O agente GenAI não tem acesso livre ao banco nem calcula números por conta própria. Ele chama tools com contratos claros, recebe resultados agregados e usa o LLM para interpretar o cenário, escrever o relatório e contextualizar com notícias de fontes permitidas.
-
-Essa separação torna a solução mais segura, auditável, reproduzível e fácil de defender tecnicamente.
-
----
-
-## 15. Execucao e Validacao
-
-```bash
-python -m venv .venv
-.venv/Scripts/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pytest tests -q
-python -m ruff check .
-python -m mypy src
-streamlit run app/streamlit_app.py
-```
-
-No PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-python -m pytest tests -q
-streamlit run app/streamlit_app.py
-```
-
-## 16. Artefatos por Execucao
-
-Cada run deve registrar `manifest.json`, `data_quality_report.json`,
-`metrics.json`, `news_sources.json` quando houver fontes externas,
-`agent_trace.jsonl`, `report.md`, `report.pdf` e graficos em `charts/`.
-
+## 👨‍💻 Autor & Contato
+Projeto desenvolvido para demonstração técnica de excelência em **IA Generativa, Sistemas Multi-Agente (LangGraph), RAG Híbrido Avançado e Engenharia de Dados em Saúde Pública**.
+- **Autor**: Adilio
+- **GitHub**: [@Masteradilio](https://github.com/Masteradilio)

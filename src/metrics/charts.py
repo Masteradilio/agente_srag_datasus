@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 import matplotlib
 
@@ -55,6 +55,45 @@ def generate_monthly_cases_12m_chart(df: pd.DataFrame, output_path: Path) -> Pat
     return output_path
 
 
+def generate_etiology_distribution_chart(df: pd.DataFrame, output_path: Path) -> Path:
+    ensure_directory(output_path.parent)
+    if "canonical_etiology" in df.columns:
+        counts = df["canonical_etiology"].value_counts().head(6)
+    else:
+        counts = pd.Series({"Não Especificado": len(df)})
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.bar(counts.index.astype(str), counts.values, color="#2b5c8f")
+    ax.set_title("Distribuição Etiológica de Casos de SRAG")
+    ax.set_xlabel("Agente Etiológico")
+    ax.set_ylabel("Casos")
+    ax.tick_params(axis="x", rotation=30)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150)
+    plt.close(fig)
+    return output_path
+
+
+def generate_age_group_cases_chart(df: pd.DataFrame, output_path: Path) -> Path:
+    ensure_directory(output_path.parent)
+    age_col = "canonical_age_group" if "canonical_age_group" in df.columns else "age_group"
+    if age_col in df.columns:
+        counts = df[age_col].value_counts()
+    else:
+        counts = pd.Series({"Não Informado": len(df)})
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.bar(counts.index.astype(str), counts.values, color="#3a8f6e")
+    ax.set_title("Casos de SRAG por Faixa Etária")
+    ax.set_xlabel("Faixa Etária")
+    ax.set_ylabel("Casos")
+    ax.tick_params(axis="x", rotation=25)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150)
+    plt.close(fig)
+    return output_path
+
+
 def build_chart_context(df: pd.DataFrame) -> dict[str, object]:
     case_dates = pd.to_datetime(df["canonical_case_date"], errors="coerce").dropna()
     weighted_df = _case_date_weights(df)
@@ -76,6 +115,14 @@ def build_chart_context(df: pd.DataFrame) -> dict[str, object]:
         monthly_end,
     ).reindex(monthly_index, fill_value=0)
 
+    etio_counts = (
+        df["canonical_etiology"].value_counts().to_dict()
+        if "canonical_etiology" in df.columns
+        else {}
+    )
+    age_col = "canonical_age_group" if "canonical_age_group" in df.columns else "age_group"
+    age_counts = df[age_col].value_counts().to_dict() if age_col in df.columns else {}
+
     return {
         "daily_cases_30d": {
             "start": daily_start.date().isoformat(),
@@ -96,6 +143,8 @@ def build_chart_context(df: pd.DataFrame) -> dict[str, object]:
             "peak_value": int(monthly_counts.max()),
             "series": {str(index): int(value) for index, value in monthly_counts.items()},
         },
+        "etiology_summary": {str(k): int(v) for k, v in etio_counts.items()},
+        "age_group_summary": {str(k): int(v) for k, v in age_counts.items()},
     }
 
 

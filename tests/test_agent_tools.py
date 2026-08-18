@@ -39,7 +39,7 @@ def test_agent_metric_and_chart_tools_write_artifacts(tmp_path) -> None:
 
     assert summary["total_cases"] == 20
     assert (tmp_path / "artifacts" / run_id / "metrics.json").is_file()
-    assert len(charts) == 2
+    assert len(charts) == 4
     assert all(path.endswith(".png") for path in charts)
 
 

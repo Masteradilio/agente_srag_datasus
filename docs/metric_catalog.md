@@ -1,90 +1,60 @@
-# Catalogo de Metricas
+# Catálogo de Métricas Epidemiológicas e Estatísticas (v2.0.0)
 
-## Data de referencia
+## 1. Métricas Epidemiológicas Primárias
 
-Maior valor valido de `canonical_case_date` na base refinada.
+### 1.1 Data de Referência
+- **Definição:** Maior valor válido de `canonical_case_date` na base refinada.
 
-## Taxa de aumento de casos em 7 dias
+### 1.2 Taxa de Variação de Casos (7 dias móveis)
+- **Fórmula:**
+  $$\text{Taxa de Aumento} = \frac{\text{casos}_{t-7..t} - \text{casos}_{t-14..t-8}}{\text{casos}_{t-14..t-8}}$$
+- **Significado:** Mede a aceleração da transmissão na última semana em relação à semana imediatamente anterior.
 
-Formula:
+### 1.3 Taxa de Mortalidade Conhecida
+- **Fórmula:**
+  $$\text{Taxa de Mortalidade} = \frac{\text{óbitos}}{\text{casos com desfecho conhecido (cura + óbito)}}$$
+- **Significado:** Elimina o viés de subnotificação de casos ainda em acompanhamento hospitalar ativo.
 
-```text
-(casos_ultimos_7_dias - casos_7_dias_anteriores) / casos_7_dias_anteriores
-```
+### 1.4 Taxa de Passagem por UTI (Proxy de Gravidade)
+- **Fórmula:**
+  $$\text{Taxa UTI} = \frac{\text{casos de SRAG com internação em UTI}}{\text{casos com campo UTI preenchido (Sim/Não)}}$$
+- **Nota Metodológica:** Representa a proporção de casos graves que necessitaram de cuidados intensivos, não a taxa de ocupação física de leitos do município.
 
-Colunas usadas:
+### 1.5 Taxa de Vacinação Registrada (Proxy Vacinal)
+- **Fórmula:**
+  $$\text{Taxa de Vacinação} = \frac{\text{casos de SRAG com registro vacinal positivo}}{\text{casos com campo de vacinação preenchido}}$$
 
-- `canonical_case_date`
-- `cases`, quando a base estiver agregada
+---
 
-Limitacao: se a janela anterior nao tiver casos, a taxa fica indisponivel.
+## 2. Distribuição Etiológica de Patógenos
 
-## Taxa de mortalidade conhecida
+Classificação derivada a partir dos campos `CLASSI_FIN`, `PCR_RESUL` e `OUTRO_VIR`:
+1. **COVID-19:** Casos confirmados para SARS-CoV-2 por PCR ou classificação final `5`.
+2. **Influenza:** Casos positivos para Influenza A/B por PCR ou classificação final `1`.
+3. **Vírus Sincicial Respiratório (VSR):** Casos positivos para VSR ou classificação final `2`.
+4. **Outros Vírus Respiratórios:** Adenovírus, Metapneumovírus, Rinovírus, etc. (classificação `3`).
+5. **Outros Agentes Etiológicos:** Agentes bacterianos ou fúngicos (classificação `4`).
+6. **Não Especificado:** Síndrome respiratória sem identificação do patógeno (classificação `9` ou ignorado).
 
-Formula em dados linha a linha:
+---
 
-```text
-obitos / casos_com_evolucao_conhecida
-```
+## 3. Estratificação por Faixas Etárias
 
-Colunas usadas:
+Derivação padronizada a partir da codificação do DataSUS:
+- **0 a 4 anos:** Primeira infância (maior risco para VSR e bronquiolite).
+- **5 a 19 anos:** Crianças em idade escolar e adolescentes.
+- **20 a 59 anos:** Adultos e população economicamente ativa.
+- **60+ anos:** População idosa (grupo de maior vulnerabilidade e mortalidade).
+- **Não Informado:** Registros com idade nula ou códigos de exclusão (999).
 
-- `evolution`
+---
 
-Proxy em base agregada:
+## 4. Detecção Estatística de Anomalias (Z-Score)
 
-```text
-deaths / cases
-```
-
-Limitacao: a taxa conhecida depende da completude de evolucao. Em base agregada,
-usa casos totais porque o status individual nao esta disponivel.
-
-## Taxa de mortalidade bruta
-
-Formula:
-
-```text
-obitos / casos_totais
-```
-
-Colunas usadas:
-
-- `evolution`, em dados linha a linha
-- `deaths` e `cases`, em dados agregados
-
-## Proporcao de casos com UTI
-
-Formula:
-
-```text
-casos_com_uti / casos_totais
-```
-
-Colunas usadas:
-
-- `icu`
-
-Proxy: mede passagem por UTI registrada entre casos de SRAG, nao ocupacao de
-leitos nem demanda hospitalar total.
-
-## Proporcao de casos com vacinacao registrada
-
-Formula:
-
-```text
-casos_com_vacinacao_sim / casos_com_status_vacinal_conhecido
-```
-
-Colunas usadas:
-
-- `vaccination`
-
-Proxy: mede registro vacinal entre casos de SRAG, nao cobertura vacinal da
-populacao.
-
-## Graficos
-
-- `daily_cases_30d.png`: serie diaria dos ultimos 30 dias.
-- `monthly_cases_12m.png`: serie mensal dos ultimos 12 meses.
-
+- **Janela de Avaliação:** Comparação entre o período recente (últimos 14 dias) e o período de referência anterior (14 dias anteriores).
+- **Fórmula do Z-Score:**
+  $$Z = \frac{x_{\text{atual}} - \mu_{\text{anterior}}}{\sigma_{\text{anterior}}}$$
+- **Níveis de Severidade:**
+  - `info`: Variação positiva moderada ($Z \ge 1.0$ ou crescimento $\ge 30\%$).
+  - `warning`: Aumento estatisticamente atípico ($Z \ge 2.0$ ou crescimento $\ge 50\%$).
+  - `critical`: Surto epidemiológico severo ($Z \ge 3.0$ e crescimento $\ge 75\%$).

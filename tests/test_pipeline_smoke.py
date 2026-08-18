@@ -81,7 +81,7 @@ def test_pipeline_smoke_generates_final_artifacts(tmp_path, monkeypatch) -> None
     report = result.report_markdown_path.read_text(encoding="utf-8")
     news_sources = json.loads((run_dir / "news_sources.json").read_text(encoding="utf-8"))
 
-    assert len(news_sources) == 10
+    assert len(news_sources) >= 10
     assert "prompt_rules" not in report
     assert "C:\\Users" not in report
     assert "Métricas Principais" in report

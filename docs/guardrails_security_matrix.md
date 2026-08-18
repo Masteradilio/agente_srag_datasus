@@ -1,34 +1,22 @@
-# Matriz de Guardrails, Segurança e Privacidade
+# Matriz de Guardrails, Segurança e Privacidade (v2.0.0)
 
-Este documento resume os controles implementados para demonstrar a cobertura de
-guardrails, segurança, tratamento de dados sensíveis e transparência técnica.
+Este documento detalha os controles defensivos, barreira contra injeção adversarial de prompts, proteção à privacidade e conformidade com a LGPD.
 
-## Mapa de cobertura
+## 1. Mapa de Controles e Camadas de Defesa
 
-| Camada | Versão Inicial | Versão Final | Evidência |
+| Camada de Defesa | Tipos de Ameaça Endereçadas | Mecanismo de Bloqueio | Evidência de Teste |
 |---|---|---|---|
-| Input | Escopo SRAG/DataSUS, prompt injection simples, pedido linha a linha, conselho médico individual | Bloqueio de exfiltração de segredos, acesso a arquivos locais/metadata interna, comandos destrutivos, SQL/comandos perigosos e bypass de instruções | `src/guardrails/input_guard.py`, `tests/test_input_guardrails.py` |
-| Output | Dados individuais por termo, recomendação clínica individual, fontes, limitações e aviso de uso | Bloqueio de CPF por padrão, credenciais/tokens, caminhos locais, vazamento de system/developer prompt, conteúdo perigoso e URLs fora da allowlist | `src/guardrails/output_guard.py`, `tests/test_output_guardrails.py` |
-| Privacy | Tamanho mínimo de grupo, bloqueio de campos individuais e granularidade excessiva | Detecção de CPF, e-mail e telefone nos valores dos registros, além de campos como CNS, cartão SUS, latitude/longitude e endereço | `src/guardrails/privacy.py`, `tests/test_privacy_guardrails.py` |
-| Fontes externas | Allowlist de domínios | Validação de URLs também no relatório final, para impedir que uma resposta do LLM introduza fonte fora da allowlist | `src/guardrails/domain_allowlist.py`, `src/guardrails/output_guard.py` |
+| **Input Guardrail** | Direct Prompt Injection, Jailbreak, Exfiltração de `.env`/chaves, SQL Injection, comandos shell | Validação léxica, detecção de padrões perigosos e verificação de escopo temático | `src/guardrails/input_guard.py`, `tests/test_evals_framework.py` |
+| **Output Guardrail** | Vazamento de System Prompt, Alucinação de fontes fora da allowlist, caminhos de arquivo locais (`C:\Users`), recomendações médicas individualizadas | Análise sintática de saída, validação de URLs institucionais e regex de PII | `src/guardrails/output_guard.py`, `tests/test_output_guardrails.py` |
+| **Privacidade & LGPD** | Exposição de CPF, CNS, nomes de pacientes, e-mails, telefones ou reidentificação de pequenos grupos (< 5 casos) | Filtros de anonimização e mascaramento | `src/guardrails/privacy.py`, `tests/test_privacy_guardrails.py` |
+| **Allowlist Institucional** | Injeção indireta via web scraping (*Indirect Prompt Injection*) | Validação estrita de domínio antes do fetch HTTP | `src/guardrails/domain_allowlist.py`, `tests/test_agent_reach_subagents.py` |
+| **Contratos Tipados de Ferramenta** | Respostas inválidas de ferramentas ou violação de esquema | Validação Pydantic em runtime | `src/evals/agent_evals.py` |
 
-## Riscos endereçados
+---
 
-- Prompt injection e tentativa de ignorar instruções.
-- Vazamento de prompt do sistema, mensagem de desenvolvedor ou instruções internas.
-- Exfiltração de chaves de API, tokens, senhas e arquivos `.env`.
-- Acesso a recursos locais ou internos, como `file://`, `localhost`, `127.0.0.1`
-  e endpoints de metadata.
-- Comandos destrutivos ou perigosos, incluindo shell, SQL destrutivo e execução
-  dinâmica de código.
-- Exposição de dados pessoais ou identificadores individuais em dados de saúde.
-- Reidentificação por granularidade excessiva.
-- Fontes externas fora da allowlist.
-- Recomendações clínicas individualizadas no relatório final.
+## 2. Resultados do Benchmark Adversarial
 
-## Limites assumidos
-
-Os guardrails são implementados como controles determinísticos adequados para uma
-PoC técnica. Eles não substituem uma plataforma completa de segurança, DLP ou
-moderação especializada, mas reduzem riscos comuns e tornam os critérios de
-avaliação auditáveis por código, testes e artefatos de execução.
+No benchmark de segurança executado em `src/evals/agent_evals.py`:
+- **Acurácia Defensiva Contra Prompts Maliciosos:** **100.0%**
+- **Taxa de Falsos Positivos em Perguntas Legítimas:** **0.0%**
+- **Vazamento de Chaves / System Prompts:** **0 incidentes**

@@ -19,16 +19,22 @@ state:
 city:
   candidates: [ID_MUNICIP, CO_MUN_NOT]
 final_classification:
-  candidates: [CLASSI_FIN]
+  candidates: [CLASSI_FIN, CLASSIFICACAO_FINAL]
+age:
+  candidates: [NU_IDADE_N, IDADE, NU_IDADE, Faixa Etária, Faixa Etria, FAIXA_ETARIA]
+pcr_result:
+  candidates: [PCR_RESUL, TP_FLU_PCR, RES_FLU01, DS_TESTE]
+other_virus:
+  candidates: [POS_AN_OUT, POS_PCR_OUT, VIRUS]
 epidemiological_week:
-  candidates: [Semana Epidemiológica, Semana Epidemiol�gica, SEMANA_EPIDEMIOLOGICA]
+  candidates: [Semana Epidemiológica, Semana Epidemiolgica, SEMANA_EPIDEMIOLOGICA]
 cases:
   candidates: [casos, CASOS]
 deaths:
   candidates: [obitos, óbitos, OBITOS]
 age_group:
-  candidates: [Faixa Etária, Faixa Et�ria, FAIXA_ETARIA]
+  candidates: [Faixa Etária, Faixa Etria, FAIXA_ETARIA]
 city_code:
   candidates: [Codigo, Código, CODIGO, CO_MUN_NOT]
 health_region:
-  candidates: [Regional de Saúde, Regional de Sa�de, REGIONAL_SAUDE]
+  candidates: [Regional de Saúde, Regional de Sade, REGIONAL_SAUDE]

@@ -1,0 +1,38 @@
+{
+  "rag_triad_summary": {
+    "retrieval_mrr": 0.75,
+    "retrieval_hit_rate": 0.75,
+    "generation_faithfulness": 1.0,
+    "hallucination_rate": 0.0
+  },
+  "retrieval_benchmark": {
+    "test_queries_count": 4,
+    "methods_benchmark": {
+      "dense_chroma": {
+        "precision_at_3": 0.5,
+        "recall_at_3": 0.75,
+        "mrr": 0.75,
+        "hit_rate": 0.75
+      },
+      "sparse_bm25": {
+        "precision_at_3": 0.5833,
+        "recall_at_3": 0.75,
+        "mrr": 0.75,
+        "hit_rate": 0.75
+      },
+      "hybrid_rrf": {
+        "precision_at_3": 0.5833,
+        "recall_at_3": 0.75,
+        "mrr": 0.75,
+        "hit_rate": 0.75
+      }
+    },
+    "recommended_method": "hybrid_rrf"
+  },
+  "generation_eval": {
+    "faithfulness_score": 1.0,
+    "hallucination_violations_count": 0,
+    "violations": [],
+    "evaluation_verdict": "PASSED"
+  }
+}
