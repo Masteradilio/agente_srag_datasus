@@ -1,0 +1,94 @@
+[
+  {
+    "title": "Ministério da Saúde habilita 561 leitos para SRAG",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/noticias/2026/maio/ministerio-da-saude-habilita-561-leitos-para-reforcar-assistencia-de-pacientes-com-sindrome-respiratoria-aguda-grave-srag",
+    "source_domain": "www.gov.br",
+    "published_at": "2026-05-29",
+    "snippet": "Notícia oficial sobre abertura de 561 leitos e repasse de recursos para resposta ao aumento de casos de SRAG.",
+    "source_channel": "official_portal"
+  },
+  {
+    "title": "Dataset oficial SRAG 2019 a 2026",
+    "url": "https://dadosabertos.saude.gov.br/dataset/srag-2019-a-2026",
+    "source_domain": "dadosabertos.saude.gov.br",
+    "published_at": null,
+    "snippet": "Portal oficial de dados abertos do SUS para SRAG.",
+    "source_channel": "official_portal"
+  },
+  {
+    "title": "Brasil tem alta de SRAG em bebês",
+    "url": "https://agenciabrasil.ebc.com.br/saude/noticia/2026-05/brasil-tem-alta-de-sindrome-respiratoria-aguda-grave-em-bebes",
+    "source_domain": "agenciabrasil.ebc.com.br",
+    "published_at": "2026-05-14",
+    "snippet": "Notícia pública sobre alta de SRAG em menores de dois anos, associada ao vírus sincicial respiratório.",
+    "source_channel": "official_portal"
+  },
+  {
+    "title": "InfoMS paineis oficiais",
+    "url": "https://infoms.saude.gov.br/extensions",
+    "source_domain": "infoms.saude.gov.br",
+    "published_at": null,
+    "snippet": "Paineis oficiais de saude, vacinacao e indicadores complementares.",
+    "source_channel": "official_portal"
+  },
+  {
+    "title": "busca | Portal Fiocruz",
+    "url": "https://portal.fiocruz.br/busca?search_api_views_fulltext=SRAG",
+    "source_domain": "portal.fiocruz.br",
+    "published_at": null,
+    "snippet": "Consulta técnica em boletins e análises de vigilância respiratória publicadas pela Fiocruz.",
+    "source_channel": "web",
+    "excerpt": "Selecione um filtro e clique em Aplicar para ver os resultados\nAv. Brasil, 4365 - Manguinhos, Rio de Janeiro - CEP: 21040-900 - Telefone: (21) 2598-4242\nEste portal é regido pela Política de Acesso Aberto ao Conhecimento , que busca garantir à sociedade o acesso gratuito, público e aberto ao conteúdo integral de toda obra intelectual produzida pela Fiocruz.\nO conteúdo deste portal pode ser utilizado para todos os fins não comerciais, respeitados e reservados os direitos morais dos autores.\nExpediente",
+    "extraction_status": "success"
+  },
+  {
+    "title": "OPAS/OMS | Organização Pan-Americana da Saúde",
+    "url": "https://www.paho.org/pt",
+    "source_domain": "www.paho.org",
+    "published_at": "2026-08-17T10:28:49-04:00",
+    "snippet": "Contexto regional das Americas sobre vigilancia respiratoria.",
+    "source_channel": "web",
+    "excerpt": "User account menu\nSaber mais\nOPAS/OMS/Karina Zambrana\nResposta ao terremoto na Venezuela\nCrise humanitária no Haiti\nSituação do sarampo nas Américas\nConheça os cinco pilares prioritários de sua visão para o futuro da OPAS.\nVisite a página o Diretor\nAssista ao podcast\nPublicações\nGovernança\nRevista\nParcerias\nEmergências em Saúde\nAliança para Atenção Primária à Saúde nas Américas\nIniciativa Melhor Atenção às DNTs\nZero mortes maternas evitáveis\nIniciativa de eliminação\nSobre a\nPolíticas\nContate-nos\nSiga-nos\nEscritório Regional para as Américas da Organização Mundial da Saúde\n© Organização Pan-Americana da Saúde. Todos os direitos reservados.",
+    "extraction_status": "success"
+  },
+  {
+    "title": "World Health Organization (WHO)",
+    "url": "https://www.who.int/",
+    "source_domain": "www.who.int",
+    "published_at": null,
+    "snippet": "Contexto global e vigilancia respiratoria.",
+    "source_channel": "web",
+    "excerpt": "Africa CDC and WHO call for urgent, community-led action to contain Ebola in the DRC\nCountries urged to strengthen breastfeeding support and health systems to give every child a healthy start in life\nWHO: Integration, innovation and community leadership key to ending HIV, hepatitis and STIs\nWHO launches seven strategies to prevent drowning\n19 August\n17 September\n20th meeting of the Strategic and Technical Advisory Group for Neglected Tropical Diseases\nGlobal Digital Collaboration Conference 2026\nSecond meeting of the WHO Strategic and Technical Advisory Group on the SPECS 2030 initiative\nWorld sexual and reproductive health month 2026\nSPECS 2030 initiative meeting, including the second in-pe",
+    "extraction_status": "success"
+  },
+  {
+    "title": "Agência Gov",
+    "url": "https://agenciagov.ebc.com.br/",
+    "source_domain": "agenciagov.ebc.com.br",
+    "published_at": null,
+    "snippet": "Consulta ao vivo em comunicacao governamental sobre saude publica.",
+    "source_channel": "web",
+    "excerpt": "Associação brasileira do setor projeta incremento para até R$ 10 bi nos próximos anos. Além disso, Embrapa afirma que, no ano passado, o uso de bioinsumos retirou do ar poluição equivalente a 60 milhões de carros\nSuperior Tribunal de Justiça restabelece restrições a faculdades de medicina com baixo desempenho\nMudança: prazo para pedir ingresso no Simples Nacional é setembro deste ano\nClique e assista\nUm ano depois, pesquisadores voltam à TI Tirecatinga em expedição de saberes e sabores\nComo o MEC pretende abrir cursos de mestrado e doutorado em regiões afastadas do País\nAcessibilidade: entenda as barreiras que afetam o cotidiano das pessoas com deficiência\nDia D de vacinação contra 20 doença",
+    "extraction_status": "success"
+  },
+  {
+    "title": "Sistema InfoGripe · GitHub",
+    "url": "https://github.com/infogripe",
+    "source_domain": "github.com",
+    "published_at": null,
+    "snippet": "Repositorios publicos do InfoGripe.",
+    "source_channel": "web",
+    "excerpt": "There was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this page .\nReposítório do boletim InfoGripe\n3 2\nInfogripe hexagon sticker\nR\nR\nR\nR\nR\nReposítório do boletim InfoGripe\nThere was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this page .\nThere was an error while loading. Please reload this p",
+    "extraction_status": "success"
+  },
+  {
+    "title": "Agência Brasil | Últimas notícias do Brasil e do mundo",
+    "url": "https://agenciabrasil.ebc.com.br/",
+    "source_domain": "agenciabrasil.ebc.com.br",
+    "published_at": null,
+    "snippet": "Consulta ao vivo em noticias publicas brasileiras de saude.",
+    "source_channel": "web",
+    "excerpt": "",
+    "extraction_status": "success"
+  }
+]

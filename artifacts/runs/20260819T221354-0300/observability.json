@@ -1,0 +1,45 @@
+{
+  "provider": "nvidia_openai_compatible",
+  "model": "minimaxai/minimax-m3",
+  "llm_call_count": 12,
+  "prompt_tokens": 91438,
+  "completion_tokens": 5964,
+  "total_tokens": 97402,
+  "estimated_cost_usd": 0.0,
+  "latency_ms": 13252,
+  "status": "success",
+  "generated_at": "2026-08-19T22:15:14.913898-03:00",
+  "pipeline_latency_ms": 80630,
+  "rows_raw": 473791,
+  "rows_refined": 473791,
+  "token_accounting": {
+    "model": "minimaxai/minimax-m3",
+    "prompt_tokens": 2162,
+    "completion_tokens": 802,
+    "total_tokens": 2964,
+    "estimated_cost_usd": 0.000806,
+    "estimated_cost_brl": 0.0043
+  },
+  "latency_waterfall_ms": {
+    "ingestion": 450,
+    "preprocessing": 820,
+    "metrics_and_charts": 340,
+    "agent_reach_official": 280,
+    "agent_reach_social": 190,
+    "agent_reach_media": 160,
+    "rag_vector_search": 120,
+    "llm_drafting": 13252,
+    "reflection_evaluation": 80,
+    "pdf_export": 650
+  },
+  "eval_scores": {
+    "faithfulness": 0.98,
+    "relevance": 0.95,
+    "mrr": 0.88
+  },
+  "openinference_schema_version": "1.0.0",
+  "historical_raw_files_count": 1,
+  "historical_raw_files": [
+    "C:\\Users\\adili\\projetos_offline\\agente_srag_datasus\\data\\landing\\20260819T221354-0300\\INFLUD25-22-06-2026.csv"
+  ]
+}

@@ -68,18 +68,19 @@ data/refined/*
 docs/descricao_vaga.md
 MASTER_BACKLOG.md
 
-# Runtime artifacts
+# Runtime artifacts (Only latest portfolio run tracked)
 artifacts/runs/*
 !artifacts/runs/.gitkeep
+!artifacts/runs/20260819T221354-0300/
+!artifacts/runs/20260819T221354-0300/**
 
 # Vector stores and local databases
 chroma_db/
 qdrant_storage/
 artifacts/vector_store/
 *.duckdb
-*.db
-*.sqlite
-*.sqlite3
+*.feather
+*.orc
 
 # Generated reports and charts
 *.pdf
@@ -89,16 +90,17 @@ artifacts/vector_store/
 *.svg
 *.html
 
-# Keep documentation PDFs when intentionally committed
+# Keep documentation and latest portfolio run assets
 !docs/*.pdf
+!docs/*.png
+!artifacts/runs/20260819T221354-0300/**/*.pdf
+!artifacts/runs/20260819T221354-0300/**/*.png
 
 # Large raw files
 *.xlsx
 *.xls
 *.csv
 *.parquet
-*.feather
-*.orc
 
 # Streamlit
 .streamlit/secrets.toml

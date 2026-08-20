@@ -1,0 +1,15 @@
+{
+  "run_id": "20260819T221354-0300",
+  "timestamp": "2026-08-20T01:14:33.929040+00:00",
+  "selected_folder": "opendatasus-2026",
+  "source_file": "C:\\Users\\adili\\projetos_offline\\agente_srag_datasus\\data\\landing\\20260819T221354-0300\\INFLUD26-22-06-2026.csv",
+  "raw_file_hash": "b5745ef67f7a9cd1681cfcf8fb3dd4545b66b94d1c1985553c87818841d00729",
+  "refined_file_hash": "ce32c3465504374ce55a1746f5c95895663c9f74cbd3b3e81275997377afb9b9",
+  "rows_raw": 473791,
+  "rows_refined": 473791,
+  "model": null,
+  "embedding_model": null,
+  "prompt_version": "agent-report-v1",
+  "metric_catalog_version": "metric-catalog-v1",
+  "allowlist_version": "news-allowlist-v1"
+}

@@ -1,0 +1,48 @@
+{
+  "rows_raw": 473791,
+  "rows_refined": 473791,
+  "columns_raw": 194,
+  "columns_selected": 20,
+  "invalid_dates": {
+    "notification_date": 0,
+    "icu_start_date": 1,
+    "case_date": 0,
+    "evolution_date": 0,
+    "icu_end_date": 0
+  },
+  "missing_required_columns": [],
+  "missing_optional_columns": [
+    "epidemiological_week",
+    "cases",
+    "deaths",
+    "age_group",
+    "health_region"
+  ],
+  "null_rate_by_selected_column": {
+    "case_date": 0.0,
+    "notification_date": 0.0,
+    "evolution": 0.09840414866470659,
+    "evolution_date": 0.19001205172744945,
+    "icu": 0.10221806661587071,
+    "icu_start_date": 0.7485389127273419,
+    "icu_end_date": 0.8568039494207361,
+    "vaccination": 0.0001308593873670036,
+    "state": 2.1106352801129614e-06,
+    "city": 2.1106352801129614e-06,
+    "final_classification": 0.05940382995877929,
+    "age": 0.0,
+    "pcr_result": 0.08771589160621455,
+    "other_virus": 0.8871802123721219,
+    "epidemiological_week": 1.0,
+    "cases": 1.0,
+    "deaths": 1.0,
+    "age_group": 1.0,
+    "city_code": 2.1106352801129614e-06,
+    "health_region": 1.0
+  },
+  "discarded_rows": 0,
+  "warnings": [
+    "Missing optional columns: epidemiological_week, cases, deaths, age_group, health_region",
+    "Invalid dates detected: icu_start_date=1"
+  ]
+}

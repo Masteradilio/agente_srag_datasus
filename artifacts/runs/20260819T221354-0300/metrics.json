@@ -1,0 +1,120 @@
+{
+  "reference_date": "2026-06-21",
+  "total_cases": 473791,
+  "case_growth_rate_7d": {
+    "name": "Taxa de aumento de casos em 7 dias",
+    "value": -0.7710208934941396,
+    "numerator": -4539,
+    "denominator": 5887,
+    "limitations": []
+  },
+  "known_mortality_rate": {
+    "name": "Taxa de mortalidade conhecida",
+    "value": 0.07147205169469178,
+    "numerator": 29001,
+    "denominator": 405767,
+    "limitations": []
+  },
+  "crude_mortality_rate": {
+    "name": "Taxa de mortalidade bruta",
+    "value": 0.061210533758555986,
+    "numerator": 29001,
+    "denominator": 473791,
+    "limitations": []
+  },
+  "icu_case_rate": {
+    "name": "Taxa de ocupacao/uso de UTI em casos de SRAG",
+    "value": 0.2562543399937947,
+    "numerator": 121411,
+    "denominator": 473791,
+    "limitations": [
+      "Nao representa ocupacao hospitalar real de leitos sem base complementar de leitos disponiveis."
+    ]
+  },
+  "registered_vaccination_case_rate": {
+    "name": "Taxa de vacinacao da populacao com SRAG",
+    "value": 0.5558282260955665,
+    "numerator": 260470,
+    "denominator": 468616,
+    "limitations": [
+      "Nao representa cobertura vacinal populacional geral sem denominador populacional."
+    ]
+  },
+  "etiology_distribution": [
+    {
+      "etiology": "Outros Agentes",
+      "cases": 207504,
+      "percentage": 0.438
+    },
+    {
+      "etiology": "VSR",
+      "cases": 143945,
+      "percentage": 0.3038
+    },
+    {
+      "etiology": "Influenza",
+      "cases": 66868,
+      "percentage": 0.1411
+    },
+    {
+      "etiology": "Não Especificado",
+      "cases": 27241,
+      "percentage": 0.0575
+    },
+    {
+      "etiology": "COVID-19",
+      "cases": 21838,
+      "percentage": 0.0461
+    },
+    {
+      "etiology": "Outros Vírus",
+      "cases": 6395,
+      "percentage": 0.0135
+    }
+  ],
+  "age_distribution": [
+    {
+      "age_group": "0-4 anos",
+      "cases": 161713,
+      "percentage": 0.3413,
+      "icu_rate": 0.2395,
+      "mortality_rate": 0.0102
+    },
+    {
+      "age_group": "60+ anos",
+      "cases": 125852,
+      "percentage": 0.2656,
+      "icu_rate": 0.2804,
+      "mortality_rate": 0.1979
+    },
+    {
+      "age_group": "5-19 anos",
+      "cases": 120878,
+      "percentage": 0.2551,
+      "icu_rate": 0.2317,
+      "mortality_rate": 0.012
+    },
+    {
+      "age_group": "20-59 anos",
+      "cases": 65026,
+      "percentage": 0.1372,
+      "icu_rate": 0.2975,
+      "mortality_rate": 0.107
+    },
+    {
+      "age_group": "Não Informado",
+      "cases": 322,
+      "percentage": 0.0007,
+      "icu_rate": 0.1304,
+      "mortality_rate": 0.2824
+    }
+  ],
+  "anomalies": {
+    "total_anomalies": 0,
+    "alerts": []
+  },
+  "limitations": [
+    "Nao representa cobertura vacinal populacional geral sem denominador populacional.",
+    "Nao representa ocupacao hospitalar real de leitos sem base complementar de leitos disponiveis."
+  ]
+}
