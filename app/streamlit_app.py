@@ -752,7 +752,7 @@ def render_pipeline_page(artifacts_dir: Path) -> None:
         st.image(
             str(diagram_png),
             caption="Arquitetura de Inteligência Epidemiológica — LangGraph, Subagentes Agent Reach, RAG Híbrido, Suíte de Artefatos e Guardrails Enterprise",
-            use_container_width=True,
+            use_column_width=True,
         )
     elif diagram_pdf.is_file():
         render_pdf(diagram_pdf, height=750)
