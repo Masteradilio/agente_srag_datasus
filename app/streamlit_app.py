@@ -594,16 +594,82 @@ def _extract_sortable_date(text: str | None) -> str | None:
     return None
 
 
-# ==============================================================================
-# STREAMLIT PAGE RENDERING
-# ==============================================================================
+import streamlit.components.v1 as components
+
+
+def render_mermaid(code: str, height: int = 560) -> None:
+    """Render a Mermaid diagram directly inside Streamlit using Mermaid.js."""
+    html_code = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <script type="module">
+            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+            mermaid.initialize({{ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' }});
+        </script>
+        <style>
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                margin: 0;
+                padding: 10px;
+                background-color: transparent;
+                display: flex;
+                justify-content: center;
+            }}
+            .mermaid {{
+                width: 100%;
+                text-align: center;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="mermaid">
+{code}
+        </div>
+    </body>
+    </html>
+    """
+    components.html(html_code, height=height, scrolling=True)
+
+
+def render_markdown_with_mermaid(markdown_text: str) -> None:
+    """Renders markdown while resolving relative images as Base64 and rendering Mermaid diagrams."""
+    # 1. Replace relative image markdown links (e.g. docs/architecture_diagram.png) with Base64 data URIs
+    def _replace_image_match(match: re.Match) -> str:
+        alt_text = match.group(1)
+        rel_path = match.group(2)
+        full_path = PROJECT_ROOT / rel_path
+        if full_path.is_file():
+            mime = "image/png" if full_path.suffix.lower() == ".png" else "image/jpeg"
+            b64 = base64.b64encode(full_path.read_bytes()).decode("utf-8")
+            return f"![{alt_text}](data:{mime};base64,{b64})"
+        return match.group(0)
+
+    processed = re.sub(r"!\[(.*?)\]\((.*?)\)", _replace_image_match, markdown_text)
+
+    # 2. Split and render Mermaid code blocks
+    pattern = re.compile(r"```mermaid\n(.*?)```", re.DOTALL)
+    last_idx = 0
+    for match in pattern.finditer(processed):
+        start, end = match.span()
+        before_text = processed[last_idx:start].strip()
+        if before_text:
+            st.markdown(before_text)
+        mermaid_code = match.group(1).strip()
+        render_mermaid(mermaid_code, height=560)
+        last_idx = end
+
+    remaining_text = processed[last_idx:].strip()
+    if remaining_text:
+        st.markdown(remaining_text)
+
 
 def render_about_page() -> None:
     st.title("ℹ️ Sobre a Plataforma")
     st.caption("Visão geral da arquitetura, dados do OpenDataSUS e documentação técnica.")
     readme = read_text(PROJECT_ROOT / "README.md")
-    with st.container(height=800):
-        st.markdown(readme)
+    render_markdown_with_mermaid(readme)
 
 
 def execute_pipeline_with_progress(run_id: str, raw_file: Path | None) -> str:
