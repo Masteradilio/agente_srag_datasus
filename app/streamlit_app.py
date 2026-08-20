@@ -745,8 +745,17 @@ def render_pipeline_page(artifacts_dir: Path) -> None:
             st.error(f"Falha na execução: {exc}")
 
     st.divider()
-    st.subheader("Arquitetura e Fluxo do Grafo LangGraph")
-    render_pdf(PROJECT_ROOT / "docs" / "architecture_diagram.pdf", height=650)
+    st.subheader("📐 Arquitetura do Sistema & Orquestração Multi-Agente (v2.0.0)")
+    diagram_png = PROJECT_ROOT / "docs" / "architecture_diagram.png"
+    diagram_pdf = PROJECT_ROOT / "docs" / "architecture_diagram.pdf"
+    if diagram_png.is_file():
+        st.image(
+            str(diagram_png),
+            caption="Arquitetura de Inteligência Epidemiológica — LangGraph, Subagentes Agent Reach, RAG Híbrido, Suíte de Artefatos e Guardrails Enterprise",
+            use_container_width=True,
+        )
+    elif diagram_pdf.is_file():
+        render_pdf(diagram_pdf, height=750)
 
 
 def render_reports_page(artifacts_dir: Path) -> None:
@@ -870,11 +879,6 @@ def render_chat_page(artifacts_dir: Path) -> None:
     question_to_process = None
     if submitted and user_input_area.strip():
         question_to_process = user_input_area.strip()
-
-    # Also support streamlit bottom chat_input
-    chat_bar = st.chat_input("Ou digite uma pergunta rápida aqui...")
-    if chat_bar:
-        question_to_process = chat_bar
 
     if question_to_process:
         with st.spinner("Consultando ChromaDB, BM25 e gerando resposta fundamentada..."):
