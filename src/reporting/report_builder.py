@@ -91,13 +91,17 @@ O monitoramento epidemiológico registrou um volume total acumulado de **{total_
     etio_table = "\n".join(
         f"| {item.get('etiology')} | {item.get('cases', 0):,} | {item.get('percentage', 0):.1%} |"
         for item in etio_list
-    ) or "| Não informado | - | - |"
+    ) if etio_list else "| Não informado | - | - |"
 
     age_list = metrics.get("age_distribution", [])
-    age_table = "\n".join(
-        f"| {item.get('age_group')} | {item.get('cases', 0):,} | {item.get('percentage', 0):.1%} | {item.get('icu_rate') or 0:.1%} | {item.get('mortality_rate') or 0:.1%} |"
-        for item in age_list
-    ) or "| Não informado | - | - | - | - |"
+    age_table_rows = []
+    for item in age_list:
+        cases_fmt = f"{item.get('cases', 0):,}"
+        pct_fmt = f"{item['percentage']:.1%}" if item.get("percentage") is not None else "-"
+        icu_fmt = f"{item['icu_rate']:.1%}" if item.get("icu_rate") is not None else "-"
+        mort_fmt = f"{item['mortality_rate']:.1%}" if item.get("mortality_rate") is not None else "-"
+        age_table_rows.append(f"| {item.get('age_group')} | {cases_fmt} | {pct_fmt} | {icu_fmt} | {mort_fmt} |")
+    age_table = "\n".join(age_table_rows) if age_table_rows else "| Não informado | - | - | - | - |"
 
     epidemiological_deepdive = f"""# Parecer Epidemiológico Técnico Aprofundado
 **Run:** `{context.run_id}` | **Data Base:** {ref_date}

@@ -45,7 +45,12 @@ def list_run_ids(artifacts_dir: Path) -> list[str]:
     if not artifacts_dir.is_dir():
         return []
     runs = [path.name for path in artifacts_dir.iterdir() if path.is_dir()]
-    return sorted(runs, reverse=True)
+    timestamped = sorted(
+        [r for r in runs if (r.startswith("20") and len(r) >= 15) or (r.startswith("run-20") and len(r) >= 19)],
+        reverse=True,
+    )
+    others = sorted([r for r in runs if r not in timestamped], reverse=True)
+    return timestamped + others
 
 
 def read_json(path: Path) -> dict[str, Any] | list[Any]:

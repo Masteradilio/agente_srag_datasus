@@ -311,22 +311,7 @@ def calculate_vaccination_rate(df: pd.DataFrame) -> MetricValue:
     )
 
 
-def calculate_metric_summary(parquet_path: Path) -> MetricSummary:
-    df = pd.read_parquet(parquet_path)
-    reference_date = calculate_reference_date(df)
-    mortality_rates = calculate_mortality_rates(df)
 
-    summary = MetricSummary(
-        reference_date=reference_date.isoformat(),
-        total_cases=_total_cases(df),
-        case_growth_rate_7d=calculate_case_growth_rate(df, reference_date),
-        known_mortality_rate=mortality_rates["known"],
-        crude_mortality_rate=mortality_rates["crude"],
-        icu_case_rate=calculate_icu_rate(df),
-        registered_vaccination_case_rate=calculate_vaccination_rate(df),
-    )
-    summary.limitations = _collect_limitations(summary)
-    return summary
 
 
 def write_metric_summary(summary: MetricSummary, output_path: Path) -> Path:
