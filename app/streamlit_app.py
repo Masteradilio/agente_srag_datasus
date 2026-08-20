@@ -150,6 +150,7 @@ def answer_chat_question(question: str, run_id: str, paths: dict[str, Path]) -> 
     quality = read_json(paths["quality"])
     news = read_json(paths["news"])
     chart_context = read_json(paths["chart_context"])
+    observability = read_json(paths["observability"])
     report_text = read_text(paths["report_md"])
 
     # Read all 5 specialized intelligence artifacts
@@ -212,13 +213,15 @@ def answer_chat_question(question: str, run_id: str, paths: dict[str, Path]) -> 
         f"{json.dumps(chart_context, ensure_ascii=False, indent=2)}\n\n"
         f"--- 9. QUALIDADE DOS DADOS (data_quality_report.json) ---\n"
         f"{json.dumps(quality, ensure_ascii=False, indent=2)}\n\n"
-        f"--- 10. RESUMO DO PARQUET ---\n"
+        f"--- 10. OBSERVABILIDADE & EVALS (observability.json) ---\n"
+        f"{json.dumps(observability, ensure_ascii=False, indent=2)}\n\n"
+        f"--- 11. RESUMO DO PARQUET ---\n"
         f"{parquet_context}\n\n"
-        f"--- 11. RESULTADO_TOOL_BUSCA_ALLOWLIST ---\n"
+        f"--- 12. RESULTADO_TOOL_BUSCA_ALLOWLIST ---\n"
         f"{external_context}\n\n"
-        f"--- 12. RELATORIO ---\n"
+        f"--- 13. RELATORIO ---\n"
         f"{report_text[:1800]}\n\n"
-        f"--- 13. CONTEXTO_RAG ---\n"
+        f"--- 14. CONTEXTO_RAG ---\n"
         f"{rag_context}"
     )
 
@@ -253,7 +256,7 @@ def _call_chat_llm(system_prompt: str, user_prompt: str, observability_path: Pat
                         "temperature": 0.2,
                         "max_tokens": 1500,
                     },
-                    timeout=15,
+                    timeout=35,
                 )
                 if response.status_code == 200:
                     payload = response.json()
@@ -289,7 +292,7 @@ def _call_chat_llm(system_prompt: str, user_prompt: str, observability_path: Pat
                         "temperature": 0.2,
                         "max_tokens": 1500,
                     },
-                    timeout=15,
+                    timeout=35,
                 )
                 if response.status_code == 200:
                     payload = response.json()
@@ -408,8 +411,8 @@ def _search_external_context_if_requested(question: str) -> str:
             candidates=_chat_news_candidates(),
         )
         articles = [
-            extract_news_article(result.url, sources.allowed_domains, timeout_seconds=8)
-            for result in results[:8]
+            extract_news_article(result.url, sources.allowed_domains, timeout_seconds=4)
+            for result in results[:4]
         ]
     except Exception as exc:
         return json.dumps(

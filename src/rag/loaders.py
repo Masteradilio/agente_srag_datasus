@@ -29,10 +29,22 @@ def load_run_documents(
     artifacts_dir: Path = Path("artifacts/runs"),
 ) -> list[DocumentSource]:
     documents: list[DocumentSource] = []
-    for relative_path in [
-        artifacts_dir / run_id / "news_sources.json",
-        artifacts_dir / run_id / "report.md",
-    ]:
+    run_dir = artifacts_dir / run_id
+    artifact_files = [
+        "report.md",
+        "executive_bulletin.md",
+        "epidemiological_deepdive.md",
+        "anomaly_alerts.md",
+        "media_and_social_signals.md",
+        "data_governance_report.md",
+        "observability.json",
+        "metrics.json",
+        "chart_context.json",
+        "data_quality_report.json",
+        "news_sources.json",
+    ]
+    for filename in artifact_files:
+        relative_path = run_dir / filename
         document = load_text_document(relative_path, source_type="run_artifact")
         if document:
             documents.append(document)

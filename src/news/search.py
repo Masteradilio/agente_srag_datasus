@@ -45,7 +45,7 @@ def _search_allowlisted_web(
                 DUCKDUCKGO_ENDPOINT,
                 params={"q": search_query},
                 headers={"User-Agent": USER_AGENT},
-                timeout=20,
+                timeout=4,
             )
             duckduckgo_response.raise_for_status()
         except Exception:
@@ -73,7 +73,7 @@ def _search_bing_html(
             BING_ENDPOINT,
             params={"q": search_query},
             headers={"User-Agent": USER_AGENT},
-            timeout=20,
+            timeout=4,
         )
         response.raise_for_status()
     except Exception:

@@ -30,7 +30,12 @@ OUT_OF_SCOPE_TERMS = [
 SECRET_EXFILTRATION_TERMS = [
     "api key",
     "apikey",
-    "token",
+    "api_key",
+    "bearer token",
+    "access token",
+    "auth token",
+    "jwt token",
+    "token de acesso",
     "senha",
     "password",
     ".env",
@@ -220,6 +225,19 @@ CHAT_CONTEXT_TERMS = [
     "fiocruz",
     "oms",
     "opas",
+    "tokens",
+    "token",
+    "latencia",
+    "latência",
+    "custo",
+    "custos",
+    "observabilidade",
+    "pipeline",
+    "llm",
+    "execucao",
+    "execução",
+    "benchmark",
+    "evals",
 ]
 
 
