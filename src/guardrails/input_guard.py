@@ -81,6 +81,9 @@ MEDICAL_ADVICE_TERMS = [
     "qual remedio",
     "qual remédio",
     "posso tomar",
+    "qual antibiotico",
+    "qual antibiótico",
+    "qual dosagem",
 ]
 
 SRAG_SCOPE_TERMS = [
@@ -89,6 +92,7 @@ SRAG_SCOPE_TERMS = [
     "opendatasus",
     "influenza",
     "covid",
+    "vsr",
     "respiratoria",
     "respiratória",
     "relatorio",
@@ -97,13 +101,30 @@ SRAG_SCOPE_TERMS = [
     "uti",
     "vacinacao",
     "vacinação",
+    "patogeno",
+    "patógeno",
+    "patogenos",
+    "patógenos",
+    "etiologia",
+    "etiologica",
+    "etiológica",
+    "etiologias",
+    "virus",
+    "vírus",
+    "anomalia",
+    "anomalias",
+    "surto",
+    "surtos",
+    "z-score",
+    "zscore",
+    "faixa etaria",
+    "faixa etária",
+    "idade",
+    "internacao",
+    "internação",
+    "internacoes",
+    "internações",
 ]
-
-
-class GuardrailResult(BaseModel):
-    allowed: bool
-    reasons: list[str] = Field(default_factory=list)
-
 
 CHAT_CONTEXT_TERMS = [
     "dados",
@@ -116,16 +137,95 @@ CHAT_CONTEXT_TERMS = [
     "fontes",
     "noticia",
     "notícia",
+    "noticias",
+    "notícias",
     "qualidade",
     "metrica",
     "métrica",
+    "metricas",
+    "métricas",
     "taxa",
+    "taxas",
     "obito",
     "óbito",
+    "obitos",
+    "óbitos",
     "morte",
+    "mortes",
     "periodo",
     "período",
+    "governanca",
+    "governança",
+    "landing",
+    "parquet",
+    "linhas",
+    "linhagem",
+    "hash",
+    "sha-256",
+    "sha256",
+    "bruto",
+    "brutos",
+    "bruta",
+    "brutas",
+    "refinado",
+    "refinados",
+    "refinada",
+    "refinadas",
+    "social",
+    "sociais",
+    "comunidade",
+    "comunidades",
+    "comunitaria",
+    "comunitária",
+    "comunitarias",
+    "comunitárias",
+    "coletiva",
+    "coletivas",
+    "imprensa",
+    "transcricao",
+    "transcrição",
+    "transcricoes",
+    "transcrições",
+    "reddit",
+    "midia",
+    "mídia",
+    "agent reach",
+    "reach",
+    "allowlist",
+    "permitida",
+    "permitidas",
+    "institucional",
+    "institucionais",
+    "boletim",
+    "parecer",
+    "alerta",
+    "alertas",
+    "executivo",
+    "desvio",
+    "populacao",
+    "população",
+    "idoso",
+    "idosos",
+    "crianca",
+    "criança",
+    "criancas",
+    "crianças",
+    "bebe",
+    "bebê",
+    "bebes",
+    "bebês",
+    "leito",
+    "leitos",
+    "sus",
+    "fiocruz",
+    "oms",
+    "opas",
 ]
+
+
+class GuardrailResult(BaseModel):
+    allowed: bool
+    reasons: list[str] = Field(default_factory=list)
 
 
 def validate_input_request(
@@ -150,6 +250,7 @@ def validate_input_request(
         reasons.append("pedido solicita dados linha a linha ou identificadores individuais.")
     if _contains_any(normalized, MEDICAL_ADVICE_TERMS):
         reasons.append("pedido solicita diagnostico ou tratamento individual.")
+
     has_domain_scope = _contains_any(normalized, SRAG_SCOPE_TERMS)
     has_contextual_scope = allow_contextual_chat and _contains_any(normalized, CHAT_CONTEXT_TERMS)
     if _contains_any(normalized, OUT_OF_SCOPE_TERMS) or not (

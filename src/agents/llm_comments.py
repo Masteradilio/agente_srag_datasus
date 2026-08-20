@@ -14,16 +14,17 @@ def generate_executive_report_sections(
     chart_context: dict[str, Any],
     news_evidence: list[dict[str, Any]],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
+    from utils.paths import PROJECT_ROOT
     started = time.perf_counter()
-    load_dotenv()
+    load_dotenv(dotenv_path=PROJECT_ROOT / ".env")
     disable_api = os.getenv("DISABLE_LLM_API") == "1"
 
     # Ler e limpar chaves e modelos
     nvidia_key = "" if disable_api else (os.getenv("NVIDIA_API_KEY") or "").strip().strip('"').strip("'")
-    nvidia_model = (os.getenv("LLM_MODEL") or "").strip().strip('"').strip("'") or "minimaxai/minimax-m3"
+    nvidia_model = (os.getenv("LLM_MODEL") or "").strip().strip('"').strip("'") or "meta/llama-3.1-70b-instruct"
 
     openrouter_key = "" if disable_api else (os.getenv("OPENROUTER_API_KEY") or "").strip().strip('"').strip("'")
-    openrouter_model = (os.getenv("OPENROUTER_MODEL") or "").strip().strip('"').strip("'") or "minimax/minimax-m3"
+    openrouter_model = (os.getenv("OPENROUTER_MODEL") or "").strip().strip('"').strip("'") or "deepseek/deepseek-chat"
 
     prompt = _build_prompt(metric_summary, chart_context, news_evidence)
     observability = _base_observability("local_deterministic", nvidia_model)
