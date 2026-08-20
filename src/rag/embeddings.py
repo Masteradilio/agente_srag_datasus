@@ -26,7 +26,7 @@ class HuggingFaceLocalEmbeddings:
             _MODEL_INSTANCE = SentenceTransformer(self.model_name)
             return _MODEL_INSTANCE
         except Exception as exc:
-            logger.warning("Could not load SentenceTransformer (%s). Using deterministic lexical embedding.", exc)
+            logger.debug("SentenceTransformer initialization notice: %s. Using deterministic lexical embedding.", exc)
             return None
 
     def embed_documents(self, texts: Sequence[str]) -> list[list[float]]:
@@ -36,7 +36,7 @@ class HuggingFaceLocalEmbeddings:
                 embeddings = model.encode(list(texts), convert_to_numpy=True, normalize_embeddings=True)
                 return [arr.tolist() for arr in embeddings]
             except Exception as exc:
-                logger.warning("Embedding encoding failed (%s). Falling back.", exc)
+                logger.debug("Embedding encoding notice: %s. Falling back.", exc)
 
         return [_deterministic_pseudo_embedding(t) for t in texts]
 

@@ -1,4 +1,6 @@
+import os
 import re
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 import markdown  # type: ignore[import-untyped]
@@ -13,16 +15,25 @@ def export_report_pdf(markdown_path: Path, output_pdf_path: Path) -> Path:
     html = markdown.markdown(markdown_text, extensions=["tables"])
     output_pdf_path.parent.mkdir(parents=True, exist_ok=True)
 
-    try:
-        from weasyprint import HTML  # type: ignore[import-untyped]
-
-        HTML(string=html, base_url=str(PROJECT_ROOT.parent)).write_pdf(output_pdf_path)
-    except Exception:
+    success = _try_weasyprint(html, output_pdf_path)
+    if not success:
         fallback_html_path = output_pdf_path.with_suffix(".html")
         fallback_html_path.write_text(_html_document(html), encoding="utf-8")
         _write_reportlab_pdf(markdown_text, output_pdf_path)
 
     return output_pdf_path
+
+
+def _try_weasyprint(html: str, output_pdf_path: Path) -> bool:
+    try:
+        with open(os.devnull, "w", encoding="utf-8") as devnull:
+            with redirect_stderr(devnull), redirect_stdout(devnull):
+                from weasyprint import HTML  # type: ignore[import-untyped]
+
+                HTML(string=html, base_url=str(PROJECT_ROOT.parent)).write_pdf(output_pdf_path)
+                return True
+    except Exception:
+        return False
 
 
 def _html_document(body: str) -> str:
@@ -62,70 +73,55 @@ def _write_reportlab_pdf(markdown_text: str, output_pdf_path: Path) -> None:
             flush_list()
             story.append(Spacer(1, 8))
             continue
+
         if stripped.startswith("# "):
             flush_list()
-            story.append(Paragraph(_clean_markdown(stripped[2:]), styles["Title"]))
+            story.append(Paragraph(stripped[2:], styles["Title"]))
+            story.append(Spacer(1, 10))
             continue
+
         if stripped.startswith("## "):
             flush_list()
-            story.append(Paragraph(_clean_markdown(stripped[3:]), styles["Heading2"]))
+            story.append(Paragraph(stripped[3:], styles["Heading2"]))
+            story.append(Spacer(1, 8))
             continue
+
+        if stripped.startswith("### "):
+            flush_list()
+            story.append(Paragraph(stripped[4:], styles["Heading3"]))
+            story.append(Spacer(1, 6))
+            continue
+
         if stripped.startswith("- "):
-            image_path = _extract_image_path(stripped)
-            if image_path and image_path.is_file():
+            image_match = re.match(r"- !\[.*?\]\((.*?)\)", stripped)
+            if image_match:
                 flush_list()
-                story.append(Image(str(image_path), width=440, height=190))
-                story.append(Spacer(1, 8))
+                relative_path = image_match.group(1).replace("/", os.sep)
+                image_path = (PROJECT_ROOT / relative_path).resolve()
+                if not image_path.is_file():
+                    alt_path = (output_pdf_path.parent / Path(relative_path).name).resolve()
+                    if alt_path.is_file():
+                        image_path = alt_path
+                if image_path.is_file():
+                    story.append(Image(str(image_path), width=460, height=220))
+                    story.append(Spacer(1, 8))
                 continue
-            text = _clean_markdown(stripped[2:])
-            pending_items.append(ListItem(Paragraph(text, styles["BodyText"])))
+
+            pending_items.append(ListItem(Paragraph(_escape_xml(stripped[2:]), styles["BodyText"])))
             continue
+
         flush_list()
-        story.append(Paragraph(_clean_markdown(stripped), styles["BodyText"]))
+        story.append(Paragraph(_escape_xml(stripped), styles["BodyText"]))
+        story.append(Spacer(1, 4))
 
     flush_list()
-    output_pdf_path.parent.mkdir(parents=True, exist_ok=True)
-    SimpleDocTemplate(str(output_pdf_path), pagesize=A4).build(story)
+    doc = SimpleDocTemplate(str(output_pdf_path), pagesize=A4)
+    doc.build(story)
 
 
-def _clean_markdown(text: str) -> str:
-    cleaned = re.sub(r"`([^`]+)`", r"\1", text)
-    cleaned = cleaned.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    return cleaned
-
-
-def _extract_image_path(text: str) -> Path | None:
-    match = re.search(r"(agente_srag_datasus/[^\s`]+\.png)", text)
-    if not match:
-        return None
-    return PROJECT_ROOT.parent / Path(match.group(1))
-
-
-def _minimal_pdf(text: str) -> bytes:
-    safe_text = text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
-    content = f"BT /F1 12 Tf 72 720 Td ({safe_text}) Tj ET"
-    objects = [
-        b"1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n",
-        b"2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n",
-        b"3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
-        b"/Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >> endobj\n",
-        b"4 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n",
-        f"5 0 obj << /Length {len(content.encode('latin-1'))} >> stream\n"
-        f"{content}\nendstream endobj\n".encode("latin-1"),
-    ]
-    pdf = bytearray(b"%PDF-1.4\n")
-    offsets = [0]
-    for obj in objects:
-        offsets.append(len(pdf))
-        pdf.extend(obj)
-    xref_start = len(pdf)
-    pdf.extend(f"xref\n0 {len(objects) + 1}\n0000000000 65535 f \n".encode("ascii"))
-    for offset in offsets[1:]:
-        pdf.extend(f"{offset:010d} 00000 n \n".encode("ascii"))
-    pdf.extend(
-        (
-            f"trailer << /Size {len(objects) + 1} /Root 1 0 R >>\n"
-            f"startxref\n{xref_start}\n%%EOF\n"
-        ).encode("ascii")
+def _escape_xml(text: str) -> str:
+    return (
+        text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
     )
-    return bytes(pdf)

@@ -1,41 +1,41 @@
-# Local package
--e .
+# Core & Web
+fastapi>=0.110.0
+uvicorn>=0.28.0
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+requests>=2.32.3
+urllib3>=2.2.0
+charset-normalizer>=3.3.2
+beautifulsoup4>=4.12.0
+streamlit>=1.32.0
 
-# Core
-python-dotenv==1.0.1
-pydantic==2.8.2
-pydantic-settings==2.4.0
-PyYAML>=6.0.2
+# Data & Numerical
+pandas>=2.2.0
+pyarrow>=15.0.0
+numpy>=1.26.0
+openpyxl>=3.1.0
+matplotlib>=3.8.0
 
-# HTTP and ingestion
-requests==2.32.3
-
-# Data processing
-pandas>=2.2.2
-pyarrow>=17.0.0
-openpyxl>=3.1.5
-
-# GenAI, agents and RAG
-langgraph>=0.2.14
-chromadb>=0.5.5
-sentence-transformers>=3.0.0
+# LLM, Multi-Agent & RAG
+langgraph>=0.2.0
+langchain-core>=0.3.0
+openai>=1.14.0
 rank-bm25>=0.2.2
-opentelemetry-api>=1.26.0
+chromadb>=0.5.0
+sentence-transformers>=3.0.0
+torch>=2.2.0
+transformers>=4.40.0
 
-# News extraction and parsing
-beautifulsoup4==4.12.3
+# Document & PDF Generation
+markdown>=3.5.0
+reportlab>=4.1.0
+weasyprint>=61.0; sys_platform != "win32"
 
-# Visualization and app
-matplotlib>=3.9.0
-streamlit>=1.38.0
+# Observability & Tracing
+opentelemetry-api>=1.24.0
 
-# Reports
-markdown>=3.7
-reportlab>=4.2.0
-weasyprint>=62.0
-
-# Testing and quality
-pytest>=8.3.0
-pytest-cov>=5.0.0
-ruff>=0.6.0
-mypy>=1.11.0
+# Testing & Linting
+pytest>=8.0.0
+pytest-cov>=4.1.0
+ruff>=0.3.0
+mypy>=1.9.0
