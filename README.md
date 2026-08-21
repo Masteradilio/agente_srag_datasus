@@ -9,6 +9,7 @@
 [![VectorDB](https://img.shields.io/badge/Vector%20DB-ChromaDB%20%2B%20BM25-purple.svg)](https://www.trychroma.com/)
 [![Embeddings](https://img.shields.io/badge/Embeddings-HuggingFace%20Local-yellow.svg)](https://huggingface.co/sentence-transformers)
 [![EVALs](https://img.shields.io/badge/EVALs-RAG%20Triad%20%26%20Security-success.svg)](artifacts/benchmarks/)
+[![License: AGPL v3](https://img.shields.io/badge/License-GNU%20AGPLv3-blue.svg)](LICENSE)
 
 **[🇧🇷 Português](#-português) | [🇺🇸 English](#-english)**
 
@@ -153,6 +154,14 @@ streamlit run app/streamlit_app.py
 
 ---
 
+## 📜 Licença e Termos de Uso
+Este projeto é distribuído sob os termos estritos da **GNU Affero General Public License v3.0 (GNU AGPLv3)**.
+- **Copyleft Forte**: Qualquer trabalho derivado, modificação ou serviço de rede hospedado (SaaS/serviço em nuvem) que utilize este código-fonte deve obrigatoriamente disponibilizar o código-fonte completo sob a mesma licença AGPLv3.
+- **Uso Comercial / Exploração Empresarial**: Nenhuma entidade ou empresa privada pode incorporar, explorar comercialmente ou distribuir este software como produto proprietário fechado sem autorização expressa e licenciamento comercial específico do autor.
+- Consulte o arquivo [`LICENSE`](LICENSE) para o texto legal completo.
+
+---
+
 <a name="-english"></a>
 # 🇺🇸 English
 
@@ -248,6 +257,14 @@ pytest tests/ -v
 # 5. Launch the Streamlit Web Application
 streamlit run app/streamlit_app.py
 ```
+
+---
+
+## 📜 License & Terms of Use
+This project is distributed under the strict terms of the **GNU Affero General Public License v3.0 (GNU AGPLv3)**.
+- **Strong Copyleft**: Any derivative work, modification, or network-hosted service (SaaS/cloud) using this codebase must make its complete source code available under the same AGPLv3 license.
+- **Commercial Use / Proprietary Exploitation**: No private organization may incorporate, commercially exploit, or redistribute this software as a closed-source proprietary offering without explicit written consent and a commercial license from the copyright owner.
+- See the full legal terms in the [`LICENSE`](LICENSE) file.
 
 ---
 
